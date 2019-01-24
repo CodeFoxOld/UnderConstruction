@@ -7,27 +7,23 @@ namespace de.trustfallgames.targetsenior.tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour {
-        [SerializeField] private bool blocked;
-
-
         private Tile() {
             
         }
         
         public Tile(int x, int z) {
-            _coords = new TileCoord(x, z);
+            Coords = new TileCoord(x, z);
         }
         
         private BoxCollider collider;
-        private TileCoord _coords;
 
         public void SetTilecords(int x, int z) {
-            _coords = new TileCoord(x,z);
+            Coords = new TileCoord(x,z);
         }
         
-        public TileCoord Coords => _coords;
+        public TileCoord Coords { get; private set; }
 
-        public bool Blocked => blocked;
+        [SerializeField] public bool Blocked;
 
         // Start is called before the first frame update
         void Start() {
@@ -39,8 +35,8 @@ namespace de.trustfallgames.targetsenior.tilemap {
         }
 
         private void OnValidate() {
-            GetComponent<BoxCollider>().enabled = blocked;
-            GetComponent<MeshCollider>().enabled = !blocked;
+            GetComponent<BoxCollider>().enabled = Blocked;
+            GetComponent<MeshCollider>().enabled = !Blocked;
         }
 
         public void CheckCollider() {
