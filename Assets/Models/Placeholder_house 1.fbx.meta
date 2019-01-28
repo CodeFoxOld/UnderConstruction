@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: baae5c8c7a712114591cad6ebb945b95
+guid: af4a334a9f9a07f41ba030ea76499431
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material.001
+    2100000: Material
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Human_MaleBase
+    4300000: Placerholder_House
   externalObjects: {}
   materials:
     importMaterials: 1

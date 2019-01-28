@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ce29127cb8127f74fa33bd4746c522c5
+guid: ffab1f743bd6f3e4285dc130ce953ef1
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -8,7 +8,7 @@ ModelImporter:
     2100000: Material
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cube
+    4300000: Placerholder_House
   externalObjects: {}
   materials:
     importMaterials: 1
