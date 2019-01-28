@@ -2,29 +2,34 @@
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.character {
-    public class Controller : MonoBehaviour {
-        private bool      test;
+namespace de.trustfallgames.underConstruction.character
+{
+    public class Controller : MonoBehaviour
+    {
+        private bool test;
         private Character _character;
-        private Movement  _movement;
-        
+        private Movement _movement;
+
         private bool movingUp;
         private bool movingRight;
         private bool movingDown;
         private bool movingLeft;
 
         // Start is called before the first frame update
-        void Start() {
+        void Start()
+        {
             _character = gameObject.GetComponent<Character>();
-            _movement  = gameObject.GetComponent<Movement>();
+            _movement = gameObject.GetComponent<Movement>();
         }
 
         // Update is called once per frame
         void Update() { }
 
-        public void OnButtonClick(String moveDirection) {
+        public void OnButtonClick(String moveDirection)
+        {
             Debug.Log("Input for direction " + moveDirection);
-            switch (moveDirection) {
+            switch (moveDirection)
+            {
                 case "upleft":
                     _movement.StartMove(MoveDirection.up);
                     return;
@@ -43,9 +48,11 @@ namespace de.trustfallgames.underConstruction.character {
 
             //_movement.StartMove(moveDirection);
         }
-        
-        public void ButtonToggle(MoveDirection direction, bool state) {
-            switch (direction) {
+
+        public void ButtonToggle(MoveDirection direction, bool state)
+        {
+            switch (direction)
+            {
                 case MoveDirection.up:
                     movingUp = state;
                     break;
@@ -61,5 +68,6 @@ namespace de.trustfallgames.underConstruction.character {
                 default: throw new ArgumentOutOfRangeException("direction", direction, null);
             }
 
+        }
     }
 }
