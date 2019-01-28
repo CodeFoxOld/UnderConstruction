@@ -1,16 +1,21 @@
-﻿using de.trustfallgames.targetsenior.tilemap;
-using de.trustfallgames.targetsenior.util;
+﻿using de.trustfallgames.underConstruction.tilemap;
+using de.trustfallgames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.targetsenior.character {
+namespace de.trustfallgames.underConstruction.character {
     [RequireComponent(typeof(Movement))]
     public class Character : MonoBehaviour {
         [Header("Whole Player Object")]
-        [SerializeField] private Transform _player;
+        [SerializeField]
+        private Transform _player;
+
         [Header("Character Model")]
-        [SerializeField] private Transform _character;
+        [SerializeField]
+        private Transform _character;
+
         private TileCoord     _currentCoord;
-        private MoveDirection _moveDirection = MoveDirection.DownLeft;
+        private MoveDirection _moveDirection = MoveDirection.left;
+        private Controller    _controller;
 
         public TileCoord CurrentCoord {
             get { return _currentCoord; }
@@ -31,5 +36,18 @@ namespace de.trustfallgames.targetsenior.character {
         public Transform CharacterTransform { get { return _character; } }
 
         public Transform Player { get { return _player; } }
+
+        private void Start() {
+            _controller = gameObject.GetComponent<Controller>();
+        }
+
+        public Controller Controller { get { return _controller; } }
+
+        private Character() { }
+
+        public static Character getCharacter() {
+            return GameObject.Find("Character").GetComponent<Character>();
+        }
     }
 }
+
