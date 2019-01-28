@@ -1,9 +1,9 @@
 ﻿using System;
-using de.trustfallgames.targetsenior.tilemap;
-using de.trustfallgames.targetsenior.util;
+using de.trustfallgames.underConstruction.tilemap;
+using de.trustfallgames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.targetsenior.character {
+namespace de.trustfallgames.underConstruction.character {
     [RequireComponent(typeof(Character))]
     public class Movement : MonoBehaviour {
         private Character _character;
@@ -109,13 +109,13 @@ namespace de.trustfallgames.targetsenior.character {
         private TileCoord GetTileCoordForDirection(MoveDirection moveDirection) {
             TileCoord coord = _character.CurrentCoord;
             switch (moveDirection) {
-                case MoveDirection.UpLeft:
+                case MoveDirection.up:
                     return new TileCoord(coord.X, coord.Z + 1);
-                case MoveDirection.UpRight:
+                case MoveDirection.right:
                     return new TileCoord(coord.X, coord.Z - 1);
-                case MoveDirection.DownLeft:
+                case MoveDirection.left:
                     return new TileCoord(coord.X - 1, coord.Z);
-                case MoveDirection.DownRight:
+                case MoveDirection.down:
                     return new TileCoord(coord.X + 1, coord.Z);
             }
 
@@ -145,10 +145,10 @@ namespace de.trustfallgames.targetsenior.character {
 
         public static float GetRotationValue(MoveDirection moveDirection) {
             switch (moveDirection) {
-                case MoveDirection.UpLeft:    return 90;
-                case MoveDirection.UpRight:   return 180;
-                case MoveDirection.DownRight: return 270;
-                case MoveDirection.DownLeft:  return 360;
+                case MoveDirection.up:    return 90;
+                case MoveDirection.right:   return 180;
+                case MoveDirection.down: return 270;
+                case MoveDirection.left:  return 360;
             }
 
             return 0;
@@ -156,50 +156,50 @@ namespace de.trustfallgames.targetsenior.character {
 
         public static Vector3 GetDirectionVector(MoveDirection moveDirection) {
             switch (moveDirection) {
-                case MoveDirection.UpLeft:    return new Vector3(0, 0, 1);
-                case MoveDirection.UpRight:   return new Vector3(1, 0, 0);
-                case MoveDirection.DownRight: return new Vector3(0, 0, -1);
-                case MoveDirection.DownLeft:  return new Vector3(-1, 0, 0);
+                case MoveDirection.up:    return new Vector3(0, 0, 1);
+                case MoveDirection.right:   return new Vector3(1, 0, 0);
+                case MoveDirection.down: return new Vector3(0, 0, -1);
+                case MoveDirection.left:  return new Vector3(-1, 0, 0);
             }
 
             return new Vector3(0, 0, 0);
         }
 
         public static float GetTurnDegree(MoveDirection current, MoveDirection target) {
-            if (current == MoveDirection.UpLeft) {
+            if (current == MoveDirection.up) {
                 switch (target) {
-                    case MoveDirection.DownLeft:
+                    case MoveDirection.left:
                         return -90;
-                    case MoveDirection.UpRight:
+                    case MoveDirection.right:
                         return 90;
-                    case MoveDirection.DownRight:
+                    case MoveDirection.down:
                         return 180;
                 }
-            } else if (current == MoveDirection.UpRight) {
+            } else if (current == MoveDirection.right) {
                 switch (target) {
-                    case MoveDirection.UpLeft:
+                    case MoveDirection.up:
                         return -90;
-                    case MoveDirection.DownRight:
+                    case MoveDirection.down:
                         return 90;
-                    case MoveDirection.DownLeft:
+                    case MoveDirection.left:
                         return 180;
                 }
-            } else if (current == MoveDirection.DownRight) {
+            } else if (current == MoveDirection.down) {
                 switch (target) {
-                    case MoveDirection.UpRight:
+                    case MoveDirection.right:
                         return -90;
-                    case MoveDirection.DownLeft:
+                    case MoveDirection.left:
                         return 90;
-                    case MoveDirection.UpLeft:
+                    case MoveDirection.up:
                         return 180;
                 }
-            } else if (current == MoveDirection.DownLeft) {
+            } else if (current == MoveDirection.left) {
                 switch (target) {
-                    case MoveDirection.DownRight:
+                    case MoveDirection.down:
                         return -90;
-                    case MoveDirection.UpLeft:
+                    case MoveDirection.up:
                         return 90;
-                    case MoveDirection.UpRight:
+                    case MoveDirection.right:
                         return 180;
                 }
             }
