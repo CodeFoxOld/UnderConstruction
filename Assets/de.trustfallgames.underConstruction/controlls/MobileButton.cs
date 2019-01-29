@@ -1,27 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using de.trustfallgames.underConstruction.character;
-using de.trustfallgames.underConstruction.util;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using MoveDirection = de.trustfallgames.underConstruction.util.MoveDirection;
 
+[RequireComponent(typeof(Image))]
 public class MobileButton : InteractableButton {
     [SerializeField] private MoveDirection moveDirection;
 
-    private Controller _controller;
+    [SerializeField] private Controller _controller;
+
     // Start is called before the first frame update
     void Start() {
-        _controller = Character.getCharacter().Controller;
+        _controller = GameManager.GetManager().Controller;
     }
 
-    // Update is called once per frame
-    void Update() { }
-
-    public override void OnTouchStart() {
+    protected override void OnButtonPressed(PointerEventData eventData) {
         _controller.ButtonToggle(moveDirection, true);
     }
 
-    public override void OnTouchEnd() {
-        _controller.ButtonToggle(moveDirection,false);
+    protected override void OnButtonReleased(PointerEventData eventData) {
+        _controller.ButtonToggle(moveDirection, false);
     }
 }
