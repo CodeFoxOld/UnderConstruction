@@ -14,7 +14,7 @@ public class MobileButton : InteractableButton {
 
     // Start is called before the first frame update
     void Start() {
-        _controller = GameManager.GetManager().Controller;
+        _controller = GameManager.GetManager().Controller;        
     }
 
     protected override void OnButtonPressed(PointerEventData eventData) {
