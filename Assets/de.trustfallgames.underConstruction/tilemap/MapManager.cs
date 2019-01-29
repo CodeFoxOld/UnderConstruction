@@ -8,6 +8,7 @@ namespace de.trustfallgames.underConstruction.tilemap {
         [SerializeField]
         private string lastRefresh;
 
+        [SerializeField] private GameObject _tilePrefab;
         [SerializeField] private Dictionary<TileCoord, Tile> _tiles;
 
         // Start is called before the first frame update
@@ -55,7 +56,7 @@ namespace de.trustfallgames.underConstruction.tilemap {
         public void GenerateTilemap() {
             for (int i = 0; i < xDimension; i++) {
                 for (int j = 0; j < yDimension; j++) {
-                    GameObject tile = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                    GameObject tile = GameObject.Instantiate(_tilePrefab);
                     tile.transform.SetParent(transform);
                     tile.transform.localScale = new Vector3(0.1f, 1, 0.1f);
                     tile.transform.position   = new Vector3((0 - (xDimension / 2) + i), 0, (0 - (yDimension / 2) + j));
