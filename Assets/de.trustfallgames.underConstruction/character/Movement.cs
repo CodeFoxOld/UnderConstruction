@@ -49,7 +49,7 @@ namespace de.trustfallgames.underConstruction.character {
         /// </summary>
         /// <param name="moveDirection"></param>
         private void Move() {
-            _character.Player.Translate(GetDirectionVector(_character.CurrentMoveDirection) / 60);
+            _character.Player.Translate(GetDirectionVector(_character.CurrentMoveDirection) / 10);
             if (Math.Abs(targetPosition.x - _character.transform.position.x) < 0.01
                 && Math.Abs(targetPosition.z - _character.transform.position.z) < 0.01) {
                 moved          = true;
@@ -64,7 +64,7 @@ namespace de.trustfallgames.underConstruction.character {
         /// <param name="moveDirection"></param>
         private void Turn() {
             if (Math.Abs(targetRotation - currentRotation) < 0.1) {
-                _charTransform.localEulerAngles = new Vector3(-90, 0, _character.GetCurrentRotation());
+                _charTransform.localEulerAngles = new Vector3(0, _character.GetCurrentRotation(), 0);
                 turned                          = true;
                 Debug.Log("Turn complete");
                 return;
@@ -72,7 +72,7 @@ namespace de.trustfallgames.underConstruction.character {
 
             currentRotation += rotationPerFrame;
 
-            _charTransform.localEulerAngles = new Vector3(-90, 0, currentRotation);
+            _charTransform.localEulerAngles = new Vector3(0, currentRotation, 0);
 
 
             //IDEA: Rotation with MODULO 360 to keep range for calculation when rotation is done
