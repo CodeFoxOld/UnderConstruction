@@ -2,34 +2,31 @@
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.character
-{
-    public class Controller : MonoBehaviour
-    {
-        private bool test;
-        private Character _character;
-        private Movement _movement;
+namespace de.trustfallgames.underConstruction.character {
+    public class Controller : MonoBehaviour {
+        private                  bool      test;
+        [SerializeField] private Character _character;
+        [SerializeField] private Movement  _movement;
 
         private bool movingUp;
         private bool movingRight;
         private bool movingDown;
         private bool movingLeft;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            _character = gameObject.GetComponent<Character>();
-            _movement = gameObject.GetComponent<Movement>();
+        void Update() {
+            if (movingUp)
+                _movement.StartMove(MoveDirection.up);
+            if(movingRight)
+                _movement.StartMove(MoveDirection.right);
+            if(movingDown)
+                _movement.StartMove(MoveDirection.down);
+            if (movingLeft) 
+                _movement.StartMove(MoveDirection.left);
         }
 
-        // Update is called once per frame
-        void Update() { }
-
-        public void OnButtonClick(String moveDirection)
-        {
+        /*public void OnButtonClick(String moveDirection) {
             Debug.Log("Input for direction " + moveDirection);
-            switch (moveDirection)
-            {
+            switch (moveDirection) {
                 case "upleft":
                     _movement.StartMove(MoveDirection.up);
                     return;
@@ -47,12 +44,10 @@ namespace de.trustfallgames.underConstruction.character
             throw new ArgumentException(moveDirection + " is not a valid move direction.");
 
             //_movement.StartMove(moveDirection);
-        }
+        }*/
 
-        public void ButtonToggle(MoveDirection direction, bool state)
-        {
-            switch (direction)
-            {
+        public void ButtonToggle(MoveDirection direction, bool state) {
+            switch (direction) {
                 case MoveDirection.up:
                     movingUp = state;
                     break;
@@ -67,7 +62,13 @@ namespace de.trustfallgames.underConstruction.character
                     break;
                 default: throw new ArgumentOutOfRangeException("direction", direction, null);
             }
+        }
 
+        public Character Character {
+            set {
+                _character = value;
+                _movement  = value.Movement;
+            }
         }
     }
 }
