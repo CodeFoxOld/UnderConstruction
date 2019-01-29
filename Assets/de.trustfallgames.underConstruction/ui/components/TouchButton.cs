@@ -11,7 +11,6 @@ namespace de.trustfallgames.underConstruction.ui.components {
     [ExecuteInEditMode]
     public class TouchButton : Button {
         private ButtonState _buttonState = ButtonState.NotPressed;
-        private EventTrigger _eventTrigger;
 
         public void onPress() {
             _buttonState = ButtonState.Pressed;
@@ -28,9 +27,6 @@ namespace de.trustfallgames.underConstruction.ui.components {
 
         void Start() {
             targetGraphic = gameObject.GetComponent<Image>();
-            _eventTrigger = gameObject.GetComponent<EventTrigger>();
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            entry.eventID = EventTriggerType.PointerDown;
         }
 
         void Update() { }
