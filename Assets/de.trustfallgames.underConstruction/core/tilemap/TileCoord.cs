@@ -1,4 +1,4 @@
-namespace de.trustfallgames.underConstruction.tilemap {
+namespace de.trustfallgames.underConstruction.core.tilemap {
     public class TileCoord {
 
         private TileCoord() {

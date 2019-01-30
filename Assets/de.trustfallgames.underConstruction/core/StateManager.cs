@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using de.trustfallgames.underConstruction.character;
-using de.trustfallgames.underConstruction.tilemap;
+using de.trustfallgames.underConstruction.core.tilemap;
 using UnityEngine;
 
 public class StateManager : MonoBehaviour {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.tilemap {
+namespace de.trustfallgames.underConstruction.core.tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour {
