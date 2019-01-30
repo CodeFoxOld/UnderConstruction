@@ -14,15 +14,15 @@ namespace de.trustfallgames.underConstruction.character {
         [SerializeField]
         private Transform _character;
 
-        private TileCoord     _currentCoord;
+        private TileCoord _currentCoord = new TileCoord(0, 0);
         private MoveDirection _moveDirection = MoveDirection.left;
-        private Controller    _controller;
-        private Movement      _movement;
+        private Controller _controller;
+        [SerializeField] private Movement _movement;
 
         private void Start() {
             GameManager.GetManager().RegisterCharacter(this);
             _controller = GameManager.GetManager().Controller;
-            _movement   = GetComponent<Movement>();
+            _movement = GetComponent<Movement>();
         }
 
         public Controller Controller { get { return _controller; } }
@@ -56,5 +56,6 @@ namespace de.trustfallgames.underConstruction.character {
         }
 
         public Transform Player { get { return _player; } }
+
     }
 }
