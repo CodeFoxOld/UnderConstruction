@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using de.trustfallgames.underConstruction.util;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 
 namespace de.trustfallgames.underConstruction.core.tilemap {
     public class MapManager : MonoBehaviour {
@@ -8,11 +11,16 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         [SerializeField]
         private string lastRefresh;
 
-        [SerializeField] private GameObject _tilePrefab;
-        [SerializeField] private Dictionary<TileCoord, Tile> _tiles;
+        [SerializeField] private GameObject tilePrefab;
+
+        [Header("User \"Generate Field with Dimensions\" to generate a tilemap with the following dimensions")]
+        [SerializeField] private int xDimension;
+        [SerializeField] private int yDimension;
+        [SerializeField] private Dictionary<TileCoord, Tile> tiles;
 
         // Start is called before the first frame update
         void Start() {
+            GameManager.GetManager().RegisterMapManager(this);
             GenerateTileClasses();
             RefreshDictionary();
         }
@@ -29,25 +37,20 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
                     child.gameObject.AddComponent<Tile>().CheckCollider();
                 }
 
+                Vector3 position = child.transform.position;
                 child.transform.transform.position = new Vector3(
                                                                  (float) Math.Round(
-                                                                                    child.transform.position.x,
+                                                                                    position.x,
                                                                                     MidpointRounding.ToEven), 0,
                                                                  (float) Math.Round(
-                                                                                    child.transform.position.z,
+                                                                                    position.z,
                                                                                     MidpointRounding.ToEven));
                 child.gameObject.GetComponent<Tile>()
-                     .SetTilecords((int) child.transform.position.x, (int) child.transform.position.z);
+                     .SetTilecords((int) position.x, (int) position.z);
             }
 
             lastRefresh = DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
         }
-
-        [Header("User \"Generate Field with Dimensions\" to generate a tilemap with the following dimensions")]
-        [SerializeField]
-        private int xDimension;
-
-        [SerializeField] private int yDimension;
 
         /// <summary>
         /// Generates a tilemap with a predefined size
@@ -56,12 +59,11 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         public void GenerateTilemap() {
             for (int i = 0; i < xDimension; i++) {
                 for (int j = 0; j < yDimension; j++) {
-                    GameObject tile = GameObject.Instantiate(_tilePrefab);
+                    GameObject tile = GameObject.Instantiate(tilePrefab);
                     tile.transform.SetParent(transform);
                     tile.transform.localScale = new Vector3(0.1f, 1, 0.1f);
-                    tile.transform.position   = new Vector3((0 - (xDimension / 2) + i), 0, (0 - (yDimension / 2) + j));
-                    tile.transform.name =
-                        "Tile: " + ((0 - (xDimension / 2)) + i) + "|" + ((0 - (yDimension / 2) + j));
+                    tile.transform.position = new Vector3((0 - (xDimension / 2) + i), 0, (0 - (yDimension / 2) + j));
+                    tile.transform.name = "Tile: " + ((0 - (xDimension / 2)) + i) + "|" + ((0 - (yDimension / 2) + j));
                 }
             }
 
@@ -88,13 +90,21 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         /// Refreshes the Dictionary to get the best, newest and most shiny keys.
         /// </summary>
         public void RefreshDictionary() {
-            _tiles = new Dictionary<TileCoord, Tile>();
+            tiles = new Dictionary<TileCoord, Tile>(new TileCoordComparer());
             foreach (Transform obj in transform) {
                 Tile tile = obj.GetComponent<Tile>();
-                _tiles[tile.Coords] = tile;
+                tiles[tile.Coords] = tile;
             }
 
-            Debug.Log(_tiles.Count + " tiles refreshed");
+            Debug.Log(tiles.Count + " tiles refreshed");
+        }
+
+        public bool FieldBlocked(TileCoord tileCoord) {
+            return !tiles.ContainsKey(tileCoord) || tiles[tileCoord].Blocked;
+        }
+
+        public bool FieldBlocked(TileCoord tileCoord, MoveDirection moveDirection) {
+            return FieldBlocked(tileCoord.NextTileCoord(moveDirection));
         }
     }
 }
