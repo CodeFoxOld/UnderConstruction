@@ -1,7 +1,6 @@
 ﻿using System;
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace de.trustfallgames.underConstruction.core.tilemap {
     [RequireComponent(typeof(BoxCollider))]

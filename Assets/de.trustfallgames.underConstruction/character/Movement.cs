@@ -2,8 +2,6 @@
 using de.trustfallgames.underConstruction.core.tilemap;
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
-using UnityEngine.Internal;
-using UnityEngine.Serialization;
 
 namespace de.trustfallgames.underConstruction.character {
     [RequireComponent(typeof(Character))]

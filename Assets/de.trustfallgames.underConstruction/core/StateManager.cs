@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using de.trustfallgames.underConstruction.character;
-using de.trustfallgames.underConstruction.core.tilemap;
+﻿using de.trustfallgames.underConstruction.core.tilemap;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class StateManager : MonoBehaviour {
     [SerializeField] private GameObject gameManager;

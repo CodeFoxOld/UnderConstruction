@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using de.trustfallgames.underConstruction.character;
 using de.trustfallgames.underConstruction.core.tilemap;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour {
     private static GameManager _instance = null;
