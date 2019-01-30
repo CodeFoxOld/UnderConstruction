@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Tilemaps;
 
 namespace de.trustfallgames.underConstruction.core.tilemap {
     public class MapManager : MonoBehaviour {
@@ -14,7 +12,9 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         [SerializeField] private GameObject tilePrefab;
 
         [Header("User \"Generate Field with Dimensions\" to generate a tilemap with the following dimensions")]
-        [SerializeField] private int xDimension;
+        [SerializeField]
+        private int xDimension;
+
         [SerializeField] private int yDimension;
         [SerializeField] private Dictionary<TileCoord, Tile> tiles;
 
@@ -45,8 +45,7 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
                                                                  (float) Math.Round(
                                                                                     position.z,
                                                                                     MidpointRounding.ToEven));
-                child.gameObject.GetComponent<Tile>()
-                     .SetTilecords((int) position.x, (int) position.z);
+                child.gameObject.GetComponent<Tile>().Coords = new TileCoord((int) position.x, (int) position.z);
             }
 
             lastRefresh = DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
@@ -106,5 +105,22 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         public bool FieldBlocked(TileCoord tileCoord, MoveDirection moveDirection) {
             return FieldBlocked(tileCoord.NextTileCoord(moveDirection));
         }
+
+        /// <summary>
+        /// Converts easy coord in coords for the map
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public TileCoord GetCoordForEasyCoord(int x, int y) {
+            return new TileCoord(0 - (xDimension / 2) + x, (0 - (yDimension / 2) + y));
+        }
+
+        public Tile GetTile(TileCoord tileCoord) {
+            return tiles[tileCoord];
+        }
+        
+        public int XDimension => xDimension;
+        public int YDimension => yDimension;
     }
 }
