@@ -18,8 +18,9 @@ public class StateManager : MonoBehaviour {
         Instantiate(mapManager).GetComponent<MapManager>().GenerateTilemap();
         Instantiate(character);
         Instantiate(ui);
-        Instantiate(spawnManager);
-        
+        if (spawnManager != null)
+            Instantiate(spawnManager);
+
         Destroy(gameObject);
     }
 
