@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private Character character = null;
     [SerializeField] private Controller controller;
     [SerializeField] private MapManager mapManager;
+    [SerializeField] private Settings settings;
 
     private GameManager() { }
 
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour {
 
 
         controller = GetComponent<Controller>();
+        settings = GetComponent<Settings>();
     }
 
     // Start is called before the first frame update
@@ -55,4 +57,6 @@ public class GameManager : MonoBehaviour {
     public Character Character => character;
     public Controller Controller => controller;
     public MapManager MapManager => mapManager;
+    public Settings Settings => settings;
+
 }
