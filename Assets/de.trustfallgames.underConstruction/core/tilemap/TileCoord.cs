@@ -23,8 +23,7 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
             set { z = value; }
         }
 
-        public override bool Equals(object obj) {
-            var a = (TileCoord) obj;
+        public bool Equals(TileCoord a) {
             return a.X == x && a.Z == z;
         }
 

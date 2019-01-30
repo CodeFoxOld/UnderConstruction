@@ -7,6 +7,7 @@ public class TileCoordComparer : IEqualityComparer<TileCoord> {
     private readonly IEqualityComparer<int> _baseComparer;
 
     public bool Equals(TileCoord tileA, TileCoord tileB) {
+        if (tileA == null || tileB == null) return false;
         return tileA.X == tileB.X && tileA.Z == tileB.Z;
     }
 
