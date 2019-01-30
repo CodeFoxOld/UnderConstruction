@@ -2,7 +2,6 @@
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _EmissionColor ("Emission Color", Color) = (1,1,1,1)
         _EmissionStrength ("Emission Strength", Range(0,1)) = 0.5
@@ -27,7 +26,6 @@
             float2 uv_MainTex;
         };
 
-        fixed4 _Color;
         fixed4 _EmissionColor;
         half _EmissionStrength;
         half _BlinkSpeed;
@@ -43,8 +41,8 @@
         {
             // Albedo comes from a texture tinted by color
             fixed positiveTime = abs(sin(_Time * _BlinkSpeed));
-            fixed4 c = _Color;
-            o.Albedo = c.rgb;
+            fixed4 c = _EmissionColor;
+            o.Albedo = _EmissionColor.rgb;
             // Metallic and smoothness come from slider variables
             o.Alpha = _EmissionColor.a * _EmissionStrength * positiveTime;
             o.Emission = _EmissionColor * _EmissionStrength * positiveTime;
