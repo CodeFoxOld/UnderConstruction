@@ -24,28 +24,6 @@ namespace de.trustfallgames.underConstruction.character {
                 _movement.StartMove(MoveDirection.left);
         }
 
-        /*public void OnButtonClick(String moveDirection) {
-            Debug.Log("Input for direction " + moveDirection);
-            switch (moveDirection) {
-                case "upleft":
-                    _movement.StartMove(MoveDirection.up);
-                    return;
-                case "upright":
-                    _movement.StartMove(MoveDirection.right);
-                    return;
-                case "downleft":
-                    _movement.StartMove(MoveDirection.left);
-                    return;
-                case "downright":
-                    _movement.StartMove(MoveDirection.down);
-                    return;
-            }
-
-            throw new ArgumentException(moveDirection + " is not a valid move direction.");
-
-            //_movement.StartMove(moveDirection);
-        }*/
-
         public void ButtonToggle(MoveDirection direction, bool state) {
             switch (direction) {
                 case MoveDirection.up:

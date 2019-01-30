@@ -8,15 +8,20 @@ using UnityEngine.Serialization;
 namespace de.trustfallgames.underConstruction.character {
     [RequireComponent(typeof(Character))]
     public class Movement : MonoBehaviour {
-        private Character _character;
+        [SerializeField] private Character _character;
+        [SerializeField] private GameManager _gameManager;
+        [SerializeField] private MapManager _mapManager;
         private Transform _charTransform;
-        private Vector3   startPosition;
-        private Vector3   targetPosition;
+        private Vector3 startPosition;
+        private Vector3 targetPosition;
 
-        [Range(0.01f,1)]
-        [SerializeField] private float rotationDuration = 0.1f;
-        [Range(0.01f,1)]
-        [SerializeField] private float moveDuration = 0.1f;
+        [Range(0.01f, 1)]
+        [SerializeField]
+        private float rotationDuration = 0.1f;
+
+        [Range(0.01f, 1)]
+        [SerializeField]
+        private float moveDuration = 0.1f;
 
         private bool moveInProgress;
         private bool turned;
@@ -29,8 +34,10 @@ namespace de.trustfallgames.underConstruction.character {
 
         // Start is called before the first frame update
         void Start() {
-            _character     = gameObject.GetComponent<Character>();
+            _character = gameObject.GetComponent<Character>();
             _charTransform = _character.CharacterTransform.transform;
+            _gameManager = GameManager.GetManager();
+            _mapManager = _gameManager.MapManager;
         }
 
         // Update is called once per frame
@@ -57,10 +64,9 @@ namespace de.trustfallgames.underConstruction.character {
             _character.Player.Translate(GetDirectionVector(_character.CurrentMoveDirection) / (moveDuration * 60));
             if (Math.Abs(targetPosition.x - _character.transform.position.x) < 0.01
                 && Math.Abs(targetPosition.z - _character.transform.position.z) < 0.01) {
-                moved          = true;
+                moved = true;
                 moveInProgress = false;
                 _character.transform.position = targetPosition;
-                Debug.Log("Move complete");
             }
         }
 
@@ -71,17 +77,13 @@ namespace de.trustfallgames.underConstruction.character {
         private void Turn() {
             if (Math.Abs(targetRotation - currentRotation) < 0.1) {
                 _charTransform.localEulerAngles = new Vector3(0, _character.GetCurrentRotation(), 0);
-                turned                          = true;
-                Debug.Log("Turn complete");
+                turned = true;
                 return;
             }
 
             currentRotation += rotationPerFrame;
 
             _charTransform.localEulerAngles = new Vector3(0, currentRotation, 0);
-
-
-            //IDEA: Rotation with MODULO 360 to keep range for calculation when rotation is done
         }
 
         /// <summary>
@@ -89,22 +91,21 @@ namespace de.trustfallgames.underConstruction.character {
         /// </summary>
         /// <param name="moveDirection"></param>
         public void StartMove(MoveDirection moveDirection) {
+            if (_mapManager.FieldBlocked(_character.CurrentCoord, moveDirection)) {
+                Debug.Log("Field Blocked");
+                return;
+            }
+
             if (moveInProgress) return;
+            Debug.Log("Start Movement");
+            Debug.Log(_character.CurrentCoord.ToString());
+            _character.CurrentCoord = _character.CurrentCoord.NextTileCoord(moveDirection);
             CalcRot(moveDirection);
-            startPosition  = _character.transform.position;
+            startPosition = _character.transform.position;
             targetPosition = startPosition + GetDirectionVector(moveDirection);
             moveInProgress = true;
-            turned         = false;
-            moved          = false;
-        }
-
-        /// <summary>
-        /// Returns true if the field in the desired direction is valid and not blocked
-        /// </summary>
-        /// <param name="moveDirection"></param>
-        /// <returns></returns>
-        public bool IsWayValid(MoveDirection moveDirection) {
-            return true;
+            turned = false;
+            moved = false;
         }
 
         /// <summary>
@@ -116,13 +117,13 @@ namespace de.trustfallgames.underConstruction.character {
             TileCoord coord = _character.CurrentCoord;
             switch (moveDirection) {
                 case MoveDirection.up:
-                    return new TileCoord(coord.X, coord.Z + 1);
+                    return new TileCoord(coord.X , coord.Z +1);
                 case MoveDirection.right:
-                    return new TileCoord(coord.X, coord.Z - 1);
+                    return new TileCoord(coord.X +1 , coord.Z);
                 case MoveDirection.left:
                     return new TileCoord(coord.X - 1, coord.Z);
                 case MoveDirection.down:
-                    return new TileCoord(coord.X + 1, coord.Z);
+                    return new TileCoord(coord.X, coord.Z -1);
             }
 
             return new TileCoord(coord.X, coord.Z);
@@ -134,27 +135,22 @@ namespace de.trustfallgames.underConstruction.character {
         private void CalcRot(MoveDirection moveDirection) {
             float turnDegree = GetTurnDegree(_character.CurrentMoveDirection, moveDirection);
             currentRotation = _character.GetCurrentRotation();
-            targetRotation  = currentRotation + turnDegree;
+            targetRotation = currentRotation + turnDegree;
 
             if (turnDegree == 0) {
                 return;
             }
 
-            Debug.Log("targetRotation - currentRotation = " + (targetRotation - currentRotation));
-            Debug.Log("Target Rotation: " + targetRotation + " Current Rotation: " + currentRotation);
-
-
             rotationPerFrame = turnDegree / (rotationDuration * 60);
-            Debug.Log("Rotating by " + rotationPerFrame + " Degree per Frame");
             _character.CurrentMoveDirection = moveDirection;
         }
 
         public static float GetRotationValue(MoveDirection moveDirection) {
             switch (moveDirection) {
-                case MoveDirection.up:    return 90;
-                case MoveDirection.right:   return 180;
+                case MoveDirection.up: return 90;
+                case MoveDirection.right: return 180;
                 case MoveDirection.down: return 270;
-                case MoveDirection.left:  return 360;
+                case MoveDirection.left: return 360;
             }
 
             return 0;
@@ -162,10 +158,10 @@ namespace de.trustfallgames.underConstruction.character {
 
         public static Vector3 GetDirectionVector(MoveDirection moveDirection) {
             switch (moveDirection) {
-                case MoveDirection.up:    return new Vector3(0, 0, 1);
-                case MoveDirection.right:   return new Vector3(1, 0, 0);
+                case MoveDirection.up: return new Vector3(0, 0, 1);
+                case MoveDirection.right: return new Vector3(1, 0, 0);
                 case MoveDirection.down: return new Vector3(0, 0, -1);
-                case MoveDirection.left:  return new Vector3(-1, 0, 0);
+                case MoveDirection.left: return new Vector3(-1, 0, 0);
             }
 
             return new Vector3(0, 0, 0);

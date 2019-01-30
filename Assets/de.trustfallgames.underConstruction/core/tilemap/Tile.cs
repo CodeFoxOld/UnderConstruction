@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace de.trustfallgames.underConstruction.core.tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour {
+        
+        private GameObject house;
+        [SerializeField] private bool blocked;
+
         private Tile() {
             
         }
@@ -20,7 +25,6 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         
         public TileCoord Coords { get; private set; }
 
-        [SerializeField] public bool Blocked;
 
         // Start is called before the first frame update
         void Start() {
@@ -32,13 +36,19 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         }
 
         private void OnValidate() {
-            GetComponent<BoxCollider>().enabled = Blocked;
-            GetComponent<MeshCollider>().enabled = !Blocked;
+            GetComponent<BoxCollider>().enabled = blocked;
+            GetComponent<MeshCollider>().enabled = !blocked;
         }
 
         public void CheckCollider() {
             collider = GetComponent<BoxCollider>();
             collider.size = new Vector3(10,5,10);
+        }
+
+        public bool Blocked => blocked;
+
+        public void SpawnObject() {
+            //TODO:
         }
         
         

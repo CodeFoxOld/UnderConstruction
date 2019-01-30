@@ -6,7 +6,7 @@ using UnityEngine;
 using Random = System.Random;
 
 public class ApartmentStack {
-    private List<GameObject> apartments;
+    private readonly List<GameObject> apartments = new List<GameObject>();
 
     private ApartmentColor apartmentColor;
 

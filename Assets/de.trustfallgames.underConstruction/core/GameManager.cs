@@ -2,22 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using de.trustfallgames.underConstruction.character;
+using de.trustfallgames.underConstruction.core.tilemap;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour {
     private static GameManager _instance = null;
-   [SerializeField]private Character character = null;
-   [SerializeField] private Controller controller;
+    [SerializeField] private Character character = null;
+    [SerializeField] private Controller controller;
+    [SerializeField] private MapManager mapManager;
 
     private GameManager() { }
 
     public static GameManager GetManager() {
         return _instance;
-
     }
-    
+
     private void Awake() {
         if (_instance == null)
             _instance = this;
@@ -27,7 +28,6 @@ public class GameManager : MonoBehaviour {
 
 
         controller = GetComponent<Controller>();
-
     }
 
     // Start is called before the first frame update
@@ -44,6 +44,15 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void RegisterMapManager(MapManager mapManager) {
+        if (this.mapManager == null) {
+            this.mapManager = mapManager;
+        } else {
+            throw new Exception("MapManager already set!");
+        }
+    }
+
     public Character Character => character;
     public Controller Controller => controller;
+    public MapManager MapManager => mapManager;
 }
