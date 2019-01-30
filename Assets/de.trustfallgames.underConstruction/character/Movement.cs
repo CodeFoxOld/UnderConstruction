@@ -1,7 +1,8 @@
 ﻿using System;
-using de.trustfallgames.underConstruction.tilemap;
+using de.trustfallgames.underConstruction.core.tilemap;
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
+using UnityEngine.Internal;
 using UnityEngine.Serialization;
 
 namespace de.trustfallgames.underConstruction.character {
@@ -12,8 +13,10 @@ namespace de.trustfallgames.underConstruction.character {
         private Vector3   startPosition;
         private Vector3   targetPosition;
 
-        [SerializeField] private float rotationDuration;
-        [SerializeField] private float moveDuration;
+        [Range(0.01f,1)]
+        [SerializeField] private float rotationDuration = 0.1f;
+        [Range(0.01f,1)]
+        [SerializeField] private float moveDuration = 0.1f;
 
         private bool moveInProgress;
         private bool turned;
@@ -51,12 +54,13 @@ namespace de.trustfallgames.underConstruction.character {
         /// </summary>
         /// <param name="moveDirection"></param>
         private void Move() {
-            _character.Player.Translate(GetDirectionVector(_character.CurrentMoveDirection) / moveDuration * 60);
+            _character.Player.Translate(GetDirectionVector(_character.CurrentMoveDirection) / (moveDuration * 60));
             if (Math.Abs(targetPosition.x - _character.transform.position.x) < 0.01
                 && Math.Abs(targetPosition.z - _character.transform.position.z) < 0.01) {
                 moved          = true;
                 moveInProgress = false;
                 _character.transform.position = targetPosition;
+                Debug.Log("Move complete");
             }
         }
 
