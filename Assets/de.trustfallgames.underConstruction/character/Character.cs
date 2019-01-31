@@ -71,13 +71,12 @@ namespace de.trustfallGames.underConstruction.character {
 
         public Transform Player { get { return _player; } }
 
-        public void Stack(ApartmentStack apartmentStack) {
-            ApartmentPart part = apartmentStack.draw();
+        public void Stack(ApartmentPart apartmentPart) {
             var b = _character.gameObject.transform;
             _character = Instantiate(apartmentBlueprint).transform;                //Create Blueprint
             _character.position = new Vector3(CurrentCoord.X, -1, CurrentCoord.Z); //Assign under tile
-            _character.GetComponent<MeshFilter>().mesh = part.Mesh;                //Assign mesh
-            _character.GetComponent<MeshRenderer>().material = part.Material;      //Assign material
+            _character.GetComponent<MeshFilter>().mesh = apartmentPart.Mesh;                //Assign mesh
+            _character.GetComponent<MeshRenderer>().material = apartmentPart.Material;      //Assign material
             _character.localRotation = b.transform.localRotation;
             _character.SetParent(_player);
             b.SetParent(_character); //set old parent as Child
