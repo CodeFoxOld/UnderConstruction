@@ -1,7 +1,7 @@
 using System;
-using de.trustfallgames.underConstruction.util;
+using de.trustfallGames.underConstruction.util;
 
-namespace de.trustfallgames.underConstruction.core.tilemap {
+namespace de.trustfallGames.underConstruction.core.tilemap {
     public class TileCoord {
         private TileCoord() { }
 

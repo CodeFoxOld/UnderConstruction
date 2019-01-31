@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.util {
+namespace de.trustfallGames.underConstruction.util {
     /// <summary>
     /// Automatic Counter.
     /// </summary>

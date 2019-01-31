@@ -1,8 +1,8 @@
 ﻿using System;
-using de.trustfallgames.underConstruction.util;
+using de.trustfallGames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.character {
+namespace de.trustfallGames.underConstruction.character {
     public class Controller : MonoBehaviour {
         private                  bool      test;
         [SerializeField] private Character _character;

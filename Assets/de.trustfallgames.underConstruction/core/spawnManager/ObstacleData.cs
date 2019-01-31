@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.core.tilemap {
+namespace de.trustfallGames.underConstruction.core.tilemap {
     public class ObstacleData {
         private int id;
         private Material material;

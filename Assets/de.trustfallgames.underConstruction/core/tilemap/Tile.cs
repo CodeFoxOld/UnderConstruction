@@ -1,9 +1,9 @@
 ﻿using System;
-using de.trustfallgames.underConstruction.core.spawnManager;
-using de.trustfallgames.underConstruction.util;
+using de.trustfallGames.underConstruction.core.spawnManager;
+using de.trustfallGames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.core.tilemap {
+namespace de.trustfallGames.underConstruction.core.tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour {

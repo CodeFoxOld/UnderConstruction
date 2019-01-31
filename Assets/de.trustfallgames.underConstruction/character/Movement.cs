@@ -1,9 +1,9 @@
 ﻿using System;
-using de.trustfallgames.underConstruction.core.tilemap;
-using de.trustfallgames.underConstruction.util;
+using de.trustfallGames.underConstruction.core.tilemap;
+using de.trustfallGames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.character {
+namespace de.trustfallGames.underConstruction.character {
     [RequireComponent(typeof(Character))]
     public class Movement : MonoBehaviour {
         [SerializeField] private Character _character;
