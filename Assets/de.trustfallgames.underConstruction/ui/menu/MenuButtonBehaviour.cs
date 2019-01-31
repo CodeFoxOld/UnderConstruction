@@ -10,6 +10,11 @@ public class MenuButtonBehaviour : MonoBehaviour
         SceneManager.LoadScene("camera");
     }
 
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+
     public void QuitGame()
     {
         Application.Quit();
