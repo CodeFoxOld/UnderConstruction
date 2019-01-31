@@ -64,8 +64,6 @@ namespace de.trustfallGames.underConstruction.core.spawnManager {
                 a = _mapManager.GetTile(_mapManager.GetCoordForEasyCoord(x, y));
             }
 
-            Debug.Log("Start new Spawn Routine at: " + x + "|" + y);
-
             ApartmentColor apartmentColor = (ApartmentColor) Random.Range(0, 3);
 
             if (a.Blocked) {

@@ -90,13 +90,10 @@ namespace de.trustfallGames.underConstruction.character {
         /// <param name="moveDirection"></param>
         public void StartMove(MoveDirection moveDirection) {
             if (_mapManager.FieldBlocked(_character.CurrentCoord, moveDirection) ||_character.Moving) {
-                Debug.Log("Field Blocked");
                 return;
             }
 
             if (moveInProgress) return;
-            Debug.Log("Start Movement");
-            Debug.Log(_character.CurrentCoord.ToString());
             _character.CurrentCoord = _character.CurrentCoord.NextTileCoord(moveDirection);
             CalcRot(moveDirection);
             startPosition = _character.transform.position;
