@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace de.trustfallGames.underConstruction.util {
@@ -6,6 +7,8 @@ namespace de.trustfallGames.underConstruction.util {
     /// </summary>
     public class Counter {
         private readonly float start;
+        private bool[] marker;
+        private float[] stops;
         private float current;
         private bool autoReset = true;
 
@@ -16,6 +19,8 @@ namespace de.trustfallGames.underConstruction.util {
         /// </summary>
         /// <param name="start"></param>
         public Counter(float start) {
+            
+            
             current = this.start = start;
         }
 
@@ -27,6 +32,11 @@ namespace de.trustfallGames.underConstruction.util {
         public Counter(float start, bool autoReset) {
             current = this.start = start;
             this.autoReset = autoReset;
+        }
+
+        public Counter(float start, bool autoReset, params float[] stops) {
+            marker = new bool[stops.Length];
+            this.stops = stops;
         }
 
         /// <summary>
@@ -42,6 +52,30 @@ namespace de.trustfallGames.underConstruction.util {
 
             if (autoReset) Reset();
             return true;
+        }
+
+        /// <summary>
+        /// Checks the marker. Returns true in the Frame, when the marker is passed.
+        /// </summary>
+        /// <param name="stopIndex"></param>
+        /// <returns></returns>
+        public bool CheckMarker(int stopIndex) {
+            if (marker[stopIndex]) return false;
+            if (current > stops[stopIndex]) {
+                marker[stopIndex] = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        private void CheckUnusedMarker() {
+            int i = 0;
+            foreach (var stop in stops) {
+                if (stop < current && marker[i] == false) {
+                    marker[i] = true;
+                }
+            }
         }
 
         public void Reset() {
