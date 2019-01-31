@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using de.trustfallgames.underConstruction.util;
+using de.trustfallGames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.core.tilemap {
+namespace de.trustfallGames.underConstruction.core.tilemap {
     public class MapManager : MonoBehaviour {
         [Header("Use \"Generate Classes for Tiles\" to add scripts to all tiles and fill refresh values")]
         [SerializeField]

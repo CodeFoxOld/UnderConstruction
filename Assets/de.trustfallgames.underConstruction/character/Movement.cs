@@ -1,9 +1,9 @@
 ﻿using System;
-using de.trustfallgames.underConstruction.core.tilemap;
-using de.trustfallgames.underConstruction.util;
+using de.trustfallGames.underConstruction.core.tilemap;
+using de.trustfallGames.underConstruction.util;
 using UnityEngine;
 
-namespace de.trustfallgames.underConstruction.character {
+namespace de.trustfallGames.underConstruction.character {
     [RequireComponent(typeof(Character))]
     public class Movement : MonoBehaviour {
         [SerializeField] private Character _character;
@@ -89,14 +89,11 @@ namespace de.trustfallgames.underConstruction.character {
         /// </summary>
         /// <param name="moveDirection"></param>
         public void StartMove(MoveDirection moveDirection) {
-            if (_mapManager.FieldBlocked(_character.CurrentCoord, moveDirection)) {
-                Debug.Log("Field Blocked");
+            if (_mapManager.FieldBlocked(_character.CurrentCoord, moveDirection) ||_character.Moving) {
                 return;
             }
 
             if (moveInProgress) return;
-            Debug.Log("Start Movement");
-            Debug.Log(_character.CurrentCoord.ToString());
             _character.CurrentCoord = _character.CurrentCoord.NextTileCoord(moveDirection);
             CalcRot(moveDirection);
             startPosition = _character.transform.position;
@@ -206,5 +203,8 @@ namespace de.trustfallgames.underConstruction.character {
 
             return 0;
         }
+
+        public Transform CharTransform { get => _charTransform; set => _charTransform = value; }
     }
+    
 }

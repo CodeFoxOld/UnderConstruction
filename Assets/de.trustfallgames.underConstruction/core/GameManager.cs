@@ -1,6 +1,6 @@
 ﻿using System;
-using de.trustfallgames.underConstruction.character;
-using de.trustfallgames.underConstruction.core.tilemap;
+using de.trustfallGames.underConstruction.character;
+using de.trustfallGames.underConstruction.core.tilemap;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {

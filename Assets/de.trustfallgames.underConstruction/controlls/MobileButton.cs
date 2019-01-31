@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using de.trustfallgames.underConstruction.character;
+using de.trustfallGames.underConstruction.character;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using MoveDirection = de.trustfallgames.underConstruction.util.MoveDirection;
+using MoveDirection = de.trustfallGames.underConstruction.util.MoveDirection;
 
 [RequireComponent(typeof(Image))]
 public class MobileButton : InteractableButton {

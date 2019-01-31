@@ -1,15 +1,20 @@
 fileFormatVersion: 2
-guid: e34d4cc112499bf44a550aefbfb5bed7
+guid: 7ed2926612e36544db046c01b6fd15cc
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: No Name
+    2100000: office_orange
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Placeholder_Apartment
-  externalObjects: {}
+    4300000: Cube.035
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: office_orange
+    second: {fileID: 2100000, guid: 4fd30cf232dbad24b9c601e30ee3e8cd, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
