@@ -205,6 +205,10 @@ namespace de.trustfallGames.underConstruction.character {
         }
 
         public Transform CharTransform { get => _charTransform; set => _charTransform = value; }
+
     }
+    
+    
+    
     
 }
