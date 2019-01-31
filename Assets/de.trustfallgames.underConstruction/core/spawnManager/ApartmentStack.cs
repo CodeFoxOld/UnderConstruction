@@ -4,7 +4,7 @@ using UnityEngine;
 using Random = System.Random;
 
 public class ApartmentStack {
-    private readonly List<GameObject> apartments = new List<GameObject>();
+    private readonly List<ApartmentPart> apartments = new List<ApartmentPart>();
 
     private ApartmentColor apartmentColor;
 
@@ -16,19 +16,20 @@ public class ApartmentStack {
     /// <param name="apartments"></param>
     /// <param name="apartmentColor"></param>
     public ApartmentStack(GameObject[] apartments, ApartmentColor apartmentColor) {
-        foreach (GameObject go in apartments) {
-            if (go.GetComponent<apartmentPart>().ApartmentColor == apartmentColor)
-                this.apartments.Add(go);
-        }
-
         this.apartmentColor = apartmentColor;
+        Debug.Log("Trying to create new apartment stack for color: " + apartmentColor);
+        foreach (GameObject go in apartments) {
+            ApartmentPart part = go.GetComponent<ApartmentPart>();
+            if (part.ApartmentColor == this.apartmentColor)
+                this.apartments.Add(part);
+        }
     }
 
     /// <summary>
     /// Draws a random object from the list
     /// </summary>
     /// <returns></returns>
-    public GameObject draw() {
+    public ApartmentPart draw() {
         Random rand = new Random();
         return apartments[rand.Next(apartments.Count)];
     }

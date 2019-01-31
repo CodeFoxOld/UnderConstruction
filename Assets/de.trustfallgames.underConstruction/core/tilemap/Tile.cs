@@ -1,4 +1,5 @@
 ﻿using System;
+using de.trustfallgames.underConstruction.core.spawnManager;
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         private ObstacleData obstacleData;
         private GameObject house;
         private GameObject obstacleBlueprint;
+        private ApartmentStack apartmentStack;
 
         [SerializeField] private bool blocked;
         public bool Blocked => blocked;
@@ -23,18 +25,15 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
 
         private Tile() { }
 
-        public Tile(int x, int z) {
-            Coords = new TileCoord(x, z);
-        }
+        public Tile(int x, int z) { Coords = new TileCoord(x, z); }
 
         // Start is called before the first frame update
-        void Start() {
-            gameManager = GameManager.GetManager();
-        }
+        void Start() { gameManager = GameManager.GetManager(); }
 
         // Update is called once per frame
         void Update() {
             if (_spawnCounter != null && _spawnCounter.Next()) {
+                Debug.Log("Execute Object Spawn");
                 SpawnObject();
             }
 
@@ -44,28 +43,36 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         }
 
         private void Move() {
-            gameObject.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
-            if (Math.Abs(gameObject.transform.position.y) < 0.01) {
+            house.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
+            if (Math.Abs(house.transform.position.y) < 0.01) {
                 moving = false;
-                gameObject.transform.position = new Vector3(Coords.X, 0, Coords.Z);
+                house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
             }
         }
 
         private void SpawnObject() {
-            if (GameManager.GetManager().Character.CurrentCoord.Equals(Coords)
-            ) /*Player is on Field. concat new object on Player*/ {
+            Debug.Log("Spawn new Object");
+            if (GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
+                /*Player is on Field. concat new object on Player*/
                 //Concat object on Player
+                Debug.Log("Trying to Concat to Player");
+                GameManager.GetManager().Character.Stack(apartmentStack);
+                obstacleData = null;
+                return;
             } else /*Player is not on Field. Create or Concat new object*/ {
+                Debug.Log("Spawning new obstacle");
                 var b = house;
-                house = Instantiate(obstacleBlueprint);
-                house.transform.position = new Vector3(Coords.X, -1, Coords.Z);
-                house.GetComponent<MeshFilter>().mesh = obstacleData.Mesh;
-                house.GetComponent<Material>().mainTexture = obstacleData.Material.mainTexture;
+                house = Instantiate(obstacleBlueprint);                              //Create Blueprint
+                house.transform.position = new Vector3(Coords.X, -1, Coords.Z);      //Assign under tile
+                house.GetComponent<MeshFilter>().mesh = obstacleData.Mesh;           //Assign mesh
+                house.GetComponent<MeshRenderer>().material = obstacleData.Material; //Assign material
                 if (b != null) {
-                    b.transform.SetParent(house.transform);
+                    b.transform.SetParent(house.transform); //set old parent as Child
+                    obstacleData.AddStage();                //Count Stage 1 up
                 }
 
-                moving = true;
+                blocked = true; //Field is now blocked
+                moving = true;  //Start moving
             }
         }
 
@@ -79,20 +86,24 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
             collider.size = new Vector3(10, 5, 10);
         }
 
-        public void InitialiseSpawnObject(ObstacleData obstacleData, GameObject obstacleBlueprint) {
+        public void InitialiseSpawnObject(ObstacleData obstacleData, GameObject obstacleBlueprint,
+            ApartmentStack apartmentStack) {
+            this.apartmentStack = apartmentStack;
+            Debug.Log(obstacleData.ToString());
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(gameManager.Settings.SpawnDuration, false);
-            var a = Instantiate(obstacleBlueprint);
             if (this.obstacleData == null) {
                 this.obstacleData = obstacleData;
             }
         }
 
+        public void Stack(ApartmentStack apartmentStack) {
+            this.apartmentStack = apartmentStack;
+            _spawnCounter = new Counter(gameManager.Settings.SpawnDuration, false);
+        }
+
         public ObstacleData ObstacleData => obstacleData;
     }
 
-    public enum ObstacleType {
-        House,
-        NotHouse
-    }
+    public enum ObstacleType { House, NotHouse }
 }

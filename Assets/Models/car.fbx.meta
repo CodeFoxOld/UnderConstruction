@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: ffab1f743bd6f3e4285dc130ce953ef1
+guid: 6e8195acb2b6d0745b0ebcbb496d7ae1
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material
+    2100000: car.003
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Placerholder_House
+    4300000: test_car_7
   externalObjects: {}
   materials:
     importMaterials: 1

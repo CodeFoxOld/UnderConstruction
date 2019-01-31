@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace de.trustfallgames.underConstruction.core.tilemap {
     public class ObstacleData {
@@ -6,8 +7,13 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         private Material material;
         private Mesh mesh;
         private ObstacleType obstacleType;
-        
-        public ObstacleData(int id, Material material, Mesh mes, ObstacleType obstacleType) {
+        private int stage = 1;
+
+        public ObstacleData(int id, Material material, Mesh mesh, ObstacleType obstacleType) {
+            if (material == null)
+                throw new NullReferenceException();
+            if (mesh == null)
+                throw new NullReferenceException();
             this.id = id;
             this.material = material;
             this.mesh = mesh;
@@ -19,5 +25,20 @@ namespace de.trustfallgames.underConstruction.core.tilemap {
         public Mesh Mesh => mesh;
 
         public ObstacleType ObstacleType => obstacleType;
+
+        public override string ToString() {
+            return ("ID: " + id + " Materialname: " + material.name + " Meshname: " + mesh.name + " ObstacleType: "
+                    + obstacleType);
+        }
+
+        public void AddStage() {
+            stage++;
+        }
+
+        public void TakeStage() {
+            stage--;
+        }
+
+        public int Stage => stage;
     }
 }

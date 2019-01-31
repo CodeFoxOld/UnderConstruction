@@ -1,15 +1,20 @@
 fileFormatVersion: 2
-guid: af4a334a9f9a07f41ba030ea76499431
+guid: d708ac653a38d984699aadae2d916e4d
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material
+    2100000: Material.003
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Placerholder_House
-  externalObjects: {}
+    4300000: House_Appartment.012
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: f3443bd530ec34d499d3c70bed107b07, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

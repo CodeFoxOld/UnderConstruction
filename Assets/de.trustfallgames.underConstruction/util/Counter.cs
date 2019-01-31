@@ -11,10 +11,19 @@ namespace de.trustfallgames.underConstruction.util {
 
         private Counter() { }
 
+        /// <summary>
+        /// Initialise a new Counter object with auto reset.
+        /// </summary>
+        /// <param name="start"></param>
         public Counter(float start) {
             current = this.start = start;
         }
 
+        /// <summary>
+        /// Initialise a new Counter object with customizable auto reset.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="autoReset"></param>
         public Counter(float start, bool autoReset) {
             current = this.start = start;
             this.autoReset = autoReset;
@@ -38,5 +47,7 @@ namespace de.trustfallgames.underConstruction.util {
         public void Reset() {
             current = start;
         }
+
+        public float Current => current;
     }
 }

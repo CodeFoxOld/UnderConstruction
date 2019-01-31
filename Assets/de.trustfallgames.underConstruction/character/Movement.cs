@@ -89,7 +89,7 @@ namespace de.trustfallgames.underConstruction.character {
         /// </summary>
         /// <param name="moveDirection"></param>
         public void StartMove(MoveDirection moveDirection) {
-            if (_mapManager.FieldBlocked(_character.CurrentCoord, moveDirection)) {
+            if (_mapManager.FieldBlocked(_character.CurrentCoord, moveDirection) ||_character.Moving) {
                 Debug.Log("Field Blocked");
                 return;
             }
@@ -206,5 +206,8 @@ namespace de.trustfallgames.underConstruction.character {
 
             return 0;
         }
+
+        public Transform CharTransform { get => _charTransform; set => _charTransform = value; }
     }
+    
 }

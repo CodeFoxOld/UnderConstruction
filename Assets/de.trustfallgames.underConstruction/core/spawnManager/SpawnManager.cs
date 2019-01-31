@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using de.trustfallgames.underConstruction.core.tilemap;
 using de.trustfallgames.underConstruction.util;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace de.trustfallgames.underConstruction.core.spawnManager {
         private readonly Dictionary<ApartmentColor, ApartmentStack> apartmentStacks =
             new Dictionary<ApartmentColor, ApartmentStack>();
 
-        private readonly List<ObstacleData> obstacles = new List<ObstacleData>();
+        [SerializeField] private List<ObstacleData> obstacles = new List<ObstacleData>();
 
         [Range(1, 60)]
         [SerializeField]
@@ -26,19 +27,22 @@ namespace de.trustfallgames.underConstruction.core.spawnManager {
         private void Start() {
             BuildDictionary();
             BuildObstacleData();
-            counter = new Counter(spawnInterval);
+            counter = new Counter(GameManager.GetManager().Settings.SpawnInterval);
             _mapManager = GameManager.GetManager().MapManager;
         }
 
         private void BuildDictionary() {
             foreach (GameObject part in apartmentParts) {
-                if (!apartmentStacks.ContainsKey(part.GetComponent<apartmentPart>().ApartmentColor)
-                ) /*create new dictionary entry*/ {
+                if (!apartmentStacks.ContainsKey(part.GetComponent<ApartmentPart>().ApartmentColor)) {
+                    /*create new dictionary entry*/
                     ApartmentStack stack = new ApartmentStack(
                                                               apartmentParts,
-                                                              part.GetComponent<apartmentPart>().ApartmentColor);
+                                                              part.GetComponent<ApartmentPart>().ApartmentColor);
+                    apartmentStacks.Add(part.GetComponent<ApartmentPart>().ApartmentColor, stack);
                 }
             }
+
+            Debug.Log("Created " + apartmentStacks.Keys.Count + " apartment Stacks.");
         }
 
         // Update is called once per frame
@@ -58,19 +62,19 @@ namespace de.trustfallgames.underConstruction.core.spawnManager {
                 y = Random.Range(0, _mapManager.YDimension);
 
                 a = _mapManager.GetTile(_mapManager.GetCoordForEasyCoord(x, y));
-                
             }
 
+            Debug.Log("Start new Spawn Routine at: " + x + "|" + y);
+
+            ApartmentColor apartmentColor = (ApartmentColor) Random.Range(0, 3);
+
             if (a.Blocked) {
-                ObstacleData obstacleData = null;
-                foreach (ObstacleData VARIABLE in obstacles) {
-                    if (VARIABLE.Id == a.ObstacleData.Id)
-                        obstacleData = VARIABLE;
-                }
-                a.InitialiseSpawnObject(obstacleData, obstacleBlueprint);
+                a.Stack(apartmentStacks[apartmentColor]);
+                return;
             }
-            
-            a.InitialiseSpawnObject(obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint);
+
+            a.InitialiseSpawnObject(obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint, 
+            apartmentStacks[apartmentColor]);
         }
 
         private void BuildObstacleData() {
@@ -83,6 +87,8 @@ namespace de.trustfallgames.underConstruction.core.spawnManager {
                     i++;
                 }
             }
+
+            Debug.Log("Created " + obstacles.Count + " obstacles");
         }
     }
 }
