@@ -71,8 +71,9 @@ namespace de.trustfallGames.underConstruction.core.spawnManager {
                 return;
             }
 
-            a.InitialiseSpawnObject(obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint, 
-            apartmentStacks[apartmentColor]);
+            a.InitialiseSpawnObject(
+                                    obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
+                                    apartmentStacks[apartmentColor]);
         }
 
         private void BuildObstacleData() {
