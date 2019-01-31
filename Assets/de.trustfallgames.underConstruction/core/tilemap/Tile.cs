@@ -7,12 +7,13 @@ namespace de.trustfallGames.underConstruction.core.tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour {
+        [SerializeField] private GameObject[] indicator;
         private GameManager gameManager;
 
         private ObstacleData obstacleData;
         private GameObject house;
         private GameObject obstacleBlueprint;
-        private ApartmentStack apartmentStack;
+        private ApartmentPart apartmentPart;
 
         [SerializeField] private bool blocked;
         public bool Blocked => blocked;
@@ -28,7 +29,12 @@ namespace de.trustfallGames.underConstruction.core.tilemap {
         public Tile(int x, int z) { Coords = new TileCoord(x, z); }
 
         // Start is called before the first frame update
-        void Start() { gameManager = GameManager.GetManager(); }
+        void Start() {
+            gameManager = GameManager.GetManager();
+            foreach (var obj in indicator) {
+                obj.SetActive(false);
+            }
+        }
 
         // Update is called once per frame
         void Update() {
@@ -51,12 +57,13 @@ namespace de.trustfallGames.underConstruction.core.tilemap {
         }
 
         private void SpawnObject() {
+            HideIndicator();
             Debug.Log("Spawn new Object");
             if (GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
                 /*Player is on Field. concat new object on Player*/
                 //Concat object on Player
                 Debug.Log("Trying to Concat to Player");
-                GameManager.GetManager().Character.Stack(apartmentStack);
+                GameManager.GetManager().Character.Stack(apartmentPart);
                 obstacleData = null;
                 return;
             } else /*Player is not on Field. Create or Concat new object*/ {
@@ -88,7 +95,8 @@ namespace de.trustfallGames.underConstruction.core.tilemap {
 
         public void InitialiseSpawnObject(ObstacleData obstacleData, GameObject obstacleBlueprint,
             ApartmentStack apartmentStack) {
-            this.apartmentStack = apartmentStack;
+            apartmentPart = apartmentStack.draw();
+            ShowIndicator();
             Debug.Log(obstacleData.ToString());
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(gameManager.Settings.SpawnDuration, false);
@@ -98,8 +106,22 @@ namespace de.trustfallGames.underConstruction.core.tilemap {
         }
 
         public void Stack(ApartmentStack apartmentStack) {
-            this.apartmentStack = apartmentStack;
+            apartmentPart = apartmentStack.draw();
             _spawnCounter = new Counter(gameManager.Settings.SpawnDuration, false);
+        }
+
+        private void ShowIndicator() {
+            foreach (var obj in indicator) {
+                obj.SetActive(transform);
+                obj.GetComponent<MeshRenderer>().material.color = apartmentPart.Material.color;
+                obj.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", apartmentPart.Material.color);
+            }
+        }
+
+        private void HideIndicator() {
+            foreach (var obj in indicator) {
+                obj.SetActive(false);
+            }
         }
 
         public ObstacleData ObstacleData => obstacleData;
