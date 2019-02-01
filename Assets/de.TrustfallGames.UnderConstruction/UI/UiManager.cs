@@ -31,7 +31,11 @@ namespace de.TrustfallGames.UnderConstruction.UI {
             pauseMenuCanvas.SetActive(false);
         }
 
-        public UiManager OnHighscoreCalc(int highscoreMultiplicator, int highscore) { return this; }
+        public UiManager OnHighscoreCalc(int highscoreMultiplicator, int highscore)
+        {
+            ui.GetComponent<GameUIBehaviour>().ChangeScore(highscore);
+            return this;
+        }
 
         public void OnDeconstructorChange(int count) {
             

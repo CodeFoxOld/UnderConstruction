@@ -4,9 +4,9 @@ using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuButtonBehaviour : MonoBehaviour
+public class MenuBehaviour : MonoBehaviour
 {
-    [SerializeField] private GameManager _gamemanager;
+    private GameManager _gamemanager;
 
     private void Start()
     {
@@ -15,12 +15,12 @@ public class MenuButtonBehaviour : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("camera");
+        SceneManager.LoadScene(1);
     }
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene(0);
     }
 
     public void QuitGame()

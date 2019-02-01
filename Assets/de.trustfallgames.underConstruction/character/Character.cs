@@ -79,6 +79,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 colorCount++;
             } else {
                 colorCount = 1;
+                latestColor = apartmentPart.ApartmentColor;
             }
 
             highscore += (GameManager.GetManager().Settings.BasePoint * colorCount);
