@@ -33,6 +33,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private ApartmentColor latestColor;
 
         private int highscore;
+        private int highscoreRest;
 
         private Character() { }
 
@@ -78,8 +79,8 @@ namespace de.TrustfallGames.UnderConstruction.character {
             }
 
             highscore += (GameManager.GetManager().Settings.BasePoint * colorCount);
-
-            GameManager.GetManager().UiManager.OnHighScoreCalc(colorCount, highscore);
+            
+            GameManager.GetManager().UiManager.OnHighscoreCalc(colorCount, highscore).OnDeconstructorChange(1);
         }
 
         public float GetCurrentRotation() { return Movement.GetRotationValue(_moveDirection); }
