@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace de.trustfallGames.underConstruction.util {
+namespace de.TrustfallGames.UnderConstruction.Util {
     /// <summary>
     /// Automatic Counter.
     /// </summary>

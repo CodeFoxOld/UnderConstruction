@@ -1,10 +1,11 @@
 ﻿using System;
-using de.trustfallGames.underConstruction.core.spawnManager;
-using de.trustfallGames.underConstruction.core.tilemap;
-using de.trustfallGames.underConstruction.util;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
+using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
-namespace de.trustfallGames.underConstruction.character {
+namespace de.TrustfallGames.UnderConstruction.character {
     [RequireComponent(typeof(Movement))]
     public class Character : MonoBehaviour {
         [Header("Whole Player Object")]

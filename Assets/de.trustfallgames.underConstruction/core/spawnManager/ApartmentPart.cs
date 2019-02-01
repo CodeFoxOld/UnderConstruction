@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace de.trustfallGames.underConstruction.core.spawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
     public class ApartmentPart : MonoBehaviour {
         [SerializeField] private ApartmentColor _apartmentColor;
         [SerializeField] private Mesh mesh;

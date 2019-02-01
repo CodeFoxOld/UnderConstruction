@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using de.trustfallGames.underConstruction.core.spawnManager;
+using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using UnityEngine;
 using Random = System.Random;
 

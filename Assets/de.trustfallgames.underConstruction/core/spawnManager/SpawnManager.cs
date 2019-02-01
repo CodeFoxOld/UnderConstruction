@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using de.trustfallGames.underConstruction.core.tilemap;
-using de.trustfallGames.underConstruction.util;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace de.trustfallGames.underConstruction.core.spawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
     public class SpawnManager : MonoBehaviour {
         [SerializeField] private GameObject[] apartmentParts;
         [SerializeField] private GameObject[] obstacleStacks;
