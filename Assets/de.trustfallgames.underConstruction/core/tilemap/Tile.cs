@@ -39,6 +39,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         // Update is called once per frame
         void Update() {
+            if (_spawnCounter.CheckMarker(0)) {
+                if (GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
+                    blocked = true;
+                }
+            }
+
             if (_spawnCounter != null && _spawnCounter.Check()) {
                 Debug.Log("Execute Object Spawn");
                 SpawnObject();
@@ -59,17 +65,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private void SpawnObject() {
             HideIndicator();
-            Debug.Log("Spawn new Object");
             if (GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
                 /*Player is on Field. concat new object on Player*/
                 //Concat object on Player
-                Debug.Log("Trying to Concat to Player");
                 GameManager.GetManager().Character.Stack(apartmentPart);
                 obstacleData = null;
-                return;
             } else /*Player is not on Field. Create or Concat new object*/ {
-                Debug.Log("Spawning new obstacle");
-                var b = house;
+                GameObject b = house;
                 house = Instantiate(obstacleBlueprint);                              //Create Blueprint
                 house.transform.position = new Vector3(Coords.X, -1, Coords.Z);      //Assign under tile
                 house.GetComponent<MeshFilter>().mesh = obstacleData.Mesh;           //Assign mesh
@@ -108,7 +110,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public void Stack(ApartmentStack apartmentStack) {
             apartmentPart = apartmentStack.draw();
-            _spawnCounter = new Counter(gameManager.Settings.SpawnDuration, false);
+            _spawnCounter = new Counter(
+                                        gameManager.Settings.SpawnDuration, false,
+                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration);
         }
 
         private void ShowIndicator() {

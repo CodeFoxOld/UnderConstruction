@@ -35,6 +35,12 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             GameManager.GetManager().RegisterCounter(this);
         }
 
+        /// <summary>
+        /// Initialise a new Counter object with customizable auto reset and markers for more event point in one cycle;
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="autoReset"></param>
+        /// <param name="stops"></param>
         public Counter(float start, bool autoReset, params float[] stops) {
             marker = new bool[stops.Length];
             this.stops = stops;
@@ -46,6 +52,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// </summary>
         /// <returns>Returns true in the Frame, when the counter goes on 0 or below</returns>
         public void Next() {
+            CheckUnusedMarker();
             if (current < 0) return;
             current -= Time.deltaTime;
             if (current > 0)
@@ -53,6 +60,10 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             if (autoReset) Reset();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool Check() { return !(current > 0); }
 
         /// <summary>
@@ -69,15 +80,21 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             return false;
         }
 
+        /// <summary>
+        /// Marks marker as used
+        /// </summary>
         private void CheckUnusedMarker() {
-            int i = 0;
-            foreach (var stop in stops) {
+            const int i = 0;
+            foreach (float stop in stops) {
                 if (stop < current && marker[i] == false) {
                     marker[i] = true;
                 }
             }
         }
 
+        /// <summary>
+        /// Resets the counter and starts a new counter cycle
+        /// </summary>
         public void Reset() { current = start; }
 
         public float Current => current;

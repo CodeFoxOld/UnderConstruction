@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
@@ -27,6 +28,9 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private bool moving;
 
         public bool Moving => moving;
+
+        private int colorCount = 1;
+        private ApartmentColor latestColor;
 
         private void Start() {
             GameManager.GetManager().RegisterCharacter(this);
@@ -74,15 +78,26 @@ namespace de.TrustfallGames.UnderConstruction.character {
 
         public void Stack(ApartmentPart apartmentPart) {
             var b = _character.gameObject.transform;
-            _character = Instantiate(apartmentBlueprint).transform;                //Create Blueprint
-            _character.position = new Vector3(CurrentCoord.X, -1, CurrentCoord.Z); //Assign under tile
-            _character.GetComponent<MeshFilter>().mesh = apartmentPart.Mesh;                //Assign mesh
-            _character.GetComponent<MeshRenderer>().material = apartmentPart.Material;      //Assign material
+            _character = Instantiate(apartmentBlueprint).transform;                    //Create Blueprint
+            _character.position = new Vector3(CurrentCoord.X, -1, CurrentCoord.Z);     //Assign under tile
+            _character.GetComponent<MeshFilter>().mesh = apartmentPart.Mesh;           //Assign mesh
+            _character.GetComponent<MeshRenderer>().material = apartmentPart.Material; //Assign material
             _character.localRotation = b.transform.localRotation;
             _character.SetParent(_player);
             b.SetParent(_character); //set old parent as Child
             moving = true;           //Start moving
             _movement.CharTransform = _character.transform;
+            CalculateHighscore(apartmentPart);
+        }
+
+        private void CalculateHighscore(ApartmentPart apartmentPart) {
+            if (latestColor == apartmentPart.ApartmentColor) {
+                colorCount++;
+            } else {
+                colorCount = 1;
+            }
+
+            //TODO: Send ColorCount;
         }
     }
 }
