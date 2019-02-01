@@ -13,7 +13,7 @@ public class MenuButtonBehaviour : MonoBehaviour
         _gamemanager = GameManager.GetManager();
     }
 
-    public void StartSceneLoad()
+    public void StartGame()
     {
         SceneManager.LoadScene("camera");
     }
@@ -30,5 +30,11 @@ public class MenuButtonBehaviour : MonoBehaviour
 
     public void PauseGame()
     {
+        _gamemanager.UiManager.OnGamePaused();
+    }
+
+    public void UnpauseGame()
+    {
+        _gamemanager.UiManager.OnGameContinue();
     }
 }
