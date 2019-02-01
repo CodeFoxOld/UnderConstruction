@@ -111,8 +111,6 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// Resets the counter and starts a new counter cycle
         /// </summary>
         public void Reset() {
-            if (start == 0) return;
-            Debug.Log("Counter Reset");
             current = start;
             executed = false;
         }
