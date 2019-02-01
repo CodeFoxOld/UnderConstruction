@@ -32,6 +32,11 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private int colorCount = 1;
         private ApartmentColor latestColor;
 
+        private int highscore;
+        private int highscoreRest;
+
+        private Character() { }
+
         private void Start() {
             GameManager.GetManager().RegisterCharacter(this);
             _controller = GameManager.GetManager().Controller;
@@ -51,30 +56,6 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 _character.transform.position = new Vector3(CurrentCoord.X, 0, CurrentCoord.Z);
             }
         }
-
-        public Controller Controller { get { return _controller; } }
-
-        private Character() { }
-
-        public float GetCurrentRotation() { return Movement.GetRotationValue(_moveDirection); }
-
-        public MoveDirection MoveDirection { get { return _moveDirection; } set { _moveDirection = value; } }
-
-        public TileCoord CurrentCoord { get { return _currentCoord; } set { _currentCoord = value; } }
-
-        public Transform CharacterTransform { get { return _character; } }
-
-        public MoveDirection CurrentMoveDirection { get { return _moveDirection; } set { _moveDirection = value; } }
-
-        public Movement Movement {
-            get {
-                if (_movement == null)
-                    _movement = GetComponent<Movement>();
-                return _movement;
-            }
-        }
-
-        public Transform Player { get { return _player; } }
 
         public void Stack(ApartmentPart apartmentPart) {
             var b = _character.gameObject.transform;
@@ -97,7 +78,26 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 colorCount = 1;
             }
 
-            //TODO: Send ColorCount;
+            highscore += (GameManager.GetManager().Settings.BasePoint * colorCount);
+            
+            GameManager.GetManager().UiManager.OnHighscoreCalc(colorCount, highscore).OnDeconstructorChange(1);
         }
+
+        public float GetCurrentRotation() { return Movement.GetRotationValue(_moveDirection); }
+
+        public Movement Movement {
+            get {
+                if (_movement == null)
+                    _movement = GetComponent<Movement>();
+                return _movement;
+            }
+        }
+
+        public TileCoord CurrentCoord { get { return _currentCoord; } set { _currentCoord = value; } }
+        public Transform CharacterTransform { get { return _character; } }
+        public MoveDirection CurrentMoveDirection { get { return _moveDirection; } set { _moveDirection = value; } }
+        public MoveDirection MoveDirection { get { return _moveDirection; } set { _moveDirection = value; } }
+        public Transform Player { get { return _player; } }
+        public Controller Controller { get { return _controller; } }
     }
 }

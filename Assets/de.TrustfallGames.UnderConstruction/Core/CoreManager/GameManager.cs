@@ -18,8 +18,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         private GameManager() { }
 
-        public static GameManager GetManager() { return _instance; }
-
         private void Awake() {
             if (_instance == null)
                 _instance = this;
@@ -31,8 +29,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             controller = GetComponent<Controller>();
             settings = GetComponent<Settings>();
         }
-
-        public void RegisterCounter(Counter counter) { counters.Add(counter); }
 
         private void LateUpdate() {
             if (!_uiManager.GamePaused)
@@ -57,6 +53,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             }
         }
 
+        public void RegisterCounter(Counter counter) { counters.Add(counter); }
+
+        public static GameManager GetManager() { return _instance; }
+
         public Character Character => character;
         public Controller Controller => controller;
         public MapManager MapManager => mapManager;
@@ -66,5 +66,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             _uiManager = uiManager;
             return this;
         }
+
+        public UiManager UiManager => _uiManager;
     }
 }

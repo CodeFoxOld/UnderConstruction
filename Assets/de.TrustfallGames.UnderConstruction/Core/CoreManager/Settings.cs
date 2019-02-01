@@ -14,13 +14,15 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private float moveDuration = 0.1f;
 
-        [SerializeField] private float basePoint = 100;
+        [SerializeField] private int basePoint = 100;
+        [SerializeField] private int destructablesPerPoints;
 
+        public int DestructablesPerPoints => destructablesPerPoints;
         public float SpawnDuration => spawnDuration;
         public float MoveUpSpeed => moveUpSpeed;
         public float SpawnInterval => spawnInterval;
         public float RotationDuration => rotationDuration;
         public float MoveDuration => moveDuration;
-        public float BasePoint => basePoint;
+        public int BasePoint => basePoint;
     }
 }
