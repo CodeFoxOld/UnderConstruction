@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.UI;
+using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
@@ -10,6 +13,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField] private Controller controller;
         [SerializeField] private MapManager mapManager;
         [SerializeField] private Settings settings;
+        private List<Counter> counters = new List<Counter>();
+        private UiManager _uiManager;
 
         private GameManager() { }
 
@@ -27,11 +32,14 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             settings = GetComponent<Settings>();
         }
 
-        // Start is called before the first frame update
-        void Start() { }
+        public void RegisterCounter(Counter counter) { counters.Add(counter); }
 
-        // Update is called once per frame
-        void Update() { }
+        private void LateUpdate() {
+            if (!_uiManager.GamePaused)
+                foreach (var counter in counters) {
+                    counter.Next();
+                }
+        }
 
         public void RegisterCharacter(Character character) {
             if (this.character == null) {
@@ -53,5 +61,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public Controller Controller => controller;
         public MapManager MapManager => mapManager;
         public Settings Settings => settings;
+
+        public GameManager RegisterUiManager(UiManager uiManager) {
+            _uiManager = uiManager;
+            return this;
+        }
     }
 }

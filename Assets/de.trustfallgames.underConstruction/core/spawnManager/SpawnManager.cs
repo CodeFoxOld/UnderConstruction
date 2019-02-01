@@ -47,7 +47,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
 
         // Update is called once per frame
         void Update() {
-            if (counter.Next()) {
+            if (counter.Check()) {
                 StartNewSpawnRoutine();
             }
         }

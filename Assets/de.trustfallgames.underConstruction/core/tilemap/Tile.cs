@@ -39,7 +39,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         // Update is called once per frame
         void Update() {
-            if (_spawnCounter != null && _spawnCounter.Next()) {
+            if (_spawnCounter != null && _spawnCounter.Check()) {
                 Debug.Log("Execute Object Spawn");
                 SpawnObject();
             }

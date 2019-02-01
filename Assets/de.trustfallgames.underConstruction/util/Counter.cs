@@ -1,4 +1,5 @@
 using System;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Util {
@@ -12,16 +13,15 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         private float current;
         private bool autoReset = true;
 
-        private Counter() { }
+        private Counter() { GameManager.GetManager().RegisterCounter(this); }
 
         /// <summary>
         /// Initialise a new Counter object with auto reset.
         /// </summary>
         /// <param name="start"></param>
         public Counter(float start) {
-            
-            
             current = this.start = start;
+            GameManager.GetManager().RegisterCounter(this);
         }
 
         /// <summary>
@@ -32,27 +32,28 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         public Counter(float start, bool autoReset) {
             current = this.start = start;
             this.autoReset = autoReset;
+            GameManager.GetManager().RegisterCounter(this);
         }
 
         public Counter(float start, bool autoReset, params float[] stops) {
             marker = new bool[stops.Length];
             this.stops = stops;
+            GameManager.GetManager().RegisterCounter(this);
         }
 
         /// <summary>
         /// Calculates the next Frame.
         /// </summary>
         /// <returns>Returns true in the Frame, when the counter goes on 0 or below</returns>
-        public bool Next() {
-            if (current < 0) return false;
+        public void Next() {
+            if (current < 0) return;
             current -= Time.deltaTime;
-            if (current > 0) {
-                return false;
-            }
-
+            if (current > 0)
+                return;
             if (autoReset) Reset();
-            return true;
         }
+
+        public bool Check() { return !(current > 0); }
 
         /// <summary>
         /// Checks the marker. Returns true in the Frame, when the marker is passed.
@@ -62,7 +63,6 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         public bool CheckMarker(int stopIndex) {
             if (marker[stopIndex]) return false;
             if (current > stops[stopIndex]) {
-                marker[stopIndex] = true;
                 return true;
             }
 
@@ -78,9 +78,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             }
         }
 
-        public void Reset() {
-            current = start;
-        }
+        public void Reset() { current = start; }
 
         public float Current => current;
     }
