@@ -8,8 +8,8 @@ namespace de.TrustfallGames.UnderConstruction.Util {
     /// </summary>
     public class Counter {
         private readonly float start;
-        private bool[] marker;
-        private float[] stops;
+        private bool[] marker = new bool[0];
+        private float[] stops = new float[0];
         private float current;
         private bool autoReset = true;
 
