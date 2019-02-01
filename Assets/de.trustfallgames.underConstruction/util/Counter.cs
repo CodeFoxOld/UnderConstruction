@@ -43,6 +43,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <param name="autoReset"></param>
         /// <param name="stops"></param>
         public Counter(float start, bool autoReset, params float[] stops) {
+            this.autoReset = autoReset;
             current = this.start = start;
             marker = new bool[stops.Length];
             this.stops = stops;
