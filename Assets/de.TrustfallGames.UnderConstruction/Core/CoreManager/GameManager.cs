@@ -66,5 +66,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             _uiManager = uiManager;
             return this;
         }
+
+        public UiManager UiManager => _uiManager;
     }
 }

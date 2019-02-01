@@ -32,6 +32,8 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private int colorCount = 1;
         private ApartmentColor latestColor;
 
+        private int highscore;
+
         private void Start() {
             GameManager.GetManager().RegisterCharacter(this);
             _controller = GameManager.GetManager().Controller;
@@ -97,7 +99,9 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 colorCount = 1;
             }
 
-            //TODO: Send ColorCount;
+            highscore += (GameManager.GetManager().Settings.BasePoint * colorCount);
+
+            GameManager.GetManager().UiManager.OnHighScoreCalc(colorCount, highscore);
         }
     }
 }
