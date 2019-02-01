@@ -12,6 +12,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         private float[] stops = new float[0];
         private float current;
         private bool autoReset = true;
+        private bool executed;
 
         private Counter() { GameManager.GetManager().RegisterCounter(this); }
 
@@ -42,6 +43,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <param name="autoReset"></param>
         /// <param name="stops"></param>
         public Counter(float start, bool autoReset, params float[] stops) {
+            current = this.start = start;
             marker = new bool[stops.Length];
             this.stops = stops;
             GameManager.GetManager().RegisterCounter(this);
@@ -53,18 +55,31 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <returns>Returns true in the Frame, when the counter goes on 0 or below</returns>
         public void Next() {
             CheckUnusedMarker();
-            if (current < 0) return;
-            current -= Time.deltaTime;
-            if (current > 0)
+            if (current <= 0) {
+                if (autoReset) {
+                    Reset();
+                }
+
                 return;
-            if (autoReset) Reset();
+            }
+
+            if (current > 0)
+                current -= Time.deltaTime;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public bool Check() { return !(current > 0); }
+        public bool Check() {
+            if (executed) return false;
+            if (current <= 0) {
+                executed = true;
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Checks the marker. Returns true in the Frame, when the marker is passed.
@@ -95,7 +110,12 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <summary>
         /// Resets the counter and starts a new counter cycle
         /// </summary>
-        public void Reset() { current = start; }
+        public void Reset() {
+            if (start == 0) return;
+            Debug.Log("Counter Reset");
+            current = start;
+            executed = false;
+        }
 
         public float Current => current;
     }

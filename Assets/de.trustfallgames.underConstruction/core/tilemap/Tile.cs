@@ -102,7 +102,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             ShowIndicator();
             Debug.Log(obstacleData.ToString());
             this.obstacleBlueprint = obstacleBlueprint;
-            _spawnCounter = new Counter(gameManager.Settings.SpawnDuration, false);
+            _spawnCounter = new Counter(
+                                        gameManager.Settings.SpawnDuration, false,
+                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration);
             if (this.obstacleData == null) {
                 this.obstacleData = obstacleData;
             }
@@ -113,6 +115,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             _spawnCounter = new Counter(
                                         gameManager.Settings.SpawnDuration, false,
                                         gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration);
+            Debug.Log(gameManager.Settings.SpawnDuration);
         }
 
         private void ShowIndicator() {
