@@ -40,7 +40,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         // Update is called once per frame
         void Update() {
             if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
-                if (GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
+                if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
                     blocked = true;
                 }
             }
@@ -104,7 +104,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(
                                         gameManager.Settings.SpawnDuration, false,
-                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration);
+                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration + 
+                                        (Time.fixedDeltaTime * 2));
             if (this.obstacleData == null) {
                 this.obstacleData = obstacleData;
             }
@@ -115,7 +116,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             _spawnCounter = new Counter(
                                         gameManager.Settings.SpawnDuration, false,
                                         gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration);
-            Debug.Log(gameManager.Settings.SpawnDuration);
         }
 
         private void ShowIndicator() {
