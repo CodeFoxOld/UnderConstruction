@@ -4,6 +4,7 @@ using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using MoveDirection = de.TrustfallGames.UnderConstruction.Util.MoveDirection;
 
@@ -11,18 +12,18 @@ using MoveDirection = de.TrustfallGames.UnderConstruction.Util.MoveDirection;
 public class MobileButton : InteractableButton {
     [SerializeField] private MoveDirection moveDirection;
 
-    [SerializeField] private Controller _controller;
+    [SerializeField] private Controller controller;
 
     // Start is called before the first frame update
     void Start() {
-        _controller = GameManager.GetManager().Controller;        
+        controller = GameManager.GetManager().Controller;        
     }
 
     protected override void OnButtonPressed(PointerEventData eventData) {
-        _controller.ButtonToggle(moveDirection, true);
+        controller.ButtonToggle(moveDirection, true);
     }
 
     protected override void OnButtonReleased(PointerEventData eventData) {
-        _controller.ButtonToggle(moveDirection, false);
+        controller.ButtonToggle(moveDirection, false);
     }
 }

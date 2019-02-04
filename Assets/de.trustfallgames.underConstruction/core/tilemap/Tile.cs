@@ -3,6 +3,7 @@ using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
+using Random = System.Random;
 
 namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
     [RequireComponent(typeof(BoxCollider))]
@@ -22,6 +23,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         private BoxCollider collider;
 
         private Counter _spawnCounter;
+        private Counter _stackCounter;
 
         private bool moving;
 
@@ -53,6 +55,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             if (moving) {
                 Move();
             }
+
+            if (blocked) {
+                if (_stackCounter.Check()) {
+                    Stack();
+                }
+            }
         }
 
         private void Move() {
@@ -71,18 +79,29 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 GameManager.GetManager().Character.Stack(apartmentPart);
                 obstacleData = null;
             } else /*Player is not on Field. Create or Concat new object*/ {
-                GameObject b = house;
-                house = Instantiate(obstacleBlueprint);                              //Create Blueprint
-                house.transform.position = new Vector3(Coords.X, -1, Coords.Z);      //Assign under tile
-                house.GetComponent<MeshFilter>().mesh = obstacleData.Mesh;           //Assign mesh
-                house.GetComponent<MeshRenderer>().material = obstacleData.Material; //Assign material
-                if (b != null) {
-                    b.transform.SetParent(house.transform); //set old parent as Child
-                    obstacleData.AddStage();                //Count Stage 1 up
-                }
+                Stack();
+            }
 
-                blocked = true; //Field is now blocked
-                moving = true;  //Start moving
+            blocked = true; //Field is now blocked
+        }
+
+        private void Stack() {
+            GameObject b = house;
+            house = Instantiate(obstacleBlueprint);                              //Create Blueprint
+            house.transform.position = new Vector3(Coords.X, -1, Coords.Z);      //Assign under tile
+            house.GetComponent<MeshFilter>().mesh = obstacleData.Mesh;           //Assign mesh
+            house.GetComponent<MeshRenderer>().material = obstacleData.Material; //Assign material
+            if (b != null) {
+                b.transform.SetParent(house.transform); //set old parent as Child
+                obstacleData.AddStage();                //Count Stage 1 up
+            }
+
+            var a = GameManager.GetManager().Settings.GetGrowSpeed();
+            _stackCounter = new Counter(UnityEngine.Random.Range(a.Min, a.Max));
+
+            moving = true; //Start moving
+            if (obstacleData.Stage > GameManager.GetManager().Settings.BuildingHight) {
+                GameManager.GetManager().Lose();
             }
         }
 
@@ -98,27 +117,23 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public void InitialiseSpawnObject(ObstacleData obstacleData, GameObject obstacleBlueprint,
             ApartmentStack apartmentStack) {
+            var a = GameManager.GetManager().Settings.GetGrowSpeed();
+            _stackCounter = new Counter(UnityEngine.Random.Range(a.Min, a.Max));
             apartmentPart = apartmentStack.draw();
             ShowIndicator();
             Debug.Log(obstacleData.ToString());
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(
                                         gameManager.Settings.SpawnDuration, false,
-                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration + 
-                                        (Time.fixedDeltaTime * 2));
+                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration
+                                        + (Time.fixedDeltaTime * 2));
             if (this.obstacleData == null) {
                 this.obstacleData = obstacleData;
             }
         }
 
-        public void Stack(ApartmentStack apartmentStack) {
-            apartmentPart = apartmentStack.draw();
-            _spawnCounter = new Counter(
-                                        gameManager.Settings.SpawnDuration, false,
-                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration);
-        }
-
         private void ShowIndicator() {
+            SpawnInProgress = true;
             foreach (var obj in indicator) {
                 obj.SetActive(transform);
                 obj.GetComponent<MeshRenderer>().material.color = apartmentPart.Material.color;
@@ -127,12 +142,20 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         }
 
         private void HideIndicator() {
+            SpawnInProgress = false;
             foreach (var obj in indicator) {
                 obj.SetActive(false);
             }
         }
 
         public ObstacleData ObstacleData => obstacleData;
+
+        public int StepValue { get; set; }
+        public bool Visited { get; set; }
+
+        public bool IsCounterInProgress() { return _spawnCounter.Current > 0; }
+
+        public bool SpawnInProgress { get; private set; }
     }
 
     public enum ObstacleType { House, NotHouse }

@@ -118,10 +118,16 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         }
 
         public Tile GetTile(TileCoord tileCoord) {
-            return tiles[tileCoord];
+            if (tiles.ContainsKey(tileCoord)) {
+                return tiles[tileCoord];
+            }
+
+            return null;
         }
-        
+
         public int XDimension => xDimension;
         public int YDimension => yDimension;
+
+        public Dictionary<TileCoord, Tile> Tiles => tiles;
     }
 }

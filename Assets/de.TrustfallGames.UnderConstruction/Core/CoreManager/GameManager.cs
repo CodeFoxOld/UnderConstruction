@@ -68,5 +68,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         }
 
         public UiManager UiManager => _uiManager;
+
+        public void Lose() {
+            Debug.Log("YOU LOSE BITCH!");
+        }
     }
 }
