@@ -111,5 +111,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public MoveDirection MoveDirection { get { return _moveDirection; } set { _moveDirection = value; } }
         public Transform Player { get { return _player; } }
         public Controller Controller { get { return _controller; } }
+
+        public ApartmentColor LatestColor => latestColor;
     }
 }
