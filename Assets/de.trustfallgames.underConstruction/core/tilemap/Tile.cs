@@ -41,7 +41,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         }
 
         // Update is called once per frame
-        void Update() {
+        void FixedUpdate() {
             if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
                 if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
                     blocked = true;
