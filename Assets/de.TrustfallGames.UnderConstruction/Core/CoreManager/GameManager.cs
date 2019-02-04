@@ -13,7 +13,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField] private Controller controller;
         [SerializeField] private MapManager mapManager;
         [SerializeField] private Settings settings;
-        private List<Counter> counters = new List<Counter>();
+
+        private CounterHive _counterHive;
         private UiManager _uiManager;
 
         private GameManager() { }
@@ -28,13 +29,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
             controller = GetComponent<Controller>();
             settings = GetComponent<Settings>();
-        }
-
-        private void LateUpdate() {
-            if (!_uiManager.GamePaused)
-                foreach (var counter in counters) {
-                    counter.Next();
-                }
         }
 
         public void RegisterCharacter(Character character) {
@@ -53,7 +47,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             }
         }
 
-        public void RegisterCounter(Counter counter) { counters.Add(counter); }
 
         public static GameManager GetManager() { return _instance; }
 
@@ -69,8 +62,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public UiManager UiManager => _uiManager;
 
-        public void Lose() {
-            Debug.Log("YOU LOSE BITCH!");
+        public void Lose() { Debug.Log("YOU LOSE BITCH!"); }
+
+        public GameManager RegisterCounterHive(CounterHive counterHive) {
+            _counterHive = counterHive;
+            return this;
         }
+
+        public CounterHive CounterHive => _counterHive;
     }
 }

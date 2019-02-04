@@ -136,6 +136,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                     tiles.Enqueue(tile);
                 }
             }
+            
+            //IDEA: Wenn nur noch benachbarte Felder frei sind diese auch besetzen.
 
             Debug.Log(stack.Count());
 

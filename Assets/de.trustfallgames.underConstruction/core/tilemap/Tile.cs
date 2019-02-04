@@ -41,7 +41,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         }
 
         // Update is called once per frame
-        void Update() {
+        void FixedUpdate() {
             if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
                 if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
                     blocked = true;
@@ -88,8 +88,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private void CheckCharacterMoveAbility() {
             TileCoord coord = gameManager.Character.CurrentCoord;
-            List<TileCoord> neighbours = gameManager.MapManager.GetTile(coord.NextTileCoord(MoveDirection.up))
-                                                    .Coords.Neighbours;
 
             List<TileCoord> directions = new List<TileCoord> {
                                                                  coord.NextTileCoord(MoveDirection.up),

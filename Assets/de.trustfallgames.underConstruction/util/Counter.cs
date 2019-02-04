@@ -14,7 +14,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         private bool autoReset = true;
         private bool executed;
 
-        private Counter() { GameManager.GetManager().RegisterCounter(this); }
+        private Counter() { GameManager.GetManager().CounterHive.RegisterCounter(this); }
 
         /// <summary>
         /// Initialise a new Counter object with auto reset.
@@ -22,7 +22,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <param name="start"></param>
         public Counter(float start) {
             current = this.start = start;
-            GameManager.GetManager().RegisterCounter(this);
+            GameManager.GetManager().CounterHive.RegisterCounter(this);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         public Counter(float start, bool autoReset) {
             current = this.start = start;
             this.autoReset = autoReset;
-            GameManager.GetManager().RegisterCounter(this);
+            GameManager.GetManager().CounterHive.RegisterCounter(this);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             current = this.start = start;
             marker = new bool[stops.Length];
             this.stops = stops;
-            GameManager.GetManager().RegisterCounter(this);
+            GameManager.GetManager().CounterHive.RegisterCounter(this);
         }
 
         /// <summary>

@@ -36,6 +36,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
         public int Count() { return tiles.Count; }
 
         public Tile DrawUnclassified() {
+            //TODO: What if unclassified is empty?
             Tile temp = unclassified[Random.Range(0, unclassified.Count)];
             List<Tile> tiles = new List<Tile>();
             foreach (var obj in unclassified) {
