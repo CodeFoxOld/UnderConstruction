@@ -2,59 +2,37 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.UIElements;
+using Button = UnityEngine.UI.Button;
 
-
-[RequireComponent(typeof(EventTrigger))]
 [RequireComponent(typeof(Image))]
-public abstract class InteractableButton : MonoBehaviour, ISubmitHandler,IEventHandler,ISelectHandler {
+public abstract class InteractableButton : MonoBehaviour, IPointerUpHandler, IPointerDownHandler {
     // Start is called before the first frame update
-    private bool pressed = false;
+    private Image _image;
+    private bool pressed;
 
-    private bool pressedLastFrame = false;
-
-    private void Start() { }
-
-    // Update is called once per frame
-    private void Update() {
-        Touch[] touches = Input.touches;
-
-        if (Input.touchCount <= 0) return;
-        pressed = false;
-        if (Input.touches.Any(touch => EventSystem.current.IsPointerOverGameObject(touch.fingerId))) {
-            pressed = true;
-            if (!pressedLastFrame) {
-                OnTouchStart();
-                pressedLastFrame = true;
-            }
-        }
-
-        if (pressed || !pressedLastFrame) return;
-
-        OnTouchEnd();
-        pressedLastFrame = false;
+    private void Start() {
+        _image = GetComponent<Image>();
     }
 
-    public abstract void OnTouchStart();
+    public void OnPointerUp(PointerEventData eventData) {
+        pressed = true;
+        OnButtonReleased(eventData);
+    }
 
-    public abstract void OnTouchEnd();
+    public void OnPointerDown(PointerEventData eventData) {
+        pressed = false;
+        OnButtonPressed(eventData);
+    }
 
-    public bool Pressed() {
+    /// <summary>
+    /// Returns the state of the button as boolean
+    /// </summary>
+    /// <returns>True when button is pressed, false when not</returns>
+    public bool ButtonState() {
         return pressed;
     }
 
-    public void OnSubmit(BaseEventData eventData) { throw new System.NotImplementedException(); }
+    protected abstract void OnButtonPressed(PointerEventData eventData);
 
-    public void SendEvent(EventBase e) { throw new System.NotImplementedException(); }
-
-    public void HandleEvent(EventBase evt) { throw new System.NotImplementedException(); }
-
-    public bool HasTrickleDownHandlers() { throw new System.NotImplementedException(); }
-
-    public bool HasBubbleUpHandlers() { throw new System.NotImplementedException(); }
-
-    public bool HasCaptureHandlers() { throw new System.NotImplementedException(); }
-
-    public bool HasBubbleHandlers() { throw new System.NotImplementedException(); }
-
-    public void OnSelect(BaseEventData eventData) { throw new System.NotImplementedException(); }
+    protected abstract void OnButtonReleased(PointerEventData eventData);
 }

@@ -1,4 +1,4 @@
-namespace de.trustfallgames.underConstruction.util {
+namespace de.TrustfallGames.UnderConstruction.Util {
     public enum MoveDirection {
         up,
         right,

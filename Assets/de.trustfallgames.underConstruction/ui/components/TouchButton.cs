@@ -4,14 +4,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
-namespace de.trustfallgames.underConstruction.ui.components {
+namespace de.TrustfallGames.UnderConstruction.ui.components {
     [RequireComponent(typeof(EventTrigger))]
     [RequireComponent(typeof(Image))]
     [AddComponentMenu("CustomUI/TouchButton")]
     [ExecuteInEditMode]
     public class TouchButton : Button {
         private ButtonState _buttonState = ButtonState.NotPressed;
-        private EventTrigger _eventTrigger;
 
         public void onPress() {
             _buttonState = ButtonState.Pressed;
@@ -28,9 +27,6 @@ namespace de.trustfallgames.underConstruction.ui.components {
 
         void Start() {
             targetGraphic = gameObject.GetComponent<Image>();
-            _eventTrigger = gameObject.GetComponent<EventTrigger>();
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            entry.eventID = EventTriggerType.PointerDown;
         }
 
         void Update() { }
