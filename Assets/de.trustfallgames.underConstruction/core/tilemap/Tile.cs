@@ -88,8 +88,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private void CheckCharacterMoveAbility() {
             TileCoord coord = gameManager.Character.CurrentCoord;
-            List<TileCoord> neighbours = gameManager.MapManager.GetTile(coord.NextTileCoord(MoveDirection.up))
-                                                    .Coords.Neighbours;
 
             List<TileCoord> directions = new List<TileCoord> {
                                                                  coord.NextTileCoord(MoveDirection.up),

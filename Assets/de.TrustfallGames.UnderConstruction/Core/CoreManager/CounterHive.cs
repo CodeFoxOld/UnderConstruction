@@ -19,6 +19,7 @@ public class CounterHive : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate() {
+        if(gameManager.UiManager == null) return;
             if (!gameManager.UiManager.GamePaused)
                 foreach (var counter in counters) {
                     counter.Next();
