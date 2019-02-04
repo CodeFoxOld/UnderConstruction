@@ -100,27 +100,6 @@ namespace de.TrustfallGames.UnderConstruction.character {
         }
 
         /// <summary>
-        /// Returns a TileCord which contains the coords of the tile in the desired direction
-        /// </summary>
-        /// <param name="moveDirection"></param>
-        /// <returns></returns>
-        private TileCoord GetTileCoordForDirection(MoveDirection moveDirection) {
-            TileCoord coord = _character.CurrentCoord;
-            switch (moveDirection) {
-                case MoveDirection.up:
-                    return new TileCoord(coord.X , coord.Z +1);
-                case MoveDirection.right:
-                    return new TileCoord(coord.X +1 , coord.Z);
-                case MoveDirection.left:
-                    return new TileCoord(coord.X - 1, coord.Z);
-                case MoveDirection.down:
-                    return new TileCoord(coord.X, coord.Z -1);
-            }
-
-            return new TileCoord(coord.X, coord.Z);
-        }
-
-        /// <summary>
         /// Calculates the rotation and cache the rotation data
         /// </summary>
         private void CalcRot(MoveDirection moveDirection) {
