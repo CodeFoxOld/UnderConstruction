@@ -34,6 +34,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         public UiManager OnHighscoreCalc(int highscoreMultiplicator, int highscore)
         {
             ui.GetComponent<GameUIBehaviour>().ChangeScore(highscore);
+            ui.GetComponent<GameUIBehaviour>().PopScoreWithMultiplier(highscoreMultiplicator);
             return this;
         }
 
