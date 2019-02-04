@@ -27,7 +27,7 @@ public class GameUIBehaviour : MonoBehaviour
     {
         GameObject popup = GameObject.Instantiate(_popupScore);
         
-        popup.transform.SetParent(GameObject.Find("UI(Clone)").transform, false);
+        popup.transform.SetParent(gameObject.transform, false);
         popup.transform.position = new Vector3(0, -200, 0);
 
         TextMeshProUGUI scoreOutput = popup.GetComponent<TextMeshProUGUI>();
