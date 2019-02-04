@@ -89,22 +89,21 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <returns></returns>
         public bool CheckMarker(int stopIndex) {
             if (marker[stopIndex]) return false;
-            if (current > stops[stopIndex]) {
-                return true;
-            }
 
-            return false;
+            return current < stops[stopIndex];
         }
 
         /// <summary>
         /// Marks marker as used
         /// </summary>
         private void CheckUnusedMarker() {
-            const int i = 0;
+            int i = 0;
             foreach (float stop in stops) {
-                if (stop < current && marker[i] == false) {
+                if (stop > current) {
                     marker[i] = true;
                 }
+
+                i++;
             }
         }
 
