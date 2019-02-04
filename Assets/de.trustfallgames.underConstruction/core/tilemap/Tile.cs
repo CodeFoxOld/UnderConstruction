@@ -90,13 +90,23 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             TileCoord coord = gameManager.Character.CurrentCoord;
             List<TileCoord> neighbours = gameManager.MapManager.GetTile(coord.NextTileCoord(MoveDirection.up))
                                                     .Coords.Neighbours;
-            if (gameManager.MapManager.GetTile(neighbours[0]).blocked
-                && gameManager.MapManager.GetTile(neighbours[0]).blocked
-                && gameManager.MapManager.GetTile(neighbours[0]).blocked
-                && gameManager.MapManager.GetTile(neighbours[0]).blocked) {
-                if (gameManager.Character.DestructibleCount == 0) {
-                    gameManager.Lose();
-                }
+
+            List<TileCoord> directions = new List<TileCoord> {
+                                                                 coord.NextTileCoord(MoveDirection.up),
+                                                                 coord.NextTileCoord(MoveDirection.right),
+                                                                 coord.NextTileCoord(MoveDirection.down),
+                                                                 coord.NextTileCoord(MoveDirection.left)
+                                                             };
+            bool check = true;
+            foreach (var obj in directions) {
+                if (!check) break;
+                if (obj == null) continue;
+                check = gameManager.MapManager.GetTile(obj).blocked;
+            }
+
+            if (!check) return;
+            if (gameManager.Character.DestructibleCount == 0) {
+                gameManager.Lose();
             }
         }
 
