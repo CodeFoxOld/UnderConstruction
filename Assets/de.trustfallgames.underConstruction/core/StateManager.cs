@@ -8,7 +8,10 @@ public class StateManager : MonoBehaviour {
     [SerializeField] private GameObject spawnManager;
 
     // Start is called before the first frame update
-    void Start() {
+    void Start(){
+        //Set the framerate to 30fps for mobile performance
+        Application.targetFrameRate = 30;
+        
         Instantiate(gameManager);
         Instantiate(mapManager).GetComponent<MapManager>().GenerateTilemap();
         Instantiate(character);
