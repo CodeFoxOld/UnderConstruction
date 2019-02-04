@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Util;
@@ -80,9 +81,23 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 obstacleData = null;
             } else /*Player is not on Field. Create or Concat new object*/ {
                 Stack();
+                blocked = true; //Field is now blocked
+                CheckCharacterMoveAbility();
             }
+        }
 
-            blocked = true; //Field is now blocked
+        private void CheckCharacterMoveAbility() {
+            TileCoord coord = gameManager.Character.CurrentCoord;
+            List<TileCoord> neighbours = gameManager.MapManager.GetTile(coord.NextTileCoord(MoveDirection.up))
+                                                    .Coords.Neighbours;
+            if (gameManager.MapManager.GetTile(neighbours[0]).blocked
+                && gameManager.MapManager.GetTile(neighbours[0]).blocked
+                && gameManager.MapManager.GetTile(neighbours[0]).blocked
+                && gameManager.MapManager.GetTile(neighbours[0]).blocked) {
+                if (gameManager.Character.DestructibleCount == 0) {
+                    gameManager.Lose();
+                }
+            }
         }
 
         private void Stack() {

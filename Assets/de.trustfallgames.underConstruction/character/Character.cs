@@ -36,7 +36,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private int highscore;
         private int highscoreRest;
         private int destRest;
-        private int destructibleCount;
+        public int DestructibleCount { get; private set; }
 
         private Character() { }
 
@@ -88,11 +88,11 @@ namespace de.TrustfallGames.UnderConstruction.character {
                        / GameManager.GetManager().Settings.DestructablesPerPoints;
             destRest = (GameManager.GetManager().Settings.BasePoint * colorCount)
                        % GameManager.GetManager().Settings.DestructablesPerPoints;
-            destructibleCount += dest;
+            DestructibleCount += dest;
 
             GameManager.GetManager()
                        .UiManager.OnHighscoreCalc(colorCount, highscore)
-                       .OnDeconstructorChange(destructibleCount);
+                       .OnDeconstructorChange(DestructibleCount);
         }
 
         public float GetCurrentRotation() { return Movement.GetRotationValue(_moveDirection); }
