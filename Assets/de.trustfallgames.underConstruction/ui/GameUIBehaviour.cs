@@ -5,14 +5,13 @@ using UnityEngine;
 public class GameUIBehaviour : MonoBehaviour
 {
     [SerializeField] private GameObject _popupScore;
-    private TextMeshProUGUI _scoreText;
+    [SerializeField ]private TextMeshProUGUI _scoreText;
     private GameManager _gameManager;
     private int baseScore;
     
     void Start()
     {
         _gameManager = GameManager.GetManager();
-        _scoreText = gameObject.GetComponentInChildren<TextMeshProUGUI>();
         baseScore = _gameManager.Settings.BasePoint;
         
         ChangeScore(0);
