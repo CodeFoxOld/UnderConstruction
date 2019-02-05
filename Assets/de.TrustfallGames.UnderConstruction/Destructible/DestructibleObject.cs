@@ -18,53 +18,79 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private TileCoord _startCoord;
         private TileCoord _endCoord;
         private TileCoord[] destructibleArray;
+        private int position;
+        private bool destructionInProgress;
+        private TileCoord _charPos;
 
         // Start is called before the first frame update
         void Start() { }
 
         // Update is called once per frame
         void Update() {
-            if (!start) return;
-            gameObject.transform.Translate(_directionVector3);
-            if (_direction == DestructibleDirection.vertical) {
-                
-                
-            } else {
-                
-                
+            if (start) {
+                gameObject.transform.Translate(_directionVector3);
+                Tile tile = null;
+                if (_direction == DestructibleDirection.vertical) {
+                    if (gameObject.transform.position.x > destructibleArray[position].X) {
+                        tile = _mapManager.GetTile(destructibleArray[position]);
+                    }
+                } else {
+                    if (gameObject.transform.position.z > destructibleArray[position].Z) {
+                        tile = _mapManager.GetTile(destructibleArray[position]);
+                    }
+                }
+
+                if (tile != null) {
+                    tile.Destruct();
+                    destroyed[position] = true;
+                    position++;
+                }
+
+                if (position == destructibleArray.Length - 1) {
+                    StartDestroy();
+                }
+            }
+
+            if (!start && destructionInProgress) {
+                //TODO: Death animation
             }
         }
 
-        public DestructibleObject SetGameManager(GameManager gameManager) {
+        private void StartDestroy() {
+            start = false;
+            destructionInProgress = true;
+            Destroy(gameObject);
+            //throw new NotImplementedException();
+        }
+
+        public DestructibleObject Setup(GameManager gameManager, MapManager mapManager, Character character,
+            DestructibleDirection direction, TileCoord tileCoord) {
             _gameManager = gameManager;
-            return this;
-        }
-
-        public DestructibleObject SetMapManager(MapManager mapManager) {
             _mapManager = mapManager;
-            return this;
-        }
-
-        public DestructibleObject SetCharacter(Character character) {
             _character = character;
-            return this;
-        }
-
-        public DestructibleObject SetDirection(DestructibleDirection direction) {
             _direction = direction;
             SetDirectionVector3();
+            _charPos = tileCoord;
+            SetPosition();
             return this;
+        }
+
+        private void SetPosition() {
+            gameObject.transform.position = _direction == DestructibleDirection.vertical ?
+                                                new Vector3(0 - (_mapManager.XDimension / 2), 0, _charPos.Z) :
+                                                new Vector3(_charPos.X, 0, 0 - (_mapManager.YDimension / 2));
         }
 
         public void Init() {
             start = true;
+
             destroyed = _direction == DestructibleDirection.vertical ? new bool[_mapManager.XDimension] :
                             new bool[_mapManager.YDimension];
             if (_direction == DestructibleDirection.vertical) {
-                _startCoord = new TileCoord(0 - (_mapManager.XDimension / 2), _character.CurrentCoord.Z);
+                _startCoord = new TileCoord(0 - (_mapManager.XDimension / 2), _charPos.Z);
                 _endCoord = new TileCoord(_startCoord.X + _mapManager.XDimension + 1, _startCoord.Z);
             } else {
-                _startCoord = new TileCoord(_character.CurrentCoord.X, 0 - (_mapManager.YDimension / 2));
+                _startCoord = new TileCoord(_charPos.X, 0 - (_mapManager.YDimension / 2));
                 _endCoord = new TileCoord(_startCoord.X, _startCoord.Z + _mapManager.YDimension + 1);
             }
 

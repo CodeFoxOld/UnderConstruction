@@ -27,6 +27,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         private Counter _stackCounter;
 
         private bool moving;
+        private bool movingDown;
 
         private Tile() { }
 
@@ -62,6 +63,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                     if (tileObstacle.ObstacleType == ObstacleType.House)
                         Stack();
                 }
+            }
+
+            if (movingDown) {
+                MoveDown();
             }
         }
 
@@ -184,6 +189,29 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public bool IsCounterInProgress() { return _spawnCounter.Current > 0; }
 
         public bool SpawnInProgress { get; private set; }
+
+        public void Destruct() {
+            tileObstacle.TakeStage();
+            _stackCounter.Reset();
+            movingDown = true;
+            MoveDown();
+        }
+
+        private void MoveDown() {
+            house.transform.Translate(0, -1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
+            if (Math.Abs(house.transform.GetChild(0).position.y) < 0.01) {
+                movingDown = false;
+                var a = house;
+                if (house.transform.childCount > 0) {
+                    house = house.transform.GetChild(0).gameObject;
+                    house.transform.parent = null;
+                    Destroy(a);
+                    house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
+                } else {
+                    blocked = false;
+                }
+            }
+        }
     }
 
     public enum ObstacleType { House, NotHouse }
