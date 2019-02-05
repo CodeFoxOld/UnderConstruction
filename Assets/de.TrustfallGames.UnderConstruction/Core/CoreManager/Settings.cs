@@ -42,8 +42,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [Header(
             "Building High, after that the Player lose. If a Player should lose,"
             + "when a building is higher than 5, set the value to 5.")]
+        [Range(1,60)]
         private float _buildingHight;
 
+        [Range(1,60)]
+        [Header("Move speed of destructible. Move Speed for one field in seconds")]
+        private float _destructibleMoveSpeed;
+        
         
         public int DestructablesPerPoints => destructablesPerPoints;
         public float SpawnDuration => spawnDuration;
@@ -53,8 +58,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public float MoveDuration => moveDuration;
         public float BuildingHight => _buildingHight;
         public int BasePoint => basePoint;
+        public float DestructibleMoveSpeed => _destructibleMoveSpeed;
+        
 
         public GrowSpeed GetGrowSpeed() { return new GrowSpeed(GrowSpeedMin, GrowSpeedMax); }
+        
+        
     }
 
     public struct GrowSpeed {

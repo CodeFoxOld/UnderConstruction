@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
@@ -129,5 +130,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public int YDimension => yDimension;
 
         public Dictionary<TileCoord, Tile> Tiles => tiles;
+
+        public void SpawnDesctructible(DestructibleDirection direction) {
+            
+        }
     }
 }
