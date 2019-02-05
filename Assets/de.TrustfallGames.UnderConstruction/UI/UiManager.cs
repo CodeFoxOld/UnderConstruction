@@ -4,19 +4,27 @@ using UnityEngine;
 namespace de.TrustfallGames.UnderConstruction.UI {
     public class UiManager : MonoBehaviour {
         [SerializeField] private GameObject pauseMenuCanvas;
+        [SerializeField] private GameObject gameOverCanvas;
         [SerializeField] private GameObject ui;
 
         private GameManager _gamemanager;
         private bool gamePaused;
+        private GameUIBehaviour _gameUI;
+        private GameUIBehaviour _gameOverUI;
         public bool GamePaused => gamePaused;
 
         private void Start() {
             _gamemanager = GameManager.GetManager().RegisterUiManager(this);
 
             pauseMenuCanvas = Instantiate(pauseMenuCanvas);
+            gameOverCanvas = Instantiate(gameOverCanvas);
             ui = Instantiate(ui);
+            
+            _gameUI = ui.GetComponent<GameUIBehaviour>();
+            _gameOverUI = ui.GetComponent<GameUIBehaviour>();
 
             pauseMenuCanvas.SetActive(false);
+            gameOverCanvas.SetActive(false);
         }
 
         public void OnGamePaused() {
@@ -33,8 +41,8 @@ namespace de.TrustfallGames.UnderConstruction.UI {
 
         public UiManager OnHighscoreCalc(int highscoreMultiplicator, int highscore)
         {
-            ui.GetComponent<GameUIBehaviour>().ChangeScore(highscore);
-            ui.GetComponent<GameUIBehaviour>().PopScoreWithMultiplier(highscoreMultiplicator);
+            _gameUI.ChangeScore(highscore);
+            _gameUI.GetComponent<GameUIBehaviour>().PopScoreWithMultiplier(highscoreMultiplicator);
             return this;
         }
 
@@ -44,6 +52,14 @@ namespace de.TrustfallGames.UnderConstruction.UI {
 
         public void OnDesctructibleButtonPressed(DestructibleDirection direction) {
             _gamemanager.MapManager.SpawnDesctructible(direction);
+        }
+
+        public void OnGameLost(int finalScore)
+        {
+            gamePaused = true;
+            ui.SetActive(false);
+            gameOverCanvas.SetActive(true);
+            _gameOverUI.ChangeScore(finalScore);
         }
 
     }

@@ -62,7 +62,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public UiManager UiManager => _uiManager;
 
-        public void Lose() { Debug.Log("YOU LOSE BITCH!"); }
+        public void Lose() {
+            Debug.Log("YOU LOSE BITCH!");
+            _uiManager.OnGameLost(character.Highscore);
+        }
 
         public GameManager RegisterCounterHive(CounterHive counterHive) {
             _counterHive = counterHive;

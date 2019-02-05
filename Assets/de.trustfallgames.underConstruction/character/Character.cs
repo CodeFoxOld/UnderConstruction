@@ -37,6 +37,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private int highscoreRest;
         private int destRest;
         public int DestructibleCount { get; private set; }
+        public int Highscore => highscore;
 
         private Character() { }
 
