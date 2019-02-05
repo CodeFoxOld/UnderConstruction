@@ -41,5 +41,15 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         public void OnDeconstructorChange(int count) {
             
         }
+
+        public void OnDesctructibleButtonPressed(DestructibleDirection direction) {
+            _gamemanager.MapManager.SpawnDesctructible(direction);
+        }
+
+    }
+
+    public enum DestructibleDirection {
+        horizontal,
+        vertical
     }
 }
