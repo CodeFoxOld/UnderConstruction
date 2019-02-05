@@ -10,7 +10,6 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         private GameManager _gamemanager;
         private bool gamePaused;
         private GameUIBehaviour _gameUI;
-        private GameUIBehaviour _gameOverUI;
         public bool GamePaused => gamePaused;
 
         private void Start() {
@@ -21,7 +20,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
             ui = Instantiate(ui);
             
             _gameUI = ui.GetComponent<GameUIBehaviour>();
-            _gameOverUI = ui.GetComponent<GameUIBehaviour>();
+            
 
             pauseMenuCanvas.SetActive(false);
             gameOverCanvas.SetActive(false);
@@ -54,12 +53,11 @@ namespace de.TrustfallGames.UnderConstruction.UI {
             _gamemanager.MapManager.SpawnDesctructible(direction);
         }
 
-        public void OnGameLost(int finalScore)
+        public void OnGameLost()
         {
             gamePaused = true;
             ui.SetActive(false);
-            gameOverCanvas.SetActive(true);
-            _gameOverUI.ChangeScore(finalScore);
+            gameOverCanvas.SetActive(true);    
         }
 
     }
