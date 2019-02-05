@@ -7,6 +7,9 @@ using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
+    [RequireComponent(typeof(CounterHive))]
+    [RequireComponent(typeof(Settings))]
+    [RequireComponent(typeof(Controller))]
     public class GameManager : MonoBehaviour {
         private static GameManager _instance = null;
         [SerializeField] private Character character = null;
