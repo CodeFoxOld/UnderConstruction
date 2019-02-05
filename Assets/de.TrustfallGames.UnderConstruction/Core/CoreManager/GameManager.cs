@@ -31,7 +31,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             settings = GetComponent<Settings>();
         }
 
-        public void RegisterCharacter(Character character) {
+        public GameManager RegisterCharacter(Character character) {
             if (this.character == null) {
                 controller.Character = this.character = character;
             } else {

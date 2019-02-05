@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Destructible;
 using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
+using TMPro;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
@@ -19,12 +22,17 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         [SerializeField] private int yDimension;
         [SerializeField] private Dictionary<TileCoord, Tile> tiles;
+        [SerializeField] private GameObject DestructiblePrefab;
+        private GameManager gameManager;
+        private Character character;
 
         // Start is called before the first frame update
         void Start() {
             GameManager.GetManager().RegisterMapManager(this);
             GenerateTileClasses();
             RefreshDictionary();
+            gameManager = GameManager.GetManager();
+            character = gameManager.Character;
         }
 
         void Update() { }
@@ -132,7 +140,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public Dictionary<TileCoord, Tile> Tiles => tiles;
 
         public void SpawnDesctructible(DestructibleDirection direction) {
-            
+            Instantiate(DestructiblePrefab)
+                .GetComponent<DestructibleObject>()
+                .Setup(gameManager, this, character, direction, character.CurrentCoord)
+                .Init();
         }
     }
 }

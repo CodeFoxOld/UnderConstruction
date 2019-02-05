@@ -36,14 +36,15 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private int highscore;
         private int highscoreRest;
         private int destRest;
+        private GameManager gameManager;
         public int DestructibleCount { get; private set; }
         public int Highscore => highscore;
 
         private Character() { }
 
         private void Start() {
-            GameManager.GetManager().RegisterCharacter(this);
-            _controller = GameManager.GetManager().Controller;
+            gameManager = GameManager.GetManager().RegisterCharacter(this);
+            _controller = gameManager.Controller;
             _movement = GetComponent<Movement>();
         }
 
@@ -83,16 +84,15 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 latestColor = apartmentPart.ApartmentColor;
             }
 
-            highscore += (GameManager.GetManager().Settings.BasePoint * colorCount);
+            int toAdd = GameManager.GetManager().Settings.BasePoint * colorCount;
 
-            int dest = (GameManager.GetManager().Settings.BasePoint * colorCount)
-                       / GameManager.GetManager().Settings.DestructablesPerPoints;
-            destRest = (GameManager.GetManager().Settings.BasePoint * colorCount)
-                       % GameManager.GetManager().Settings.DestructablesPerPoints;
+            highscore += toAdd;
+
+            int dest = (toAdd + destRest) / GameManager.GetManager().Settings.DestructablesPerPoints;
+            destRest = toAdd % GameManager.GetManager().Settings.DestructablesPerPoints;
             DestructibleCount += dest;
 
-            GameManager.GetManager()
-                       .UiManager.OnHighscoreCalc(colorCount, highscore)
+            gameManager.UiManager.OnHighscoreCalc(colorCount, highscore)
                        .OnDeconstructorChange(DestructibleCount);
         }
 
