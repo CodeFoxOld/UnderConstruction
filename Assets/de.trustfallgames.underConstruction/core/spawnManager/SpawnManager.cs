@@ -28,6 +28,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private GameManager _gameManager;
         private Character _character;
 
+        private void Awake() {
+        }
+
         // Start is called before the first frame update
         private void Start() {
             BuildDictionary();
