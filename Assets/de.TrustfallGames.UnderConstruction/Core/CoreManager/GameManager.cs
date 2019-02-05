@@ -37,6 +37,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             } else {
                 throw new Exception("Character already set!");
             }
+
+            return this;
         }
 
         public void RegisterMapManager(MapManager mapManager) {
@@ -64,7 +66,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public void Lose() {
             Debug.Log("YOU LOSE BITCH!");
-            _uiManager.OnGameLost(character.Highscore);
+            _uiManager.OnGameLost();
         }
 
         public GameManager RegisterCounterHive(CounterHive counterHive) {
