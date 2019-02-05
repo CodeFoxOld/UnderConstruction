@@ -13,7 +13,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         [SerializeField] private GameObject[] indicator;
         private GameManager gameManager;
 
-        private ObstacleData obstacleData;
+        private TileObstacle tileObstacle;
         private GameObject house;
         private GameObject obstacleBlueprint;
         private ApartmentPart apartmentPart;
@@ -59,7 +59,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
             if (blocked) {
                 if (_stackCounter.Check()) {
-                    Stack();
+                    if (tileObstacle.ObstacleType == ObstacleType.House)
+                        Stack();
                 }
             }
         }
@@ -78,7 +79,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 /*Player is on Field. concat new object on Player*/
                 //Concat object on Player
                 GameManager.GetManager().Character.Stack(apartmentPart);
-                obstacleData = null;
+                tileObstacle = null;
             } else /*Player is not on Field. Create or Concat new object*/ {
                 Stack();
                 blocked = true; //Field is now blocked
@@ -100,12 +101,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 if (!check) break;
                 if (obj == null) continue;
                 Tile tile = gameManager.MapManager.GetTile(obj);
-                if(tile == null) continue;
+                if (tile == null) continue;
                 check = gameManager.MapManager.GetTile(obj).blocked;
             }
 
             if (!check) return;
             if (gameManager.Character.DestructibleCount == 0) {
+                Debug.Log("You Lose because you are no more able to move!");
                 gameManager.Lose();
             }
         }
@@ -114,18 +116,19 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             GameObject b = house;
             house = Instantiate(obstacleBlueprint);                              //Create Blueprint
             house.transform.position = new Vector3(Coords.X, -1, Coords.Z);      //Assign under tile
-            house.GetComponent<MeshFilter>().mesh = obstacleData.Mesh;           //Assign mesh
-            house.GetComponent<MeshRenderer>().material = obstacleData.Material; //Assign material
+            house.GetComponent<MeshFilter>().mesh = tileObstacle.Mesh;           //Assign mesh
+            house.GetComponent<MeshRenderer>().material = tileObstacle.Material; //Assign material
             if (b != null) {
                 b.transform.SetParent(house.transform); //set old parent as Child
-                obstacleData.AddStage();                //Count Stage 1 up
+                tileObstacle.AddStage();                //Count Stage 1 up
             }
 
             var a = GameManager.GetManager().Settings.GetGrowSpeed();
             _stackCounter = new Counter(UnityEngine.Random.Range(a.Min, a.Max));
 
             moving = true; //Start moving
-            if (obstacleData.Stage > GameManager.GetManager().Settings.BuildingHight) {
+            if (tileObstacle.Stage > GameManager.GetManager().Settings.BuildingHight) {
+                Debug.Log("Lose triggered by " + gameObject.name + " height: " + tileObstacle.Stage);
                 GameManager.GetManager().Lose();
             }
         }
@@ -152,8 +155,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                                         gameManager.Settings.SpawnDuration, false,
                                         gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration
                                         + (Time.fixedDeltaTime * 2));
-            if (this.obstacleData == null) {
-                this.obstacleData = obstacleData;
+            if (tileObstacle == null) {
+                tileObstacle = new TileObstacle(obstacleData);
             }
         }
 
@@ -173,7 +176,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             }
         }
 
-        public ObstacleData ObstacleData => obstacleData;
+        public TileObstacle ObstacleData => tileObstacle;
 
         public int StepValue { get; set; }
         public bool Visited { get; set; }

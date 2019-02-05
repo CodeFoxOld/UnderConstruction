@@ -3,7 +3,7 @@ using de.TrustfallGames.UnderConstruction.Core.Tilemap;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
     public class RatedTiles {
         private List<Tile> tiles = new List<Tile>();
 

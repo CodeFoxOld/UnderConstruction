@@ -41,10 +41,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         [Header(
             "Building High, after that the Player lose. If a Player should lose,"
-            + "when a building is higher than 5, set the value to 5.")]
+            + "when a building is higher than 5, set the value to 6.")]
         [Range(1,60)]
         [SerializeField]
-        private float _buildingHight = 4;
+        private int _buildingHight = 4;
 
         [Range(1,60)]
         [Header("Move speed of destructible. Move Speed for one field in seconds")]
@@ -73,8 +73,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public float Max;
 
         public GrowSpeed(float min, float max) {
-            this.Min = min;
-            this.Max = max;
+            Min = min;
+            Max = max;
         }
     }
 }

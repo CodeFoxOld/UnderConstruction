@@ -3,6 +3,7 @@ using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
 using de.TrustfallGames.UnderConstruction.UI;
+using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Destructible {
@@ -12,7 +13,11 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private Character _character;
         private DestructibleDirection _direction;
         private Vector3 _directionVector3;
+        private bool[] destroyed;
         private bool start;
+        private TileCoord _startCoord;
+        private TileCoord _endCoord;
+        private TileCoord[] destructibleArray;
 
         // Start is called before the first frame update
         void Start() { }
@@ -21,8 +26,13 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         void Update() {
             if (!start) return;
             gameObject.transform.Translate(_directionVector3);
-            
-            
+            if (_direction == DestructibleDirection.vertical) {
+                
+                
+            } else {
+                
+                
+            }
         }
 
         public DestructibleObject SetGameManager(GameManager gameManager) {
@@ -48,7 +58,29 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
 
         public void Init() {
             start = true;
+            destroyed = _direction == DestructibleDirection.vertical ? new bool[_mapManager.XDimension] :
+                            new bool[_mapManager.YDimension];
+            if (_direction == DestructibleDirection.vertical) {
+                _startCoord = new TileCoord(0 - (_mapManager.XDimension / 2), _character.CurrentCoord.Z);
+                _endCoord = new TileCoord(_startCoord.X + _mapManager.XDimension + 1, _startCoord.Z);
+            } else {
+                _startCoord = new TileCoord(_character.CurrentCoord.X, 0 - (_mapManager.YDimension / 2));
+                _endCoord = new TileCoord(_startCoord.X, _startCoord.Z + _mapManager.YDimension + 1);
+            }
+
+            BuildDestructibleArray();
+
             //TODO: Transform to start point
+        }
+
+        private void BuildDestructibleArray() {
+            destructibleArray = new TileCoord[_direction == DestructibleDirection.vertical ? _mapManager.XDimension :
+                                                  _mapManager.YDimension];
+            for (int i = 0; i < destructibleArray.Length; i++) {
+                destructibleArray[i] = _direction == DestructibleDirection.vertical ?
+                                           _startCoord.NextTileCoord(MoveDirection.right) :
+                                           _startCoord.NextTileCoord(MoveDirection.up);
+            }
         }
 
         private void SetDirectionVector3() {
@@ -60,7 +92,6 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
                 case DestructibleDirection.vertical:
                     dirVector = new Vector3(0, 0, 1);
                     break;
-                default: throw new ArgumentOutOfRangeException();
             }
 
             _directionVector3 = (dirVector * _gameManager.Settings.DestructibleMoveSpeed) * Time.fixedDeltaTime;

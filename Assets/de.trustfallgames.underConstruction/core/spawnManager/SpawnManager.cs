@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Core.spawnManager;
+using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
@@ -154,13 +154,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         }
 
         private void BuildObstacleData() {
-            int i = 0;
-
             foreach (var obstacle in obstacleStacks) {
                 ObstacleStack obstacleStack = obstacle.GetComponent<ObstacleStack>();
                 foreach (var material in obstacleStack.Materials) {
-                    obstacles.Add(new ObstacleData(i, material, obstacleStack.Mesh, obstacleStack.ObstacleType));
-                    i++;
+                    obstacles.Add(new ObstacleData(material, obstacleStack.Mesh, obstacleStack.ObstacleType));
                 }
             }
         }

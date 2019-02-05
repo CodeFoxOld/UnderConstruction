@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
     public class TilesStack {
         private Dictionary<int, RatedTiles> ratedTiles = new Dictionary<int, RatedTiles>();
         private List<Tile> unratedTiles = new List<Tile>();
@@ -35,7 +35,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
                 return ratedTiles[1].Draw();
             }
 
-            Debug.Log("Try to get index: " + (score));
             Tile temp = ratedTiles[score - 1].Draw();
             if (temp == null) {
                 if (ratedTiles[score].Draw() != null) {
