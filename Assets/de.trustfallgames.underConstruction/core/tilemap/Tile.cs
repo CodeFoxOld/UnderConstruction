@@ -99,6 +99,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             foreach (var obj in directions) {
                 if (!check) break;
                 if (obj == null) continue;
+                Tile tile = gameManager.MapManager.GetTile(obj);
+                if(tile == null) continue;
                 check = gameManager.MapManager.GetTile(obj).blocked;
             }
 

@@ -58,47 +58,52 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         }
 
         private void StartNewSpawnRoutine() {
-            ClassifiedTilesStacks tilesStacks = GetClassifiedTiles();
+            TilesStack tilesStack = GetClassifiedTiles();
 
-            Tile[] tiles = GetSpawnTiles(tilesStacks, 2);
+            Tile[] tiles = GetSpawnTiles(tilesStack, 2);
 
-            foreach (var tile in tiles) { }
+            if (tiles.Length < 2) return;
 
-            tiles[1]
-                .InitialiseSpawnObject(
-                                       obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
-                                       apartmentStacks[_character.LatestColor]);
+            for (int i = tiles.Length - 1; i >= 0; i--) {
+                if(tiles[i] == null) continue;
+                if (i == tiles.Length - 1) {
+                    
+                    tiles[i]
+                        .InitialiseSpawnObject(
+                                               obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
+                                               apartmentStacks[_character.LatestColor]);
+                } else {
+                    ApartmentColor apartmentColor = (ApartmentColor) Random.Range(0, 3);
+                    while (apartmentColor == _character.LatestColor) {
+                        apartmentColor = (ApartmentColor) Random.Range(0, 3);
+                    }
 
-            ApartmentColor apartmentColor = (ApartmentColor) Random.Range(0, 3);
-
-            while (apartmentColor == _character.LatestColor) {
-                apartmentColor = (ApartmentColor) Random.Range(0, 3);
+                    tiles[i]
+                        .InitialiseSpawnObject(
+                                               obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
+                                               apartmentStacks[apartmentColor]);
+                }
             }
-
-            tiles[0]
-                .InitialiseSpawnObject(
-                                       obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
-                                       apartmentStacks[apartmentColor]);
         }
 
         //TODO: Implement spawning amount with player size
         /// <summary>
         /// Returns an array with the length of the stages. The lowest index is the nearest field
         /// </summary>
-        /// <param name="stacks"></param>
+        /// <param name="stack"></param>
         /// <param name="stages"></param>
         /// <returns></returns>
-        private Tile[] GetSpawnTiles(ClassifiedTilesStacks stacks, int stages) {
+        private Tile[] GetSpawnTiles(TilesStack stack, int stages) {
             Tile[] tiles = new Tile[stages]; //Inits Array with stages size
 
-            if (stacks.Count() > 2) {
-                float ratio = stacks.Count() * (1f / stages); //Make ratio for stages
+            if (stack.CountRated() > 2) {
+                float ratio = stack.CountRated() * (1f / stages); //Make ratio for stages
                 for (int i = 1; i <= stages; i++) {
-                    tiles[i - 1] = stacks.DrawClassified((int) Math.Ceiling((i * ratio)));
+                    tiles[i - 1] = stack.DrawRated((int) Math.Ceiling((i * ratio)));
                 }
             } else {
                 for (int i = 1; i <= stages; i++) {
-                    tiles[i - 1] = stacks.DrawUnclassified();
+                    tiles[i - 1] = stack.DrawUnrated();
                 }
             }
 
@@ -109,8 +114,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         /// Iterates over the field. Returns the tiles classified and sorted for quick access.
         /// </summary>
         /// <returns></returns>
-        private ClassifiedTilesStacks GetClassifiedTiles() {
-            ClassifiedTilesStacks stack = new ClassifiedTilesStacks();
+        private TilesStack GetClassifiedTiles() {
+            TilesStack stack = new TilesStack();
             Queue<Tile> tiles = new Queue<Tile>();
             var temp = _mapManager.GetTile(_character.CurrentCoord);
             temp.StepValue = 0;
@@ -119,7 +124,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
 
             while (tiles.Count != 0) {
                 var a = tiles.Dequeue();
-                stack.AddClassified(a);
+                stack.AddRated(a);
                 List<TileCoord> directions = new List<TileCoord> {
                                                                      a.Coords.NextTileCoord(MoveDirection.up),
                                                                      a.Coords.NextTileCoord(MoveDirection.right),
@@ -130,20 +135,16 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                     Tile tile = _mapManager.GetTile(tileCoord);
                     if (tile == null) continue;
                     if (tile.Visited || tile.Blocked) continue;
-                    
+
                     tile.StepValue = a.StepValue + 1;
                     tile.Visited = true;
                     tiles.Enqueue(tile);
                 }
             }
-            
-            //IDEA: Wenn nur noch benachbarte Felder frei sind diese auch besetzen.
-
-            Debug.Log(stack.Count());
 
             foreach (var tile in _mapManager.Tiles.Values) {
                 if (!tile.Visited && !tile.Blocked) {
-                    stack.AddUnclassified(tile);
+                    stack.AddUnrated(tile);
                 }
 
                 tile.Visited = false;
