@@ -43,11 +43,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             "Building High, after that the Player lose. If a Player should lose,"
             + "when a building is higher than 5, set the value to 5.")]
         [Range(1,60)]
-        private float _buildingHight;
+        [SerializeField]
+        private float _buildingHight = 4;
 
         [Range(1,60)]
         [Header("Move speed of destructible. Move Speed for one field in seconds")]
-        private float _destructibleMoveSpeed;
+        [SerializeField]
+        private float _destructibleMoveSpeed = 0.25f;
         
         
         public int DestructablesPerPoints => destructablesPerPoints;
