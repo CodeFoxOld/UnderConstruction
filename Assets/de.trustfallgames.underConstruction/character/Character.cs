@@ -106,6 +106,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public bool TakeDestructible() {
             if (destructibleCount == 0) return false;
             destructibleCount--;
+            gameManager.UiManager.OnDeconstructorChange(DestructibleCount);
             return true;
 
         }

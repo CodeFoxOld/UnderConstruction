@@ -114,6 +114,7 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private void SetPosition() {
             if (_direction == DestructibleDirection.vertical) {
                 gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z );
+                gameObject.transform.localEulerAngles = new Vector3(0,90,0);
             } else {
                 gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z);
             }
