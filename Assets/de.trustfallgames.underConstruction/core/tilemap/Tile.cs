@@ -54,7 +54,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
             if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
                 if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
-                    blocked = true;
+                    SetBlocked(true);
                 }
             }
 
@@ -95,7 +95,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 tileObstacle = null;
             } else /*Player is not on Field. Create or Concat new object*/ {
                 Stack();
-                blocked = true; //Field is now blocked
+                SetBlocked(true); //Field is now blocked
                 CheckCharacterMoveAbility();
             }
         }
