@@ -252,11 +252,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         private void SetBlocked(bool state) {
             blocked = state;
             if (!state) {
-                gameManager.GetComponent<MeshRenderer>().material.color = unblockedTile;
+                gameObject.GetComponent<MeshRenderer>().material.color = unblockedTile;
                 tileObstacle = null;
             }
             
-            gameManager.GetComponent<MeshRenderer>().material.color = blockedTile;
+            gameObject.GetComponent<MeshRenderer>().material.color = blockedTile;
         }
     }
 
