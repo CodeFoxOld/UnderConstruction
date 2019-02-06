@@ -178,8 +178,14 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             SpawnInProgress = true;
             foreach (var obj in indicator) {
                 obj.SetActive(transform);
-                obj.GetComponent<MeshRenderer>().material.color = apartmentPart.Material.color;
-                obj.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", apartmentPart.Material.color);
+                obj.GetComponent<MeshRenderer>().material.color =
+                    gameManager.MapManager.ApartmentColor.GetColor(apartmentPart.ApartmentColorType);
+                obj.GetComponent<MeshRenderer>()
+                   .material.SetColor(
+                                      "_EmissionColor",
+                                      gameManager.MapManager.ApartmentColor.GetColor(
+                                                                                     apartmentPart
+                                                                                         .ApartmentColorType));
             }
         }
 

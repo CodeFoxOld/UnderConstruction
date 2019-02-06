@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
 using de.TrustfallGames.UnderConstruction.Util;
@@ -30,7 +31,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public bool Moving => moving;
 
         private int colorCount = 1;
-        private ApartmentColor latestColor;
+        private ApartmentColorType latestColorType;
 
         //UI Stuff
         private int highscore;
@@ -79,11 +80,11 @@ namespace de.TrustfallGames.UnderConstruction.character {
         }
 
         private void CalculateHighscore(ApartmentPart apartmentPart) {
-            if (latestColor == apartmentPart.ApartmentColor) {
+            if (latestColorType == apartmentPart.ApartmentColorType) {
                 colorCount++;
             } else {
                 colorCount = 1;
-                latestColor = apartmentPart.ApartmentColor;
+                latestColorType = apartmentPart.ApartmentColorType;
             }
 
             int toAdd = GameManager.GetManager().Settings.BasePoint * colorCount;
@@ -96,6 +97,17 @@ namespace de.TrustfallGames.UnderConstruction.character {
 
             gameManager.UiManager.OnHighscoreCalc(colorCount, highscore)
                        .OnDeconstructorChange(DestructibleCount);
+        }
+
+        /// <summary>
+        /// Returns true if a destructable is available.
+        /// </summary>
+        /// <returns></returns>
+        public bool TakeDestructible() {
+            if (destructibleCount == 0) return false;
+            destructibleCount--;
+            return true;
+
         }
 
         public float GetCurrentRotation() { return Movement.GetRotationValue(_moveDirection); }
@@ -115,7 +127,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public Transform Player { get { return _player; } }
         public Controller Controller { get { return _controller; } }
 
-        public ApartmentColor LatestColor => latestColor;
+        public ApartmentColorType LatestColorType => latestColorType;
         
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.Destructible;
 using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
@@ -10,6 +11,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+    [RequireComponent(typeof(ApartmentColor))]
     public class MapManager : MonoBehaviour {
         [Header("Use \"Generate Classes for Tiles\" to add scripts to all tiles and fill refresh values")]
         [SerializeField]
@@ -25,8 +27,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         [SerializeField] private int yDimension;
         [SerializeField] private Dictionary<TileCoord, Tile> tiles;
         [SerializeField] private GameObject DestructiblePrefab;
+
         private GameManager gameManager;
         private Character character;
+
+        private ApartmentColor apartmentColor;
 
         // Start is called before the first frame update
         void Start() {
@@ -34,12 +39,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             GenerateTileClasses();
             RefreshDictionary();
             gameManager = GameManager.GetManager();
+            apartmentColor = GetComponent<ApartmentColor>();
         }
 
-        public void RegisterCharacter(Character character)
-        {
-            this.character = character;
-        }
+        public ApartmentColor ApartmentColor => apartmentColor;
+
+        public void RegisterCharacter(Character character) { this.character = character; }
 
         void Update() { }
 
@@ -146,10 +151,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public Dictionary<TileCoord, Tile> Tiles => tiles;
 
         public void SpawnDesctructible(DestructibleDirection direction) {
-            Instantiate(DestructiblePrefab)
-                .GetComponent<DestructibleObject>()
-                .Setup(gameManager, this, character, direction, character.CurrentCoord)
-                .Init();
+            if (character.TakeDestructible()) {
+                Instantiate(DestructiblePrefab)
+                    .GetComponent<DestructibleObject>()
+                    .Setup(gameManager, this, character, direction, character.CurrentCoord)
+                    .Init();
+            }
         }
     }
 }

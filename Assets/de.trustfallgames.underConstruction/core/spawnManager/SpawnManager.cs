@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
 using de.TrustfallGames.UnderConstruction.Util;
@@ -18,8 +19,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
 
         [SerializeField] private GameObject obstacleBlueprint;
 
-        private readonly Dictionary<ApartmentColor, ApartmentStack> apartmentStacks =
-            new Dictionary<ApartmentColor, ApartmentStack>();
+        private readonly Dictionary<ApartmentColorType, ApartmentStack> apartmentStacks =
+            new Dictionary<ApartmentColorType, ApartmentStack>();
 
         [SerializeField] private List<ObstacleData> obstacles = new List<ObstacleData>();
 
@@ -42,12 +43,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
 
         private void BuildDictionary() {
             foreach (GameObject part in apartmentParts) {
-                if (!apartmentStacks.ContainsKey(part.GetComponent<ApartmentPart>().ApartmentColor)) {
+                if (!apartmentStacks.ContainsKey(part.GetComponent<ApartmentPart>().ApartmentColorType)) {
                     /*create new dictionary entry*/
                     ApartmentStack stack = new ApartmentStack(
                                                               apartmentParts,
-                                                              part.GetComponent<ApartmentPart>().ApartmentColor);
-                    apartmentStacks.Add(part.GetComponent<ApartmentPart>().ApartmentColor, stack);
+                                                              part.GetComponent<ApartmentPart>().ApartmentColorType);
+                    apartmentStacks.Add(part.GetComponent<ApartmentPart>().ApartmentColorType, stack);
                 }
             }
         }
@@ -72,17 +73,17 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                     tiles[i]
                         .InitialiseSpawnObject(
                                                obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
-                                               apartmentStacks[_character.LatestColor]);
+                                               apartmentStacks[_character.LatestColorType]);
                 } else {
-                    ApartmentColor apartmentColor = (ApartmentColor) Random.Range(0, 3);
-                    while (apartmentColor == _character.LatestColor) {
-                        apartmentColor = (ApartmentColor) Random.Range(0, 3);
+                    ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
+                    while (apartmentColorType == _character.LatestColorType) {
+                        apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
                     }
 
                     tiles[i]
                         .InitialiseSpawnObject(
                                                obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
-                                               apartmentStacks[apartmentColor]);
+                                               apartmentStacks[apartmentColorType]);
                 }
             }
         }
