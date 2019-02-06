@@ -46,7 +46,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         }
 
         public void OnDeconstructorChange(int count) {
-            
+            _gameUI.ChangeDestructorCount(count);
         }
 
         public void OnDesctructibleButtonPressed(DestructibleDirection direction) {

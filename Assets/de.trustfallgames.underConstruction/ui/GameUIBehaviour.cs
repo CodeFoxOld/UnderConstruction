@@ -8,6 +8,7 @@ public class GameUIBehaviour : MonoBehaviour
 {
     [SerializeField] private GameObject _popupScore;
     [SerializeField] private TextMeshProUGUI _scoreText;
+    [SerializeField] private TextMeshProUGUI _destructCount;
     private GameManager _gameManager;
     private int baseScore;
 
@@ -17,11 +18,17 @@ public class GameUIBehaviour : MonoBehaviour
         baseScore = _gameManager.Settings.BasePoint;
 
         ChangeScore(0);
+        ChangeDestructorCount(0);
     }
 
     public void ChangeScore(int newScore)
     {
         _scoreText.SetText(newScore.ToString());
+    }
+
+    public void ChangeDestructorCount(int newCount)
+    {
+        _destructCount.SetText(newCount.ToString());
     }
 
     public void PopScoreWithMultiplier(int multiplier)
