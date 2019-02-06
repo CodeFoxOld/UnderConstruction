@@ -9,7 +9,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: House_Roof
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_HouseRoof
+    second: {fileID: 2100000, guid: 87881e544fe15834fba1c8e662f9b9b6, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

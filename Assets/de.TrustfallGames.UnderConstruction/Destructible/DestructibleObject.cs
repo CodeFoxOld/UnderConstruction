@@ -54,12 +54,10 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             if (position >= destructibleArray.Length) return;
             if (_direction == DestructibleDirection.vertical) {
                 if (gameObject.transform.position.z > destructibleArray[position].Z) {
-                    Debug.Log("Trying to destroy tile at " + destructibleArray[position] + "on Z Axis");
                     DestroyCurrentTile();
                 }
             } else {
                 if (gameObject.transform.position.x > destructibleArray[position].X) {
-                    Debug.Log("Trying to destroy tile at " + destructibleArray[position] + "on X Axis");
                     DestroyCurrentTile();
                 }
             }

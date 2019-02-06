@@ -11,6 +11,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour {
         [SerializeField] private GameObject[] indicator;
+
+        [SerializeField] private Color blockedTile;
+        [SerializeField] private Color unblockedTile;
         private GameManager gameManager;
 
         private TileObstacle tileObstacle;
@@ -234,18 +237,26 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                         Destroy(a);
                         house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
                     } else {
-                        blocked = false;
-                        tileObstacle = null;
+                        SetBlocked(false);
                     }
                 }
             } else {
                 if (house.transform.position.y < -1) {
                     movingDown = false;
                     Destroy(house);
-                    blocked = false;
-                    tileObstacle = null;
+                    SetBlocked(false);
                 }
             }
+        }
+
+        private void SetBlocked(bool state) {
+            blocked = state;
+            if (!state) {
+                gameManager.GetComponent<MeshRenderer>().material.color = unblockedTile;
+                tileObstacle = null;
+            }
+            
+            gameManager.GetComponent<MeshRenderer>().material.color = blockedTile;
         }
     }
 

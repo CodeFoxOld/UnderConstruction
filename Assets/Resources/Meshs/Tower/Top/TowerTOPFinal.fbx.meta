@@ -1,20 +1,20 @@
 fileFormatVersion: 2
-guid: 74e4ab096ba5c3b46874d93114ec3092
+guid: 26c3230992d684c488d781f56abcda92
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: M_House
+    2100000: Office_Building.000
     2300000: //RootNode
     3300000: //RootNode
-    4300000: House
+    4300000: Cube.003
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: M_House
-    second: {fileID: 2100000, guid: 304c5d828a333b640a5de01fa55ccf15, type: 2}
+      name: Office_Building.000
+    second: {fileID: 2100000, guid: 3115b483e5db1d645a6011e02d9f2cd2, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

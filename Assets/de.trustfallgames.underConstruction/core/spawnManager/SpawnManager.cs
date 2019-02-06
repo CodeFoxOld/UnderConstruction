@@ -22,7 +22,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private readonly Dictionary<ApartmentColorType, ApartmentStack> apartmentStacks =
             new Dictionary<ApartmentColorType, ApartmentStack>();
 
-        [SerializeField] private List<ObstacleData> obstacles = new List<ObstacleData>();
+        List<ObstacleData> notHouse = new List<ObstacleData>();
+        List<ObstacleData> house = new List<ObstacleData>();
 
         private Counter counter;
         private MapManager _mapManager;
@@ -72,7 +73,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                 if (i == tiles.Length - 1) {
                     tiles[i]
                         .InitialiseSpawnObject(
-                                               obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
+                                               GetRandomObstacleData(), obstacleBlueprint,
                                                apartmentStacks[_character.LatestColorType]);
                 } else {
                     ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
@@ -82,7 +83,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
 
                     tiles[i]
                         .InitialiseSpawnObject(
-                                               obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
+                                               GetRandomObstacleData(), obstacleBlueprint,
                                                apartmentStacks[apartmentColorType]);
                 }
             }
@@ -155,10 +156,22 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             return stack;
         }
 
+        private ObstacleData GetRandomObstacleData() {
+            return Random.Range(0, 101) < _gameManager.Settings.HousePercentage ? house[Random.Range(0, house.Count)] :
+                       notHouse[Random.Range(0, notHouse.Count)];
+        }
+
         private void BuildObstacleData() {
             foreach (GameObject obstacle in obstacleParts) {
-                List<ObstacleData> tempObstacles = ObstacleData.Builder(obstacle.GetComponent<ObstaclePart>());
-                tempObstacles.ForEach(entry => obstacles.Add(entry));
+                if (obstacle.GetComponent<ObstaclePart>().ObstacleType == ObstacleType.House) {
+                    List<ObstacleData> tempObstacles = ObstacleData.Builder(obstacle.GetComponent<ObstaclePart>());
+                    tempObstacles.ForEach(entry => house.Add(entry));
+                }
+
+                if (obstacle.GetComponent<ObstaclePart>().ObstacleType == ObstacleType.NotHouse) {
+                    List<ObstacleData> tempObstacles = ObstacleData.Builder(obstacle.GetComponent<ObstaclePart>());
+                    tempObstacles.ForEach(entry => notHouse.Add(entry));
+                }
             }
         }
     }
