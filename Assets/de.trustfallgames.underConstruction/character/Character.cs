@@ -92,7 +92,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
             highscore += toAdd;
 
             int dest = (toAdd + destRest) / GameManager.GetManager().Settings.DestructablesPerPoints;
-            destRest = toAdd % GameManager.GetManager().Settings.DestructablesPerPoints;
+            destRest = (toAdd + destRest) % GameManager.GetManager().Settings.DestructablesPerPoints;
             destructibleCount += dest;
 
             gameManager.UiManager.OnHighscoreCalc(colorCount, highscore)
