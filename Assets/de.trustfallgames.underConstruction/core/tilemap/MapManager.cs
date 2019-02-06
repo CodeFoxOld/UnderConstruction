@@ -7,6 +7,7 @@ using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
     public class MapManager : MonoBehaviour {
@@ -16,9 +17,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         [SerializeField] private GameObject tilePrefab;
 
+        [FormerlySerializedAs("xDimension")]
         [Header("User \"Generate Field with Dimensions\" to generate a tilemap with the following dimensions")]
         [SerializeField]
-        private int xDimension;
+        private int zDimension;
 
         [SerializeField] private int yDimension;
         [SerializeField] private Dictionary<TileCoord, Tile> tiles;
@@ -70,13 +72,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         /// </summary>
         [ContextMenu("Generate Tilemap with Dimensions")]
         public void GenerateTilemap() {
-            for (int i = 0; i < xDimension; i++) {
+            for (int i = 0; i < zDimension; i++) {
                 for (int j = 0; j < yDimension; j++) {
                     GameObject tile = GameObject.Instantiate(tilePrefab);
                     tile.transform.SetParent(transform);
                     tile.transform.localScale = new Vector3(0.1f, 1, 0.1f);
-                    tile.transform.position = new Vector3((0 - (xDimension / 2) + i), 0, (0 - (yDimension / 2) + j));
-                    tile.transform.name = "Tile: " + ((0 - (xDimension / 2)) + i) + "|" + ((0 - (yDimension / 2) + j));
+                    tile.transform.position = new Vector3((0 - (zDimension / 2) + i), 0, (0 - (yDimension / 2) + j));
+                    tile.transform.name = "Tile: " + ((0 - (zDimension / 2)) + i) + "|" + ((0 - (yDimension / 2) + j));
                 }
             }
 
@@ -127,7 +129,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         /// <param name="y"></param>
         /// <returns></returns>
         public TileCoord GetCoordForEasyCoord(int x, int y) {
-            return new TileCoord(0 - (xDimension / 2) + x, (0 - (yDimension / 2) + y));
+            return new TileCoord(0 - (zDimension / 2) + x, (0 - (yDimension / 2) + y));
         }
 
         public Tile GetTile(TileCoord tileCoord) {
@@ -138,7 +140,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             return null;
         }
 
-        public int XDimension => xDimension;
+        public int ZDimension => zDimension;
         public int YDimension => yDimension;
 
         public Dictionary<TileCoord, Tile> Tiles => tiles;

@@ -28,6 +28,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private bool moving;
         private bool movingDown;
+        private int destructQueue;
 
         private Tile() { }
 
@@ -43,6 +44,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         // Update is called once per frame
         void FixedUpdate() {
+            if (destructQueue != 0 && !moving && !movingDown) {
+                Destruct();
+                destructQueue--;
+            }
+
             if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
                 if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
                     blocked = true;
@@ -50,7 +56,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             }
 
             if (_spawnCounter != null && _spawnCounter.Check()) {
-                Debug.Log("Execute Object Spawn");
                 SpawnObject();
             }
 
@@ -125,8 +130,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
             house = Instantiate(obstacleBlueprint);                                                  //Create Blueprint
             house.transform.position = new Vector3(Coords.X, -1, Coords.Z);                          //Assign under tile
-            house.GetComponent<MeshFilter>().mesh = 
-                tileObstacle.GetObstacleObjectDataStaged().Mesh; //Assign mesh
+            house.GetComponent<MeshFilter>().mesh = tileObstacle.GetObstacleObjectDataStaged().Mesh; //Assign mesh
             house.GetComponent<MeshRenderer>().material =
                 tileObstacle.GetObstacleObjectDataStaged().Material; //Assign material
             if (b != null) {
@@ -196,24 +200,44 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public bool SpawnInProgress { get; private set; }
 
         public void Destruct() {
+            if (movingDown || moving) {
+                destructQueue++;
+                return;
+            }
+
+            if (house == null) return;
+            Debug.Log("Destruct Triggered at " + Coords.ToString());
+            if (movingDown) return;
             tileObstacle.TakeStage();
             _stackCounter.Reset();
             movingDown = true;
-            MoveDown();
         }
 
         private void MoveDown() {
-            house.transform.Translate(0, -1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
-            if (Math.Abs(house.transform.GetChild(0).position.y) < 0.01) {
-                movingDown = false;
-                var a = house;
-                if (house.transform.childCount > 0) {
-                    house = house.transform.GetChild(0).gameObject;
-                    house.transform.parent = null;
-                    Destroy(a);
-                    house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
-                } else {
+            house.transform.Translate(
+                                      0,
+                                      -1 / (GameManager.GetManager().Settings.MoveUpSpeed * (1 / Time.fixedDeltaTime)),
+                                      0);
+            if (house.transform.childCount != 0) {
+                if (Math.Abs(house.transform.GetChild(0).position.y) < 0.01) {
+                    movingDown = false;
+                    var a = house;
+                    if (house.transform.childCount > 0) {
+                        house = house.transform.GetChild(0).gameObject;
+                        house.transform.parent = null;
+                        Destroy(a);
+                        house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
+                    } else {
+                        blocked = false;
+                        tileObstacle = null;
+                    }
+                }
+            } else {
+                if (house.transform.position.y < -1) {
+                    movingDown = false;
+                    Destroy(house);
                     blocked = false;
+                    tileObstacle = null;
                 }
             }
         }

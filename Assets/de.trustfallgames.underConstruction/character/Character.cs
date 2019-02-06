@@ -116,5 +116,6 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public Controller Controller { get { return _controller; } }
 
         public ApartmentColor LatestColor => latestColor;
+        
     }
 }
