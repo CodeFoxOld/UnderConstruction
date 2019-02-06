@@ -46,7 +46,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private int _buildingHight = 4;
 
-        [Range(1,60)]
+        [Range(0.1f,2)]
         [Header("Move speed of destructible. Move Speed for one field in seconds")]
         [SerializeField]
         private float _destructibleMoveSpeed = 0.25f;

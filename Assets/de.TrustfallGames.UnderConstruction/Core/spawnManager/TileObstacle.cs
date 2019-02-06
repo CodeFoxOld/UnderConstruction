@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
     public class TileObstacle {
-        private int stage = 0;
+        private int stage = 1;
         private ObstacleType obstacleType;
         private Mesh upperMesh;
         private Material upperMeshMaterial;

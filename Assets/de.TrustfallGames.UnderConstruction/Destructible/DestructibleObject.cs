@@ -6,8 +6,10 @@ using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.Destructible {
-    public class DestructibleObject : MonoBehaviour {
+namespace de.TrustfallGames.UnderConstruction.Destructible
+{
+    public class DestructibleObject : MonoBehaviour
+    {
         private GameManager _gameManager;
         private MapManager _mapManager;
         private Character _character;
@@ -23,40 +25,59 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private TileCoord _charPos;
 
         // Start is called before the first frame update
-        void Start() { }
+        void Start()
+        {
+        }
 
         // Update is called once per frame
-        void Update() {
-            if (start) {
+        void Update()
+        {
+            if (start)
+            {
                 gameObject.transform.Translate(_directionVector3);
                 Tile tile = null;
-                if (_direction == DestructibleDirection.vertical) {
-                    if (gameObject.transform.position.x > destructibleArray[position].X) {
+                if (_direction == DestructibleDirection.vertical)
+                {
+                    if (gameObject.transform.position.x > destructibleArray[position].X)
+                    {
                         tile = _mapManager.GetTile(destructibleArray[position]);
                     }
-                } else {
-                    if (gameObject.transform.position.z > destructibleArray[position].Z) {
+                }
+                else
+                {
+                    if (gameObject.transform.position.z > destructibleArray[position].Z)
+                    {
                         tile = _mapManager.GetTile(destructibleArray[position]);
                     }
                 }
 
-                if (tile != null) {
-                    tile.Destruct();
-                    destroyed[position] = true;
-                    position++;
-                }
+                MoveRoutine();
+                
 
-                if (position == destructibleArray.Length - 1) {
+                if (position == destructibleArray.Length - 1)
+                {
                     StartDestroy();
                 }
             }
 
-            if (!start && destructionInProgress) {
-                //TODO: Death animation
+            if (!start && destructionInProgress)
+            {
+                if (gameObject.transform.position.x > destructibleArray[position].X)
+                {
+                    tile.Destruct();
+                    destroyed[position] = true;
+                    position++;
+                }
             }
         }
 
-        private void StartDestroy() {
+        private void MoveRoutine()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void StartDestroy()
+        {
             start = false;
             destructionInProgress = true;
             Destroy(gameObject);
@@ -64,63 +85,82 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         }
 
         public DestructibleObject Setup(GameManager gameManager, MapManager mapManager, Character character,
-            DestructibleDirection direction, TileCoord tileCoord) {
+            DestructibleDirection direction, TileCoord tileCoord)
+        {
             _gameManager = gameManager;
             _mapManager = mapManager;
             _character = character;
             _direction = direction;
             SetDirectionVector3();
             _charPos = tileCoord;
+            BuildArrays();
             SetPosition();
             return this;
         }
 
-        private void SetPosition() {
-            gameObject.transform.position = _direction == DestructibleDirection.vertical ?
-                                                new Vector3(0 - (_mapManager.XDimension / 2), 0, _charPos.Z) :
-                                                new Vector3(_charPos.X, 0, 0 - (_mapManager.YDimension / 2));
-        }
-
-        public void Init() {
-            start = true;
-
-            destroyed = _direction == DestructibleDirection.vertical ? new bool[_mapManager.XDimension] :
-                            new bool[_mapManager.YDimension];
-            if (_direction == DestructibleDirection.vertical) {
+        private void BuildArrays()
+        {
+            destroyed = _direction == DestructibleDirection.vertical
+                ? new bool[_mapManager.XDimension]
+                : new bool[_mapManager.YDimension];
+            if (_direction == DestructibleDirection.vertical)
+            {
                 _startCoord = new TileCoord(0 - (_mapManager.XDimension / 2), _charPos.Z);
                 _endCoord = new TileCoord(_startCoord.X + _mapManager.XDimension + 1, _startCoord.Z);
-            } else {
+            }
+            else
+            {
                 _startCoord = new TileCoord(_charPos.X, 0 - (_mapManager.YDimension / 2));
                 _endCoord = new TileCoord(_startCoord.X, _startCoord.Z + _mapManager.YDimension + 1);
             }
 
             BuildDestructibleArray();
-
-            //TODO: Transform to start point
         }
 
-        private void BuildDestructibleArray() {
-            destructibleArray = new TileCoord[_direction == DestructibleDirection.vertical ? _mapManager.XDimension :
-                                                  _mapManager.YDimension];
-            for (int i = 0; i < destructibleArray.Length; i++) {
-                destructibleArray[i] = _direction == DestructibleDirection.vertical ?
-                                           _startCoord.NextTileCoord(MoveDirection.right) :
-                                           _startCoord.NextTileCoord(MoveDirection.up);
+        private void SetPosition()
+        {
+            if (_direction == DestructibleDirection.vertical)
+            {
+                gameObject.transform.position = new Vector3(_startCoord.X -1, 0, _startCoord.Z);
+            }
+            else
+            {
+                gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z-1);
             }
         }
 
-        private void SetDirectionVector3() {
+        public void Init()
+        {
+            start = true;
+        }
+
+        private void BuildDestructibleArray()
+        {
+            destructibleArray = new TileCoord[_direction == DestructibleDirection.vertical
+                ? _mapManager.XDimension
+                : _mapManager.YDimension];
+            for (int i = 0; i < destructibleArray.Length; i++)
+            {
+                destructibleArray[i] = _direction == DestructibleDirection.vertical
+                    ? _startCoord.NextTileCoord(MoveDirection.right)
+                    : _startCoord.NextTileCoord(MoveDirection.up);
+            }
+        }
+
+        private void SetDirectionVector3()
+        {
             Vector3 dirVector = new Vector3();
-            switch (_direction) {
+            switch (_direction)
+            {
                 case DestructibleDirection.horizontal:
-                    dirVector = new Vector3(1, 0, 0);
+                    dirVector = new Vector3(0, 0, -1);
                     break;
                 case DestructibleDirection.vertical:
-                    dirVector = new Vector3(0, 0, 1);
+                    dirVector = new Vector3(-1, 0, 0);
                     break;
             }
 
-            _directionVector3 = (dirVector * _gameManager.Settings.DestructibleMoveSpeed) * Time.fixedDeltaTime;
+            _directionVector3 = dirVector / (_gameManager.Settings.DestructibleMoveSpeed * (1 / Time.fixedDeltaTime));
         }
     }
 }

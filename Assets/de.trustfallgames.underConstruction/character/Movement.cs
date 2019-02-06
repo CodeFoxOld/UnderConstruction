@@ -55,7 +55,8 @@ namespace de.TrustfallGames.UnderConstruction.character {
         /// </summary>
         /// <param name="moveDirection"></param>
         private void Move() {
-            _character.Player.Translate(GetDirectionVector(_character.CurrentMoveDirection) / (_settings.MoveDuration * 60));
+            Debug.Log(Time.fixedDeltaTime);
+            _character.Player.Translate(GetDirectionVector(_character.CurrentMoveDirection) / (_settings.MoveDuration * (1/Time.fixedDeltaTime)));
             if (Math.Abs(targetPosition.x - _character.transform.position.x) < 0.01
                 && Math.Abs(targetPosition.z - _character.transform.position.z) < 0.01) {
                 moved = true;
@@ -111,7 +112,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 return;
             }
 
-            rotationPerFrame = turnDegree / (_settings.RotationDuration * 60);
+            rotationPerFrame = turnDegree / (_settings.RotationDuration * (1f / Time.fixedDeltaTime));
             _character.CurrentMoveDirection = moveDirection;
         }
 

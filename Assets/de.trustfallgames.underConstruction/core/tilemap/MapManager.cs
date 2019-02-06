@@ -32,7 +32,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             GenerateTileClasses();
             RefreshDictionary();
             gameManager = GameManager.GetManager();
-            character = gameManager.Character;
+        }
+
+        public void RegisterCharacter(Character character)
+        {
+            this.character = character;
         }
 
         void Update() { }

@@ -37,8 +37,10 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private int highscoreRest;
         private int destRest;
         private GameManager gameManager;
-        public int DestructibleCount { get; private set; }
+        [SerializeField] public int destructibleCount; 
         public int Highscore => highscore;
+
+        public int DestructibleCount => destructibleCount;
 
         private Character() { }
 
@@ -90,7 +92,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
 
             int dest = (toAdd + destRest) / GameManager.GetManager().Settings.DestructablesPerPoints;
             destRest = toAdd % GameManager.GetManager().Settings.DestructablesPerPoints;
-            DestructibleCount += dest;
+            destructibleCount += dest;
 
             gameManager.UiManager.OnHighscoreCalc(colorCount, highscore)
                        .OnDeconstructorChange(DestructibleCount);
