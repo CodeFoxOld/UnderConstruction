@@ -16,7 +16,7 @@ public class GameUIBehaviour : MonoBehaviour
         
         ChangeScore(0);
     }
-    
+
     public void ChangeScore(int newScore)
     {
         _scoreText.SetText(newScore.ToString());
