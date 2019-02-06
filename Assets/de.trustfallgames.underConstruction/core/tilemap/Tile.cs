@@ -119,13 +119,18 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private void Stack() {
             GameObject b = house;
-            house = Instantiate(obstacleBlueprint);                              //Create Blueprint
-            house.transform.position = new Vector3(Coords.X, -1, Coords.Z);      //Assign under tile
-            house.GetComponent<MeshFilter>().mesh = tileObstacle.Mesh;           //Assign mesh
-            house.GetComponent<MeshRenderer>().material = tileObstacle.Material; //Assign material
+            if (b != null) {
+                tileObstacle.AddStage(); //Count Stage 1 up
+            }
+
+            house = Instantiate(obstacleBlueprint);                                                  //Create Blueprint
+            house.transform.position = new Vector3(Coords.X, -1, Coords.Z);                          //Assign under tile
+            house.GetComponent<MeshFilter>().mesh = 
+                tileObstacle.GetObstacleObjectDataStaged().Mesh; //Assign mesh
+            house.GetComponent<MeshRenderer>().material =
+                tileObstacle.GetObstacleObjectDataStaged().Material; //Assign material
             if (b != null) {
                 b.transform.SetParent(house.transform); //set old parent as Child
-                tileObstacle.AddStage();                //Count Stage 1 up
             }
 
             var a = GameManager.GetManager().Settings.GetGrowSpeed();

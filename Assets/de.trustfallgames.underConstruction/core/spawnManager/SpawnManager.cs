@@ -6,12 +6,16 @@ using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
     public class SpawnManager : MonoBehaviour {
         [SerializeField] private GameObject[] apartmentParts;
-        [SerializeField] private GameObject[] obstacleStacks;
+
+        [FormerlySerializedAs("obstacleStacks")] [SerializeField]
+        private GameObject[] obstacleParts;
+
         [SerializeField] private GameObject obstacleBlueprint;
 
         private readonly Dictionary<ApartmentColor, ApartmentStack> apartmentStacks =
@@ -19,17 +23,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
 
         [SerializeField] private List<ObstacleData> obstacles = new List<ObstacleData>();
 
-        [Range(1, 60)]
-        [SerializeField]
-        private float spawnInterval = 10;
-
         private Counter counter;
         private MapManager _mapManager;
         private GameManager _gameManager;
         private Character _character;
 
-        private void Awake() {
-        }
+        private void Awake() { }
 
         // Start is called before the first frame update
         private void Start() {
@@ -68,9 +67,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             if (tiles.Length < 2) return;
 
             for (int i = tiles.Length - 1; i >= 0; i--) {
-                if(tiles[i] == null) continue;
+                if (tiles[i] == null) continue;
                 if (i == tiles.Length - 1) {
-                    
                     tiles[i]
                         .InitialiseSpawnObject(
                                                obstacles[Random.Range(0, obstacles.Count)], obstacleBlueprint,
@@ -157,11 +155,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         }
 
         private void BuildObstacleData() {
-            foreach (var obstacle in obstacleStacks) {
-                ObstacleStack obstacleStack = obstacle.GetComponent<ObstacleStack>();
-                foreach (var material in obstacleStack.Materials) {
-                    obstacles.Add(new ObstacleData(material, obstacleStack.Mesh, obstacleStack.ObstacleType));
-                }
+            foreach (GameObject obstacle in obstacleParts) {
+                List<ObstacleData> tempObstacles = ObstacleData.Builder(obstacle.GetComponent<ObstaclePart>());
+                tempObstacles.ForEach(entry => obstacles.Add(entry));
             }
         }
     }
