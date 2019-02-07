@@ -15,12 +15,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         private float spawnInterval = 10;
 
         [Header("Player rotation Speed")]
-        [Range(0.01f, 1)]
+        [Range(0.02f, 1)]
         [SerializeField]
         private float rotationDuration = 0.1f;
 
         [Header("Player Movement Speed")]
-        [Range(0.01f, 1)]
+        [Range(0.02f, 1)]
         [SerializeField]
         private float moveDuration = 0.1f;
 
@@ -46,7 +46,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private int _buildingHight = 5;
 
-        [Range(0.1f, 2)]
+        [Range(0.2f, 2)]
         [Header("Move speed of destructible. Move Speed for one field in seconds")]
         [SerializeField]
         private float _destructibleMoveSpeed = 0.25f;

@@ -44,6 +44,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             foreach (var obj in indicator) {
                 obj.SetActive(false);
             }
+
             RegisterInternUpdate();
         }
 
@@ -59,6 +60,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             if (_earlySpawnCounter != null && _earlySpawnCounter.Check()
                 && gameManager.Character.CurrentCoord.Equals(Coords) && !gameManager.Character.Moving) {
                 _spawnCounter = null;
+                _earlySpawnCounter = null;
                 SpawnObject();
             }
         }
