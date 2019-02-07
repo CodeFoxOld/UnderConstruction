@@ -71,10 +71,21 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             for (int i = tiles.Length - 1; i >= 0; i--) {
                 if (tiles[i] == null) continue;
                 if (i == tiles.Length - 1) {
-                    tiles[i]
-                        .InitialiseSpawnObject(
-                                               GetRandomObstacleData(), obstacleBlueprint,
-                                               apartmentStacks[_character.LatestColorType]);
+                    if (Random.Range(0, 101) < _gameManager.Settings.SaltGrains) {
+                        ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
+                        while (apartmentColorType == _character.LatestColorType) {
+                            apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
+                            tiles[i]
+                                .InitialiseSpawnObject(
+                                                       GetRandomObstacleData(), obstacleBlueprint,
+                                                       apartmentStacks[_character.LatestColorType]);
+                        }
+                    } else {
+                        tiles[i]
+                            .InitialiseSpawnObject(
+                                                   GetRandomObstacleData(), obstacleBlueprint,
+                                                   apartmentStacks[_character.LatestColorType]);
+                    }
                 } else {
                     ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
                     while (apartmentColorType == _character.LatestColorType) {
@@ -103,10 +114,16 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                 float ratio = stack.CountRated() * (1f / stages); //Make ratio for stages
                 for (int i = 1; i <= stages; i++) {
                     tiles[i - 1] = stack.DrawRated((int) Math.Ceiling((i * ratio)));
+                    while (tiles[i - 1].SpawnInProgress) {
+                        tiles[i - 1] = stack.DrawRated((int) Math.Ceiling((i * ratio)));
+                    }
                 }
             } else {
                 for (int i = 1; i <= stages; i++) {
                     tiles[i - 1] = stack.DrawUnrated();
+                    while (tiles[i - 1].SpawnInProgress) {
+                        tiles[i - 1] = stack.DrawUnrated();
+                    }
                 }
             }
 
