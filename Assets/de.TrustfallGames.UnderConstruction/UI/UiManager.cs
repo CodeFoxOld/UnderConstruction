@@ -41,6 +41,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         public UiManager OnHighscoreCalc(int highscoreMultiplicator, int highscore)
         {
             _gameUI.ChangeScore(highscore);
+            _gameUI.ChangeComboCounter(highscoreMultiplicator);
             _gameUI.GetComponent<GameUIBehaviour>().PopScoreWithMultiplier(highscoreMultiplicator);
             return this;
         }
@@ -57,7 +58,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         {
             gamePaused = true;
             ui.SetActive(false);
-            gameOverCanvas.SetActive(true);    
+            gameOverCanvas.SetActive(true);
         }
 
     }
