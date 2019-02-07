@@ -12,8 +12,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
     public class Tile : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] indicator;
 
-        [SerializeField] private Color blockedTile;
-        [SerializeField] private Color unblockedTile;
+        [SerializeField] private Material blockedTile;
+        [SerializeField] private Material unblockedTile;
         private GameManager gameManager;
 
         private TileObstacle tileObstacle;
@@ -243,12 +243,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         private void SetBlocked(bool state) {
             blocked = state;
             if (!state) {
-                gameObject.GetComponent<MeshRenderer>().material.color = unblockedTile;
+                gameObject.GetComponent<MeshRenderer>().material = unblockedTile;
                 tileObstacle = null;
                 return;
             }
 
-            gameObject.GetComponent<MeshRenderer>().material.color = blockedTile;
+            gameObject.GetComponent<MeshRenderer>().material = blockedTile;
         }
 
         public void InternUpdate() {
