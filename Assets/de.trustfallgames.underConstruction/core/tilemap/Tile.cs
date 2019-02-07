@@ -63,6 +63,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 _earlySpawnCounter = null;
                 SpawnObject();
             }
+
+            if (_earlySpawnCounter != null && !gameManager.Character.CurrentCoord.Equals(Coords)) {
+                _earlySpawnCounter = null;
+            }
         }
 
         private void Move() {
