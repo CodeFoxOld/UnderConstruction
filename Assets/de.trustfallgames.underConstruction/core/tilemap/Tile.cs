@@ -28,6 +28,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private Counter _spawnCounter;
         private Counter _stackCounter;
+        private Counter _earlySpawnCounter;
 
         private bool moving;
         private bool movingDown;
@@ -52,6 +53,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 destructQueue--;
             }
 
+            EarlySpawnRoutine();
+
             if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
                 if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
                     SetBlocked(true);
@@ -75,6 +78,21 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
             if (movingDown) {
                 MoveDown();
+            }
+        }
+
+        private void EarlySpawnRoutine() {
+            if (!SpawnInProgress) return;
+
+            if (gameManager.Character.CurrentCoord.Equals(Coords) && _earlySpawnCounter == null
+                && !gameManager.Character.Moving) {
+                _earlySpawnCounter = new Counter(gameManager.Settings.EarlySpawnTime, false);
+            }
+
+            if (_earlySpawnCounter != null && _earlySpawnCounter.Check()
+                && gameManager.Character.CurrentCoord.Equals(Coords) && !gameManager.Character.Moving) {
+                _spawnCounter = null;
+                SpawnObject();
             }
         }
 
@@ -256,7 +274,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 tileObstacle = null;
                 return;
             }
-            
+
             gameObject.GetComponent<MeshRenderer>().material.color = blockedTile;
         }
     }

@@ -65,7 +65,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             }
 
             if (current > 0)
-                current -= Time.deltaTime;
+                current -= Time.fixedDeltaTime;
         }
 
         /// <summary>

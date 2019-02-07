@@ -61,6 +61,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [Range(0,100)]
         private int saltGrains = 10;
 
+        [Header("After how many seconds should a object spawn automatic, when the player is on the field?")]
+        [SerializeField]
+        private float earlySpawnTime = 0.5f;
+
         public int SaltGrains => saltGrains;
         public int HousePercentage => housePercentage;
         public int DestructablesPerPoints => destructablesPerPoints;
@@ -72,6 +76,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public float BuildingHight => _buildingHight;
         public int BasePoint => basePoint;
         public float DestructibleMoveSpeed => _destructibleMoveSpeed;
+        public float EarlySpawnTime => earlySpawnTime;
 
         public GrowSpeed GetGrowSpeed() { return new GrowSpeed(GrowSpeedMin, GrowSpeedMax); }
     }
