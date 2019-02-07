@@ -18,6 +18,11 @@ public class MenuBehaviour : MonoBehaviour
         SceneManager.LoadScene(sceneNumber);
     }
 
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void QuitGame()
     {
         Application.Quit();
