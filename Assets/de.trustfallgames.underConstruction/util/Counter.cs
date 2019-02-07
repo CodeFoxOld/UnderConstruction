@@ -14,7 +14,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         private bool autoReset = true;
         private bool executed;
 
-        private Counter() { GameManager.GetManager().RegisterCounter(this); }
+        private Counter() { GameManager.GetManager().CounterHive.RegisterCounter(this); }
 
         /// <summary>
         /// Initialise a new Counter object with auto reset.
@@ -22,7 +22,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <param name="start"></param>
         public Counter(float start) {
             current = this.start = start;
-            GameManager.GetManager().RegisterCounter(this);
+            GameManager.GetManager().CounterHive.RegisterCounter(this);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         public Counter(float start, bool autoReset) {
             current = this.start = start;
             this.autoReset = autoReset;
-            GameManager.GetManager().RegisterCounter(this);
+            GameManager.GetManager().CounterHive.RegisterCounter(this);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             current = this.start = start;
             marker = new bool[stops.Length];
             this.stops = stops;
-            GameManager.GetManager().RegisterCounter(this);
+            GameManager.GetManager().CounterHive.RegisterCounter(this);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             }
 
             if (current > 0)
-                current -= Time.deltaTime;
+                current -= Time.fixedDeltaTime;
         }
 
         /// <summary>
@@ -89,22 +89,21 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         /// <returns></returns>
         public bool CheckMarker(int stopIndex) {
             if (marker[stopIndex]) return false;
-            if (current > stops[stopIndex]) {
-                return true;
-            }
 
-            return false;
+            return current < stops[stopIndex];
         }
 
         /// <summary>
         /// Marks marker as used
         /// </summary>
         private void CheckUnusedMarker() {
-            const int i = 0;
+            int i = 0;
             foreach (float stop in stops) {
-                if (stop < current && marker[i] == false) {
+                if (stop > current) {
                     marker[i] = true;
                 }
+
+                i++;
             }
         }
 

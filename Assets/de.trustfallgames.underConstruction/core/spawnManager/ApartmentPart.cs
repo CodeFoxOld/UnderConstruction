@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+﻿using de.TrustfallGames.UnderConstruction.Core.spawnManager;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
     public class ApartmentPart : MonoBehaviour {
-        [SerializeField] private ApartmentColor _apartmentColor;
+        [FormerlySerializedAs("apartmentColorEnum")] [FormerlySerializedAs("_apartmentColor")] [SerializeField] private ApartmentColorType apartmentColorType;
         [SerializeField] private Mesh mesh;
         [SerializeField] private Material material;
-        public ApartmentColor ApartmentColor => _apartmentColor;
+        public ApartmentColorType ApartmentColorType => apartmentColorType;
         public Mesh Mesh => mesh;
         public Material Material => material;
     }
 
-    public enum ApartmentColor { Green, Blue, Red }
 }

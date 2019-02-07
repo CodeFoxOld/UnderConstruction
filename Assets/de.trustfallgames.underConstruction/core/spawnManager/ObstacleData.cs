@@ -1,44 +1,66 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
     public class ObstacleData {
-        private int id;
-        private Material material;
-        private Mesh mesh;
         private ObstacleType obstacleType;
-        private int stage = 1;
+        private Mesh upperMesh;
+        private Material upperMeshMaterial;
+        private Mesh lowerMesh;
+        private Material lowerMeshMaterial;
+        private Mesh doorMesh;
+        private Material doorMeshMaterial;
 
-        public ObstacleData(int id, Material material, Mesh mesh, ObstacleType obstacleType) {
-            if (material == null)
-                throw new NullReferenceException();
-            if (mesh == null)
-                throw new NullReferenceException();
-            this.id = id;
-            this.material = material;
-            this.mesh = mesh;
+        private ObstacleData() { }
+
+        private ObstacleData(ObstacleType obstacleType, Mesh upperMesh, Material upperMeshMaterial, Mesh lowerMesh,
+            Material lowerMeshMaterial, Mesh doorMesh, Material doorMeshMaterial) {
             this.obstacleType = obstacleType;
+            this.upperMesh = upperMesh;
+            this.upperMeshMaterial = upperMeshMaterial;
+            this.lowerMesh = lowerMesh;
+            this.lowerMeshMaterial = lowerMeshMaterial;
+            this.doorMesh = doorMesh;
+            this.doorMeshMaterial = doorMeshMaterial;
         }
 
-        public int Id => id;
-        public Material Material => material;
-        public Mesh Mesh => mesh;
+        public ObstacleData(ObstacleType obstacleType, Mesh upperMesh, Material upperMeshMaterial) {
+            this.obstacleType = obstacleType;
+            this.upperMesh = upperMesh;
+            this.upperMeshMaterial = upperMeshMaterial;
+        }
 
         public ObstacleType ObstacleType => obstacleType;
 
         public override string ToString() {
-            return ("ID: " + id + " Materialname: " + material.name + " Meshname: " + mesh.name + " ObstacleType: "
-                    + obstacleType);
+            return ("Obstacle Type: " + obstacleType + "with Upper Mesh " + upperMesh.name + " with Material "
+                    + upperMeshMaterial.name + " ObstacleType: " + obstacleType);
         }
 
-        public void AddStage() {
-            stage++;
+        public static List<ObstacleData> Builder(ObstaclePart parts) {
+            List<ObstacleData> list = new List<ObstacleData>();
+
+            for (int i = 0; i < parts.UpperMeshMaterials.Length; i++) {
+                if (parts.ObstacleType == ObstacleType.House) {
+                    list.Add(
+                             new ObstacleData(
+                                              parts.ObstacleType, parts.UpperMesh, parts.UpperMeshMaterials[i],
+                                              parts.LowerMesh, parts.LowerMeshMaterials[i], parts.DoorMesh,
+                                              parts.DoorMeshMaterial[i]));
+                } else {
+                    list.Add(new ObstacleData(parts.ObstacleType, parts.UpperMesh, parts.UpperMeshMaterials[i]));
+                }
+            }
+
+            return list;
         }
 
-        public void TakeStage() {
-            stage--;
-        }
-
-        public int Stage => stage;
+        public Mesh UpperMesh => upperMesh;
+        public Material UpperMeshMaterial => upperMeshMaterial;
+        public Mesh LowerMesh => lowerMesh;
+        public Material LowerMeshMaterial => lowerMeshMaterial;
+        public Mesh DoorMesh => doorMesh;
+        public Material DoorMeshMaterial => doorMeshMaterial;
     }
 }
