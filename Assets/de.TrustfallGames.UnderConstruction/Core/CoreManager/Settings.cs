@@ -30,21 +30,21 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         [Header("At how many Points should the player get one destructible")]
         [SerializeField]
-        private int destructablesPerPoints;
+        private int destructablesPerPoints = 1000;
 
         [Header("The Speed a apartment should grow in Seconds")]
         [SerializeField]
-        private float GrowSpeedMin;
+        private float GrowSpeedMin = 20;
 
         [SerializeField]
-        private float GrowSpeedMax;
+        private float GrowSpeedMax = 25;
 
         [Header(
             "Building High, after that the Player lose. If a Player should lose,"
             + "when a building is higher than 5, set the value to 6.")]
         [Range(1, 60)]
         [SerializeField]
-        private int _buildingHight = 4;
+        private int _buildingHight = 5;
 
         [Range(0.1f, 2)]
         [Header("Move speed of destructible. Move Speed for one field in seconds")]
@@ -53,8 +53,15 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         [Header("Percent of house obstacles.")]
         [SerializeField]
+        [Range(0,100)]
         private int housePercentage = 40;
 
+        [Header("Percentage of color strike break. Higher value means more breaks.")]
+        [SerializeField]
+        [Range(0,100)]
+        private int saltGrains = 10;
+
+        public int SaltGrains => saltGrains;
         public int HousePercentage => housePercentage;
         public int DestructablesPerPoints => destructablesPerPoints;
         public float SpawnDuration => spawnDuration;
