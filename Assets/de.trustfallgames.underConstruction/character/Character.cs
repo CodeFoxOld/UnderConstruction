@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.character {
     [RequireComponent(typeof(Movement))]
-    public class Character : MonoBehaviour {
+    public class Character : MonoBehaviour, IInternUpdate {
         [Header("Whole Player Object")]
         [SerializeField]
         private Transform _player;
@@ -49,13 +49,9 @@ namespace de.TrustfallGames.UnderConstruction.character {
             gameManager = GameManager.GetManager().RegisterCharacter(this);
             _controller = gameManager.Controller;
             _movement = GetComponent<Movement>();
+            RegisterInternUpdate();
         }
 
-        private void Update() {
-            if (moving) {
-                Move();
-            }
-        }
 
         private void Move() {
             _character.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
@@ -129,6 +125,15 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public Controller Controller { get { return _controller; } }
 
         public ApartmentColorType LatestColorType => latestColorType;
-        
+
+        public void InternUpdate() {
+            if (moving) {
+                Move();
+            }
+        }
+
+        public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 20); }
+
+        public void Init() {  }
     }
 }

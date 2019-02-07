@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.character {
     [RequireComponent(typeof(Character))]
-    public class Movement : MonoBehaviour {
+    public class Movement : MonoBehaviour,IInternUpdate {
         [SerializeField] private Character _character;
         [SerializeField] private GameManager _gameManager;
         [SerializeField] private MapManager _mapManager;
@@ -32,22 +32,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
             _gameManager = GameManager.GetManager();
             _mapManager = _gameManager.MapManager;
             _settings = _gameManager.Settings;
-        }
-
-        // Update is called once per frame
-        void Update() {
-            if (!moveInProgress) return;
-            if (!turned) {
-                Turn();
-                return;
-            }
-
-            if (!moved) {
-                Move();
-                return;
-            }
-
-            moveInProgress = false;
+            RegisterInternUpdate();
         }
 
         /// <summary>
@@ -181,6 +166,23 @@ namespace de.TrustfallGames.UnderConstruction.character {
 
         public Transform CharTransform { get => _charTransform; set => _charTransform = value; }
 
+        public void InternUpdate() {             if (!moveInProgress) return;
+            if (!turned) {
+                Turn();
+                return;
+            }
+
+            if (!moved) {
+                Move();
+                return;
+            }
+
+            moveInProgress = false;
+        }
+
+        public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this, 30); }
+
+        public void Init() { }
     }
     
     

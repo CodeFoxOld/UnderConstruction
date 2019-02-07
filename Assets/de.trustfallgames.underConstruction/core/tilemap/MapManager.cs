@@ -46,8 +46,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public void RegisterCharacter(Character character) { this.character = character; }
 
-        void Update() { }
-
         /// <summary>
         /// Adds Tile Classes to Tiles. Adjust Position.
         /// </summary>

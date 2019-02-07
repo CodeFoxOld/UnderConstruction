@@ -11,7 +11,7 @@ using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
-    public class SpawnManager : MonoBehaviour {
+    public class SpawnManager : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] apartmentParts;
 
         [FormerlySerializedAs("obstacleStacks")] [SerializeField]
@@ -40,6 +40,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             _gameManager = GameManager.GetManager();
             _mapManager = _gameManager.MapManager;
             _character = _gameManager.Character;
+            RegisterInternUpdate();
         }
 
         private void BuildDictionary() {
@@ -51,13 +52,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                                                               part.GetComponent<ApartmentPart>().ApartmentColorType);
                     apartmentStacks.Add(part.GetComponent<ApartmentPart>().ApartmentColorType, stack);
                 }
-            }
-        }
-
-        // Update is called once per frame
-        void Update() {
-            if (counter.Check()) {
-                StartNewSpawnRoutine();
             }
         }
 
@@ -191,5 +185,15 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                 }
             }
         }
+
+        public void InternUpdate() {
+            if (counter.Check()) {
+                StartNewSpawnRoutine();
+            }
+        }
+
+        public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this, 10); }
+
+        public void Init() { }
     }
 }

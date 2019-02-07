@@ -7,7 +7,7 @@ using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Destructible {
-    public class DestructibleObject : MonoBehaviour {
+    public class DestructibleObject : MonoBehaviour,IInternUpdate {
         private GameManager _gameManager;
         private MapManager _mapManager;
         private Character _character;
@@ -22,21 +22,7 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private bool destructionInProgress;
         private TileCoord _charPos;
 
-        // Start is called before the first frame update
-        void Start() { }
-
-        // Update is called once per frame
-        void Update() {
-            if (start) {
-                gameObject.transform.position = gameObject.transform.position + _directionVector3;
-
-                DestroyRoutine();
-
-                CheckDestroy();
-            }
-
-            if (!start && destructionInProgress) { }
-        }
+        private void Start() { RegisterInternUpdate(); }
 
         private void CheckDestroy() {
             if (_direction == DestructibleDirection.vertical) {
@@ -117,6 +103,19 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
                 gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z);
             }
         }
+
+        public void InternUpdate() {             if (start) {
+                gameObject.transform.position = gameObject.transform.position + _directionVector3;
+
+                DestroyRoutine();
+
+                CheckDestroy();
+            }
+
+            if (!start && destructionInProgress) { }
+        }
+
+        public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this,60); }
 
         public void Init() { start = true; }
 

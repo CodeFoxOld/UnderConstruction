@@ -9,7 +9,7 @@ using Random = System.Random;
 namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
-    public class Tile : MonoBehaviour {
+    public class Tile : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] indicator;
 
         [SerializeField] private Color blockedTile;
@@ -44,43 +44,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             foreach (var obj in indicator) {
                 obj.SetActive(false);
             }
+            RegisterInternUpdate();
         }
 
         // Update is called once per frame
-        void FixedUpdate() {
-            if (destructQueue != 0 && !moving && !movingDown) {
-                Destruct();
-                destructQueue--;
-            }
-
-            EarlySpawnRoutine();
-
-            if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
-                if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
-                    SetBlocked(true);
-                }
-            }
-
-            if (_spawnCounter != null && _spawnCounter.Check()) {
-                SpawnObject();
-            }
-
-            if (moving) {
-                Move();
-            }
-
-            if (blocked) {
-                if (_stackCounter.Check()) {
-                    if (tileObstacle.ObstacleType == ObstacleType.House)
-                        Stack();
-                }
-            }
-
-            if (movingDown) {
-                MoveDown();
-            }
-        }
-
         private void EarlySpawnRoutine() {
             if (!SpawnInProgress) return;
 
@@ -277,6 +244,44 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
             gameObject.GetComponent<MeshRenderer>().material.color = blockedTile;
         }
+
+        public void InternUpdate() {
+            if (destructQueue != 0 && !moving && !movingDown) {
+                Destruct();
+                destructQueue--;
+            }
+
+            EarlySpawnRoutine();
+
+            if (_spawnCounter != null && _spawnCounter.CheckMarker(0)) {
+                if (!GameManager.GetManager().Character.CurrentCoord.Equals(Coords)) {
+                    SetBlocked(true);
+                }
+            }
+
+            if (_spawnCounter != null && _spawnCounter.Check()) {
+                SpawnObject();
+            }
+
+            if (moving) {
+                Move();
+            }
+
+            if (blocked) {
+                if (_stackCounter.Check()) {
+                    if (tileObstacle.ObstacleType == ObstacleType.House)
+                        Stack();
+                }
+            }
+
+            if (movingDown) {
+                MoveDown();
+            }
+        }
+
+        public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 50); }
+
+        public void Init() { }
     }
 
     public enum ObstacleType { House, NotHouse }
