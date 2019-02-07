@@ -1,9 +1,10 @@
 ﻿using System;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.character {
-    public class Controller : MonoBehaviour {
+    public class Controller : MonoBehaviour,IInternUpdate {
         private                  bool      test;
         [SerializeField] private Character _character;
         [SerializeField] private Movement  _movement;
@@ -13,16 +14,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private bool movingDown;
         private bool movingLeft;
 
-        void Update() {
-            if (movingUp)
-                _movement.StartMove(MoveDirection.up);
-            if(movingRight)
-                _movement.StartMove(MoveDirection.right);
-            if(movingDown)
-                _movement.StartMove(MoveDirection.down);
-            if (movingLeft) 
-                _movement.StartMove(MoveDirection.left);
-        }
+        private void Start() { RegisterInternUpdate(); }
 
         public void ButtonToggle(MoveDirection direction, bool state) {
             switch (direction) {
@@ -48,5 +40,19 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 _movement  = value.Movement;
             }
         }
+
+        public void InternUpdate() {             if (movingUp)
+                _movement.StartMove(MoveDirection.up);
+            if(movingRight)
+                _movement.StartMove(MoveDirection.right);
+            if(movingDown)
+                _movement.StartMove(MoveDirection.down);
+            if (movingLeft) 
+                _movement.StartMove(MoveDirection.left);
+        }
+
+        public void RegisterInternUpdate() { GameManager.GetManager().InternTick.RegisterTickObject(this, 25); }
+
+        public void Init() { throw new NotImplementedException(); }
     }
 }

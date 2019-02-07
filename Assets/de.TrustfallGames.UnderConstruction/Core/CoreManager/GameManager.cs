@@ -7,13 +7,19 @@ using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
-    public class GameManager : MonoBehaviour {
+    [RequireComponent(typeof(CounterHive))]
+    [RequireComponent(typeof(Settings))]
+    [RequireComponent(typeof(Controller))]
+    [RequireComponent(typeof(InternTick))]
+    public class GameManager : MonoBehaviour, IInternUpdate {
         private static GameManager _instance = null;
         [SerializeField] private Character character = null;
         [SerializeField] private Controller controller;
         [SerializeField] private MapManager mapManager;
         [SerializeField] private Settings settings;
-        private List<Counter> counters = new List<Counter>();
+        private InternTick internTick;
+        
+        private CounterHive _counterHive;
         private UiManager _uiManager;
 
         private GameManager() { }
@@ -28,21 +34,19 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
             controller = GetComponent<Controller>();
             settings = GetComponent<Settings>();
+            internTick = GetComponent<InternTick>();
+            RegisterInternUpdate();
         }
 
-        private void LateUpdate() {
-            if (!_uiManager.GamePaused)
-                foreach (var counter in counters) {
-                    counter.Next();
-                }
-        }
-
-        public void RegisterCharacter(Character character) {
+        public GameManager RegisterCharacter(Character character) {
             if (this.character == null) {
                 controller.Character = this.character = character;
+                mapManager.RegisterCharacter(character);
             } else {
                 throw new Exception("Character already set!");
             }
+
+            return this;
         }
 
         public void RegisterMapManager(MapManager mapManager) {
@@ -52,8 +56,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
                 throw new Exception("MapManager already set!");
             }
         }
-
-        public void RegisterCounter(Counter counter) { counters.Add(counter); }
 
         public static GameManager GetManager() { return _instance; }
 
@@ -68,5 +70,28 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         }
 
         public UiManager UiManager => _uiManager;
+
+        public void Lose() {
+            Debug.Log("YOU LOSE BITCH!");
+            _uiManager.OnGameLost();
+        }
+
+        public GameManager RegisterCounterHive(CounterHive counterHive) {
+            _counterHive = counterHive;
+            return this;
+        }
+
+        public CounterHive CounterHive => _counterHive;
+
+        public void InternUpdate() {  }
+
+        public void RegisterInternUpdate() {
+            internTick.RegisterTickObject(this, 1);
+
+        }
+
+        public InternTick InternTick => internTick;
+
+        public void Init() {  }
     }
 }

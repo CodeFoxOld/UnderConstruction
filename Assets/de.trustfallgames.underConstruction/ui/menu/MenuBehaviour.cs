@@ -13,19 +13,14 @@ public class MenuBehaviour : MonoBehaviour
         _gamemanager = GameManager.GetManager();
     }
 
-    public void StartGame()
+    public void StartGame(int sceneNumber)
     {
-        SceneManager.LoadScene(1);
-    }
-    
-    public void StartGameIsometric()
-    {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(sceneNumber);
     }
 
-    public void GoToMainMenu()
+    public void RestartGame()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void QuitGame()
