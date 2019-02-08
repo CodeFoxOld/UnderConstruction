@@ -64,7 +64,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
 
             for (int i = tiles.Length - 1; i >= 0; i--) {
                 if (tiles[i] == null) continue;
-                if (i == tiles.Length - 1) {
+                if (i == tiles.Length - 1 && _character.LatestColorType != ApartmentColorType.None) {
                     if (Random.Range(0, 101) < _gameManager.Settings.SaltGrains) {
                         ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
                         while (apartmentColorType == _character.LatestColorType) {

@@ -31,7 +31,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public bool Moving => moving;
 
         private int colorCount = 1;
-        private ApartmentColorType latestColorType;
+        private ApartmentColorType latestColorType = ApartmentColorType.None;
 
         //UI Stuff
         private int highscore;
