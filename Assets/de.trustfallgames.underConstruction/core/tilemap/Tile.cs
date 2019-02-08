@@ -14,6 +14,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         [SerializeField] private Material blockedTile;
         [SerializeField] private Material unblockedTile;
+
+        [SerializeField] private GameObject door;
+
         private GameManager gameManager;
 
         private TileObstacle tileObstacle;
@@ -71,9 +74,52 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private void Move() {
             house.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
+            if (ObstacleData.Stage == 1 && ObstacleData.ObstacleType == ObstacleType.House) {
+                door.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
+            }
+
             if (Math.Abs(house.transform.position.y) < 0.01) {
                 moving = false;
                 house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
+                if (ObstacleData.Stage == 1 && ObstacleData.ObstacleType == ObstacleType.House) {
+                    door.transform.position = new Vector3(Coords.X, 0, Coords.Z);
+                }
+            }
+        }
+
+        private void MoveDown() {
+            house.transform.Translate(
+                                      0,
+                                      -1 / (GameManager.GetManager().Settings.MoveUpSpeed * (1 / Time.fixedDeltaTime)),
+                                      0);
+
+            if (ObstacleData.Stage == 0 && ObstacleData.ObstacleType == ObstacleType.House) {
+                door.transform.Translate(
+                                         0,
+                                         -1 / (GameManager.GetManager().Settings.MoveUpSpeed
+                                               * (1 / Time.fixedDeltaTime)), 0);
+            }
+
+            if (house.transform.childCount != 0) {
+                if (Math.Abs(house.transform.GetChild(0).position.y) < 0.01) {
+                    movingDown = false;
+                    var a = house;
+                    if (house.transform.childCount > 0) {
+                        house = house.transform.GetChild(0).gameObject;
+                        house.transform.parent = null;
+                        Destroy(a);
+                        house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
+                    } else {
+                        SetBlocked(false);
+                    }
+                }
+            } else {
+                if (house.transform.position.y < -1) {
+                    movingDown = false;
+                    door.transform.position = new Vector3(Coords.X, -1, Coords.Z);
+                    Destroy(house);
+                    SetBlocked(false);
+                }
             }
         }
 
@@ -193,6 +239,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public TileObstacle ObstacleData => tileObstacle;
 
         public int StepValue { get; set; }
+
         public bool Visited { get; set; }
 
         public bool IsCounterInProgress() { return _spawnCounter.Current > 0; }
@@ -211,33 +258,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             tileObstacle.TakeStage();
             _stackCounter.Reset();
             movingDown = true;
-        }
-
-        private void MoveDown() {
-            house.transform.Translate(
-                                      0,
-                                      -1 / (GameManager.GetManager().Settings.MoveUpSpeed * (1 / Time.fixedDeltaTime)),
-                                      0);
-            if (house.transform.childCount != 0) {
-                if (Math.Abs(house.transform.GetChild(0).position.y) < 0.01) {
-                    movingDown = false;
-                    var a = house;
-                    if (house.transform.childCount > 0) {
-                        house = house.transform.GetChild(0).gameObject;
-                        house.transform.parent = null;
-                        Destroy(a);
-                        house.transform.position = new Vector3(Coords.X, 0, Coords.Z);
-                    } else {
-                        SetBlocked(false);
-                    }
-                }
-            } else {
-                if (house.transform.position.y < -1) {
-                    movingDown = false;
-                    Destroy(house);
-                    SetBlocked(false);
-                }
-            }
         }
 
         private void SetBlocked(bool state) {
