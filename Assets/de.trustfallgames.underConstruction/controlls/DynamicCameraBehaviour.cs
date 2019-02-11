@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using de.TrustfallGames.UnderConstruction.character;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SocialPlatforms;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
@@ -12,21 +12,25 @@ public class DynamicCameraBehaviour : MonoBehaviour
     private int _rotationSpeed = 25;
 
     [Header("Distance in world space, before swipe is counted")] [Range(0, 500)] [SerializeField]
-    private int _swipeDistance = 150;  
-    
+    private int _swipeDistance = 150;
+
+
     private float _targetRotation;
     private Vector2 _touchOrigin = -Vector2.one;
     private float _rotationSteps;
     private SwipedDirection _swipeDir;
     private bool _rotating;
-    
-    
+    private Touch firstTouch;
+
     void Update()
     {
         //Get The Swipe and rotate the Map if not already rotating
-        if (Input.touchCount > 0 && !_rotating)
-        {           
-            Touch firstTouch = Input.touches[0];
+        if (Input.touchCount == 1 && !_rotating)
+        {                      
+            if (Input.GetTouch(0).fingerId == 0)
+            {
+                firstTouch = Input.GetTouch(0);
+            }
 
             if (firstTouch.phase == TouchPhase.Began)
             {
