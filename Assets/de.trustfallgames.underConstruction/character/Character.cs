@@ -69,6 +69,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
             _character.localRotation = b.transform.localRotation;
             _character.SetParent(_player);
             b.SetParent(_character); //set old parent as Child
+            b.position = new Vector3(_character.position.x, 0, _character.position.z);
             moving = true;           //Start moving
             _movement.CharTransform = _character.transform;
             CalculateHighscore(apartmentPart);
