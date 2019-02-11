@@ -8,9 +8,11 @@ using Vector3 = UnityEngine.Vector3;
 
 public class DynamicCameraBehaviour : MonoBehaviour
 {
-    [Header("Camera rotation Speed, while swiping")]
-    [Range(1, 50)]
-    [SerializeField] private int _rotationSpeed = 25;
+    [Header("Duration of camera rotation in frames")] [Range(1, 50)] [SerializeField] 
+    private int _rotationSpeed = 25;
+
+    [Header("Distance in world space, before swipe is counted")] [Range(0, 500)] [SerializeField]
+    private int _swipeDistance = 150;  
     
     private float _targetRotation;
     private Vector2 _touchOrigin = -Vector2.one;
@@ -70,15 +72,18 @@ public class DynamicCameraBehaviour : MonoBehaviour
         float positiveX = Mathf.Abs(swipeVector.x);
         float positiveY = Mathf.Abs(swipeVector.y);
         
-        SwipedDirection swipedDir;
+        SwipedDirection swipedDir = SwipedDirection.None;
         
         if (positiveX > positiveY)
         {
-            swipedDir = (swipeVector.x > 0) ? SwipedDirection.Right : SwipedDirection.Left;
-        }
-        else
-        {
-            swipedDir = SwipedDirection.None;
+            if (swipeVector.x > _swipeDistance)
+            {
+                swipedDir = SwipedDirection.Right;
+            }
+            else if (swipeVector.x < -_swipeDistance)
+            {
+                swipedDir = SwipedDirection.Left;
+            }
         }
 
         return swipedDir;
