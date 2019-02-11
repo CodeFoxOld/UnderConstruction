@@ -177,8 +177,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 b.transform.SetParent(house.transform); //set old parent as Child
             }
 
-            var a = GameManager.GetManager().Settings.GetGrowSpeed();
-            _stackCounter = new Counter(UnityEngine.Random.Range(a.Min, a.Max));
+            _stackCounter = new Counter(gameManager.Settings.GetGrowInterval());
 
             moving = true; //Start moving
             if (tileObstacle.Stage > GameManager.GetManager().Settings.BuildingHight) {
@@ -199,14 +198,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public void InitialiseSpawnObject(ObstacleData obstacleData, GameObject obstacleBlueprint,
             ApartmentStack apartmentStack) {
-            var a = GameManager.GetManager().Settings.GetGrowSpeed();
-            _stackCounter = new Counter(UnityEngine.Random.Range(a.Min, a.Max));
+            _stackCounter = new Counter(gameManager.Settings.GetGrowInterval());
             apartmentPart = apartmentStack.draw();
             ShowIndicator();
             Debug.Log(obstacleData.ToString());
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(
-                                        gameManager.Settings.SpawnDuration, false,
+                                        gameManager.Settings.GetSpawnDuration(), false,
                                         gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration
                                         + (Time.fixedDeltaTime * 2));
             if (tileObstacle == null) {

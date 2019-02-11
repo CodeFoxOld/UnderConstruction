@@ -1,18 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
     public class Settings : MonoBehaviour {
+        private GameManager _gameManager;
+
         [Header("The speed Houses comes out of the ground")]
         [SerializeField]
         private float moveUpSpeed = 1;
-
-        [Header("The time, after starting the spawn event, until the field spawns.")]
-        [SerializeField]
-        private float spawnDuration = 10;
-
-        [Header("How often should a new spawn event fire")]
-        [SerializeField]
-        private float spawnInterval = 10;
 
         [Header("Player rotation Speed")]
         [Range(0.02f, 1)]
@@ -20,7 +15,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         private float rotationDuration = 0.1f;
 
         [Header("Player Movement Speed")]
-        [Range(0.02f, 1)]
+        [UnityEngine.Range(0.02f, 1)]
         [SerializeField]
         private float moveDuration = 0.1f;
 
@@ -32,12 +27,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private int destructablesPerPoints = 1000;
 
-        [Header("The Speed a apartment should grow in Seconds")]
+        [Header("The max of destructibles a player can receive with one pick up")]
         [SerializeField]
-        private float GrowSpeedMin = 20;
-
-        [SerializeField]
-        private float GrowSpeedMax = 25;
+        private int maxDestructablesPerCalc = 2;
 
         [Header(
             "Building High, after that the Player lose. If a Player should lose,"
@@ -53,12 +45,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         [Header("Percent of house obstacles.")]
         [SerializeField]
-        [Range(0,100)]
+        [Range(0, 100)]
         private int housePercentage = 40;
 
         [Header("Percentage of color strike break. Higher value means more breaks.")]
         [SerializeField]
-        [Range(0,100)]
+        [Range(0, 100)]
         private int saltGrains = 10;
 
         [Header("After how many seconds should a object spawn automatic, when the player is on the field?")]
@@ -68,26 +60,80 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public int SaltGrains => saltGrains;
         public int HousePercentage => housePercentage;
         public int DestructablesPerPoints => destructablesPerPoints;
-        public float SpawnDuration => spawnDuration;
         public float MoveUpSpeed => moveUpSpeed;
-        public float SpawnInterval => spawnInterval;
         public float RotationDuration => rotationDuration;
         public float MoveDuration => moveDuration;
         public float BuildingHight => _buildingHight;
         public int BasePoint => basePoint;
         public float DestructibleMoveSpeed => _destructibleMoveSpeed;
         public float EarlySpawnTime => earlySpawnTime;
+        public int MaxDestructablesPerCalc => maxDestructablesPerCalc;
 
-        public GrowSpeed GetGrowSpeed() { return new GrowSpeed(GrowSpeedMin, GrowSpeedMax); }
-    }
+        [Header("The point at which the game reaches the max difficulty")]
+        [SerializeField]
+        private float highScoreMax;
 
-    public struct GrowSpeed {
-        public float Min;
-        public float Max;
+        [SerializeField] [Header("Max Amounts of Fields")]
+        public int maxField;
 
-        public GrowSpeed(float min, float max) {
-            Min = min;
-            Max = max;
+        [Header("Start Amount of spawn duration")]
+        [SerializeField]
+        [Range(0.1f, 10)]
+        private float spawnDurationStart;
+
+        [Header("Min Amount of spawn duration")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float spawnDurationMin;
+
+        [Header("Start Amount of spawn interval")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float spawnIntervalStart;
+
+        [Header("Min Amount of spawn interval")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float spawnIntervalMin;
+
+        [Header("Start Amount of grow speed")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float growIntervalStart;
+
+        [Header("Min Amount of grow speed")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float growIntervalMin;
+
+        public float GetSpawnDuration() {
+            return GameManager.GetManager().Character.Highscore > highScoreMax ?
+                       calc(spawnDurationStart, spawnDurationMin, highScoreMax, highScoreMax) :
+                       calc(spawnDurationStart, spawnDurationMin, highScoreMax, GetGameManager().Character.Highscore);
+        }
+
+        public float GetSpawnInterval() {
+            return GameManager.GetManager().Character.Highscore > highScoreMax ?
+                       calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, highScoreMax) :
+                       calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, GetGameManager().Character.Highscore);
+        }
+
+        public float GetGrowInterval() {
+            return GameManager.GetManager().Character.Highscore > highScoreMax ?
+                       calc(growIntervalStart, growIntervalMin, highScoreMax, highScoreMax) :
+                       calc(growIntervalStart, growIntervalMin, highScoreMax, GetGameManager().Character.Highscore);
+        }
+
+        private float calc(float yStart, float min, float xGoal, float point) {
+            float a = (float) Math.Pow((0 - xGoal), 2);
+            float b = (float) Math.Pow((point - xGoal), 2);
+            return ((yStart - min) / (a)) * b + min;
+        }
+
+        private GameManager GetGameManager() {
+            if (_gameManager == null)
+                _gameManager = GameManager.GetManager();
+            return _gameManager;
         }
     }
 }
