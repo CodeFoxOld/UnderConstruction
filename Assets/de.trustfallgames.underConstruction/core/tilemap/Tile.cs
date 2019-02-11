@@ -240,7 +240,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public bool Visited { get; set; }
 
-        public bool IsCounterInProgress() { return _spawnCounter.Current > 0; }
+        public bool IsCounterInProgress() {
+            
+            return _spawnCounter != null && _spawnCounter.Current > 0;
+        }
 
         public bool SpawnInProgress { get; private set; }
 
