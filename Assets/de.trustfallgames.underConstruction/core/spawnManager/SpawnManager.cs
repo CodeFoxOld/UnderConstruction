@@ -36,7 +36,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private void Start() {
             BuildDictionary();
             BuildObstacleData();
-            counter = new Counter(GameManager.GetManager().Settings.SpawnInterval);
+            counter = new Counter(GameManager.GetManager().Settings.GetSpawnInterval());
             _gameManager = GameManager.GetManager();
             _mapManager = _gameManager.MapManager;
             _character = _gameManager.Character;
@@ -189,6 +189,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         public void InternUpdate() {
             if (counter.Check()) {
                 StartNewSpawnRoutine();
+                counter.Reset(_gameManager.Settings.GetSpawnInterval());
             }
         }
 
