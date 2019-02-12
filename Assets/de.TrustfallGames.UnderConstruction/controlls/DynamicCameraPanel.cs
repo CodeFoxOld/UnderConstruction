@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.ui.components;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
-public class DynamicCameraBehaviour : MonoBehaviour
+public class DynamicCameraPanel : InteractableButton
 {
     [Header("Duration of camera rotation in frames")] [Range(1, 50)] [SerializeField] 
     private int _rotationSpeed = 25;
@@ -14,60 +16,70 @@ public class DynamicCameraBehaviour : MonoBehaviour
     [Header("Distance in world space, before swipe is counted")] [Range(0, 500)] [SerializeField]
     private int _swipeDistance = 150;
 
+    [Header("The centered dynamic camera object, that will be rotated")] [SerializeField]
+    private GameObject _dynamicCam;
+    
+    [Header("The control X")] [SerializeField]
+    private GameObject _controlX;
+
 
     private float _targetRotation;
-    private Vector2 _touchOrigin = -Vector2.one;
     private float _rotationSteps;
+    private Vector2 _touchOrigin;
     private SwipedDirection _swipeDir;
     private bool _rotating;
-    private Touch firstTouch;
+
+    void Start()
+    {
+        _dynamicCam = Camera.main.transform.parent.gameObject;
+        _rotationSteps = _rotationSpeed;
+    }
 
     void Update()
-    {
-        //Get The Swipe and rotate the Map if not already rotating
-        if (Input.touchCount == 1 && !_rotating)
-        {                      
-            if (Input.GetTouch(0).fingerId == 0)
-            {
-                firstTouch = Input.GetTouch(0);
-            }
-
-            if (firstTouch.phase == TouchPhase.Began)
-            {
-                _touchOrigin = firstTouch.position;
-            }
-            else if (firstTouch.phase == TouchPhase.Ended)
-            {             
-                Vector2 touchVector = firstTouch.position - _touchOrigin;              
-                _swipeDir = GetSwipeDirection(touchVector);
-                 
-                _rotationSteps = _rotationSpeed;
-                _targetRotation = 90 / _rotationSteps;
-                _rotating = true;             
-            }         
-        }
-        
+    {      
         if (_rotating)
         {
             RotateMap();
         }
     }
 
+    protected override void OnButtonPressed(PointerEventData eventData)
+    {
+        _touchOrigin = eventData.position;
+    }
+
+    protected override void OnButtonReleased(PointerEventData eventData)
+    {     
+        if (!_rotating)
+        {
+            _swipeDir = GetSwipeDirection(eventData.position - _touchOrigin);
+
+            if (_swipeDir != SwipedDirection.None)
+            {
+                _targetRotation = 90 / _rotationSteps;
+                _rotating = true;
+            }
+        }
+    }
+    
     private void RotateMap()
     {
         if (_swipeDir == SwipedDirection.Left)
         {
-            transform.Rotate(new Vector3(0, -_targetRotation, 0));
+            _dynamicCam.transform.Rotate(new Vector3(0, -_targetRotation, 0));
+            _controlX.transform.Rotate(new Vector3(0,0, -_targetRotation));
         }
         else if (_swipeDir == SwipedDirection.Right)
         {
-            transform.Rotate(new Vector3(0, _targetRotation, 0));
+            _dynamicCam.transform.Rotate(new Vector3(0, _targetRotation, 0));
+            _controlX.transform.Rotate(new Vector3(0,0, _targetRotation));
         }
         _rotationSteps--;
 
         if (_rotationSteps == 0)
         {
             _rotating = false;
+            _rotationSteps = _rotationSpeed;
         }
     }
     
@@ -99,4 +111,6 @@ public class DynamicCameraBehaviour : MonoBehaviour
         Right,
         Left
     }
+
+    
 }
