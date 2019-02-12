@@ -22,25 +22,49 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private readonly Dictionary<ApartmentColorType, ApartmentStack> apartmentStacks =
             new Dictionary<ApartmentColorType, ApartmentStack>();
 
-        List<ObstacleData> notHouse = new List<ObstacleData>();
-        List<ObstacleData> house = new List<ObstacleData>();
+        private List<ObstacleData> notHouse = new List<ObstacleData>();
+        private List<ObstacleData> house = new List<ObstacleData>();
+
+        private List<Tile> spawns = new List<Tile>();
 
         private Counter counter;
         private MapManager _mapManager;
         private GameManager _gameManager;
+
         private Character _character;
 
-        private void Awake() { }
-
         // Start is called before the first frame update
+
         private void Start() {
             BuildDictionary();
             BuildObstacleData();
-            counter = new Counter(GameManager.GetManager().Settings.SpawnInterval);
+            counter = new Counter(GameManager.GetManager().Settings.GetSpawnInterval());
             _gameManager = GameManager.GetManager();
             _mapManager = _gameManager.MapManager;
             _character = _gameManager.Character;
             RegisterInternUpdate();
+        }
+
+        public void InternUpdate() {
+            if (counter.Check()) {
+                StartNewSpawnRoutine();
+                counter.Reset(_gameManager.Settings.GetSpawnInterval());
+            }
+
+            CheckSpawns();
+        }
+
+        private void CheckSpawns() {
+            bool temp = false;
+            foreach (Tile tile in spawns) {
+                if (!tile.IsCounterInProgress()) continue;
+                temp = true;
+                break;
+            }
+
+            if (temp) return;
+            counter.Reset(_gameManager.Settings.GetSpawnInterval());
+            StartNewSpawnRoutine();
         }
 
         private void BuildDictionary() {
@@ -58,43 +82,71 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private void StartNewSpawnRoutine() {
             TilesStack tilesStack = GetClassifiedTiles();
 
-            Tile[] tiles = GetSpawnTiles(tilesStack, 2);
 
-            if (tiles.Length < 2) return;
+            Tile[] tiles = GetSpawnTiles(tilesStack, CalculateStages());
+
+            if (tiles.Length < CalculateStages()) return;
 
             for (int i = tiles.Length - 1; i >= 0; i--) {
                 if (tiles[i] == null) continue;
-                if (i == tiles.Length - 1) {
+                if (i == tiles.Length - 1 && _character.LatestColorType != ApartmentColorType.None) {
+                    //Salted Random. Creates sometimes a color
                     if (Random.Range(0, 101) < _gameManager.Settings.SaltGrains) {
-                        ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
-                        while (apartmentColorType == _character.LatestColorType) {
-                            apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
-                            tiles[i]
-                                .InitialiseSpawnObject(
-                                                       GetRandomObstacleData(), obstacleBlueprint,
-                                                       apartmentStacks[_character.LatestColorType]);
-                        }
-                    } else {
+                        //Spawn tile with other color than latest player color
+                        tiles[i]
+                            .InitialiseSpawnObject(
+                                                   GetRandomObstacleData(), obstacleBlueprint,
+                                                   apartmentStacks
+                                                       [GetRandomColorExceptOne(_character.LatestColorType)]);
+                        spawns.Add(tiles[i]);
+                    } else /*create field with latest player color*/ {
                         tiles[i]
                             .InitialiseSpawnObject(
                                                    GetRandomObstacleData(), obstacleBlueprint,
                                                    apartmentStacks[_character.LatestColorType]);
-                    }
-                } else {
-                    ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
-                    while (apartmentColorType == _character.LatestColorType) {
-                        apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
-                    }
+                        spawns.Add(tiles[i]);
 
+
+                        //When the player has no field and/or the tile is not the farest tile
+                    }
+                } else /*Generates field with random color, which is not the same than the latest player color*/ {
                     tiles[i]
                         .InitialiseSpawnObject(
                                                GetRandomObstacleData(), obstacleBlueprint,
-                                               apartmentStacks[apartmentColorType]);
+                                               apartmentStacks[GetRandomColorExceptOne(_character.LatestColorType)]);
+                    spawns.Add(tiles[i]);
                 }
             }
         }
 
+        private int CalculateStages() {
+            int maxHs = _gameManager.Settings.HighScoreMax;
+            int hs = _character.Highscore;
+            int fields = _gameManager.Settings.MaxField - 1;
+            int steps = maxHs / fields;
+            if (hs == 0) {
+                return _gameManager.Settings.MinField;
+            }
+
+            int amount = hs / steps;
+            if (amount <= _gameManager.Settings.MinField) {
+                return _gameManager.Settings.MinField;
+            }
+
+            return (hs / steps) + 1;
+        }
+
+        private ApartmentColorType GetRandomColorExceptOne(ApartmentColorType color) {
+            ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
+            while (apartmentColorType == color) {
+                apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
+            }
+
+            return apartmentColorType;
+        }
+
         //TODO: Implement spawning amount with player size
+
         /// <summary>
         /// Returns an array with the length of the stages. The lowest index is the nearest field
         /// </summary>
@@ -104,7 +156,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private Tile[] GetSpawnTiles(TilesStack stack, int stages) {
             Tile[] tiles = new Tile[stages]; //Inits Array with stages size
 
-            if (stack.CountRated() > 2) {
+            if (stack.CountRated() > stages) {
                 float ratio = stack.CountRated() * (1f / stages); //Make ratio for stages
                 for (int i = 1; i <= stages; i++) {
                     tiles[i - 1] = stack.DrawRated((int) Math.Ceiling((i * ratio)));
@@ -183,12 +235,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                     List<ObstacleData> tempObstacles = ObstacleData.Builder(obstacle.GetComponent<ObstaclePart>());
                     tempObstacles.ForEach(entry => notHouse.Add(entry));
                 }
-            }
-        }
-
-        public void InternUpdate() {
-            if (counter.Check()) {
-                StartNewSpawnRoutine();
             }
         }
 

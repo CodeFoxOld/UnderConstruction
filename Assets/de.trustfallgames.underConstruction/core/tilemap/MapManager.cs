@@ -27,7 +27,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         [SerializeField] private int yDimension;
         [SerializeField] private Dictionary<TileCoord, Tile> tiles;
         [SerializeField] private GameObject DestructiblePrefab;
-
+        
         private GameManager gameManager;
         private Character character;
 

@@ -27,18 +27,19 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private Controller _controller;
         [SerializeField] private Movement _movement;
         private bool moving;
+        private int height;
 
         public bool Moving => moving;
 
         private int colorCount = 1;
-        private ApartmentColorType latestColorType;
+        private ApartmentColorType latestColorType = ApartmentColorType.None;
 
         //UI Stuff
         private int highscore;
         private int highscoreRest;
         private int destRest;
         private GameManager gameManager;
-        [SerializeField] public int destructibleCount; 
+        [SerializeField] public int destructibleCount;
         public int Highscore => highscore;
 
         public int DestructibleCount => destructibleCount;
@@ -51,7 +52,6 @@ namespace de.TrustfallGames.UnderConstruction.character {
             _movement = GetComponent<Movement>();
             RegisterInternUpdate();
         }
-
 
         private void Move() {
             _character.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
@@ -70,9 +70,11 @@ namespace de.TrustfallGames.UnderConstruction.character {
             _character.localRotation = b.transform.localRotation;
             _character.SetParent(_player);
             b.SetParent(_character); //set old parent as Child
+            b.position = new Vector3(_character.position.x, 0, _character.position.z);
             moving = true;           //Start moving
             _movement.CharTransform = _character.transform;
             CalculateHighscore(apartmentPart);
+            height++;
         }
 
         private void CalculateHighscore(ApartmentPart apartmentPart) {
@@ -89,10 +91,11 @@ namespace de.TrustfallGames.UnderConstruction.character {
 
             int dest = (toAdd + destRest) / GameManager.GetManager().Settings.DestructablesPerPoints;
             destRest = (toAdd + destRest) % GameManager.GetManager().Settings.DestructablesPerPoints;
-            destructibleCount += dest;
+            destructibleCount += dest > gameManager.Settings.MaxDestructablesPerCalc ?
+                                     gameManager.Settings.MaxDestructablesPerCalc : dest;
 
-            gameManager.UiManager.OnHighscoreCalc(colorCount, highscore)
-                       .OnDeconstructorChange(DestructibleCount);
+            gameManager.UiManager.OnHighscoreCalc(colorCount, apartmentPart.ApartmentColorType, highscore, height
+            ).OnDeconstructorChange(DestructibleCount);
         }
 
         /// <summary>
@@ -104,7 +107,6 @@ namespace de.TrustfallGames.UnderConstruction.character {
             destructibleCount--;
             gameManager.UiManager.OnDeconstructorChange(DestructibleCount);
             return true;
-
         }
 
         public float GetCurrentRotation() { return Movement.GetRotationValue(_moveDirection); }
@@ -134,6 +136,8 @@ namespace de.TrustfallGames.UnderConstruction.character {
 
         public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 20); }
 
-        public void Init() {  }
+        public void Init() { }
+
+        public int Height => height;
     }
 }
