@@ -94,7 +94,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
             destructibleCount += dest > gameManager.Settings.MaxDestructablesPerCalc ?
                                      gameManager.Settings.MaxDestructablesPerCalc : dest;
 
-            gameManager.UiManager.OnHighscoreCalc(colorCount, highscore, height
+            gameManager.UiManager.OnHighscoreCalc(colorCount, apartmentPart.ApartmentColorType, highscore, height
             ).OnDeconstructorChange(DestructibleCount);
         }
 

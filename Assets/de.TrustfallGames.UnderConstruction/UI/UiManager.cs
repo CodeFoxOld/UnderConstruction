@@ -1,4 +1,5 @@
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.UI {
@@ -38,10 +39,10 @@ namespace de.TrustfallGames.UnderConstruction.UI {
             pauseMenuCanvas.SetActive(false);
         }
 
-        public UiManager OnHighscoreCalc(int highscoreMultiplicator, int highscore, int height)
+        public UiManager OnHighscoreCalc(int highscoreMultiplicator, ApartmentColorType apartmentColorType, int highscore, int height)
         {
             _gameUI.ChangeScore(highscore);
-            _gameUI.ChangeComboCounter(highscoreMultiplicator);
+            _gameUI.ChangeComboCounter(highscoreMultiplicator, apartmentColorType);
             _gameUI.GetComponent<GameUIBehaviour>().PopScoreWithMultiplier(highscoreMultiplicator);
             return this;
         }
