@@ -22,6 +22,10 @@ public class DynamicCameraPanel : InteractableButton
     [Header("The control X")] [SerializeField]
     private GameObject _controlX;
 
+    [Header("Bagger Buttons")]
+    [SerializeField] private GameObject _baggerButtonLeft;
+    [SerializeField] private GameObject _baggerButtonRight;
+
 
     private float _targetRotation;
     private float _rotationSteps;
@@ -35,7 +39,7 @@ public class DynamicCameraPanel : InteractableButton
         _rotationSteps = _rotationSpeed;
     }
 
-    void Update()
+    void FixedUpdate()
     {      
         if (_rotating)
         {
@@ -80,6 +84,7 @@ public class DynamicCameraPanel : InteractableButton
         {
             _rotating = false;
             _rotationSteps = _rotationSpeed;
+            SwapBaggerButtons();        
         }
     }
     
@@ -104,7 +109,16 @@ public class DynamicCameraPanel : InteractableButton
 
         return swipedDir;
     }
-    
+
+    private void SwapBaggerButtons()
+    {
+        Vector3 mirrorTransform = _baggerButtonRight.transform.position;
+        _baggerButtonRight.transform.position = _baggerButtonLeft.transform.position;
+        _baggerButtonLeft.transform.position = mirrorTransform;
+        _baggerButtonLeft.transform.Rotate(0,0,90);
+        _baggerButtonRight.transform.Rotate(0,0,90);
+    }
+
     private enum SwipedDirection
     {
         None,

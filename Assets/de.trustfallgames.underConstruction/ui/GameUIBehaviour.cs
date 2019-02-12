@@ -4,12 +4,16 @@ using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUIBehaviour : MonoBehaviour {
     [SerializeField] private GameObject _popupScore;
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _destructCount;
     [SerializeField] private TextMeshProUGUI _comboCounter;
+    [SerializeField] private Button _baggerButtonLeft;
+    [SerializeField] private Button _baggerButtonRight;
+    
     private GameManager _gameManager;
     private int baseScore;
 
@@ -24,7 +28,21 @@ public class GameUIBehaviour : MonoBehaviour {
 
     public void ChangeScore(int newScore) { _scoreText.SetText(newScore.ToString()); }
 
-    public void ChangeDestructorCount(int newCount) { _destructCount.SetText(newCount.ToString()); }
+    public void ChangeDestructorCount(int newCount)
+    {
+        if (!(newCount > 0))
+        {
+            _baggerButtonLeft.interactable = false;
+            _baggerButtonRight.interactable = false;
+        }
+        else
+        {
+            _baggerButtonLeft.interactable = true;
+            _baggerButtonRight.interactable = true;
+        }
+
+        _destructCount.SetText(newCount.ToString());
+    }
 
     public void ChangeComboCounter(int newCounter, ApartmentColorType apartmentColorType) {
         _comboCounter.SetText("Combo! X" + newCounter.ToString());
