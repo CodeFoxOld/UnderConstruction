@@ -27,6 +27,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private Controller _controller;
         [SerializeField] private Movement _movement;
         private bool moving;
+        private int height;
 
         public bool Moving => moving;
 
@@ -73,6 +74,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
             moving = true;           //Start moving
             _movement.CharTransform = _character.transform;
             CalculateHighscore(apartmentPart);
+            height++;
         }
 
         private void CalculateHighscore(ApartmentPart apartmentPart) {
@@ -92,7 +94,8 @@ namespace de.TrustfallGames.UnderConstruction.character {
             destructibleCount += dest > gameManager.Settings.MaxDestructablesPerCalc ?
                                      gameManager.Settings.MaxDestructablesPerCalc : dest;
 
-            gameManager.UiManager.OnHighscoreCalc(colorCount, highscore).OnDeconstructorChange(DestructibleCount);
+            gameManager.UiManager.OnHighscoreCalc(colorCount, highscore, height
+            ).OnDeconstructorChange(DestructibleCount);
         }
 
         /// <summary>
@@ -134,5 +137,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 20); }
 
         public void Init() { }
+
+        public int Height => height;
     }
 }
