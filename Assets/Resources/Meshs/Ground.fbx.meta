@@ -1,27 +1,20 @@
 fileFormatVersion: 2
-guid: 58c605bda7ecdf4449137d6e6e2b8895
+guid: 3275c12afa0cf45468614de713b248c7
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Office_Building.000
-    2100002: Undertower
+    2100000: ground
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cube.000
-    4300002: Undertower
+    4300000: ground
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Office_Building.000
-    second: {fileID: 2100000, guid: e2de2be002ed8f1439a2d117b17f1a8f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Undertower
-    second: {fileID: 2100000, guid: 60282ddab1c3e9340a19784591148302, type: 2}
+      name: ground
+    second: {fileID: 2100000, guid: 8cf2f6bec6e3e2c42a67fbcdb885d06d, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
