@@ -80,13 +80,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         }
 
         private void StartNewSpawnRoutine() {
-
             TilesStack tilesStack = GetClassifiedTiles();
 
-            //TODO: Erhöung der spawnfelder mit steigendem highscore
-            Tile[] tiles = GetSpawnTiles(tilesStack, 2);
 
-            if (tiles.Length < 2) return;
+            Tile[] tiles = GetSpawnTiles(tilesStack, CalculateStages());
+
+            if (tiles.Length < CalculateStages()) return;
 
             for (int i = tiles.Length - 1; i >= 0; i--) {
                 if (tiles[i] == null) continue;
@@ -97,7 +96,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
                         tiles[i]
                             .InitialiseSpawnObject(
                                                    GetRandomObstacleData(), obstacleBlueprint,
-                                                   apartmentStacks[GetRandomColorExceptOne(_character.LatestColorType)]);
+                                                   apartmentStacks
+                                                       [GetRandomColorExceptOne(_character.LatestColorType)]);
                         spawns.Add(tiles[i]);
                     } else /*create field with latest player color*/ {
                         tiles[i]
@@ -119,11 +119,27 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             }
         }
 
+        private int CalculateStages() {
+            int maxHs = _gameManager.Settings.HighScoreMax;
+            int hs = _character.Highscore;
+            int fields = _gameManager.Settings.MaxField - 1;
+            int steps = maxHs / fields;
+            if (hs == 0) {
+                return _gameManager.Settings.MinField;
+            }
+
+            int amount = hs / steps;
+            if (amount <= _gameManager.Settings.MinField) {
+                return _gameManager.Settings.MinField;
+            }
+
+            return (hs / steps) + 1;
+        }
+
         private ApartmentColorType GetRandomColorExceptOne(ApartmentColorType color) {
             ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
             while (apartmentColorType == color) {
                 apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
-                Debug.Log("ITERATION!");
             }
 
             return apartmentColorType;
@@ -140,7 +156,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private Tile[] GetSpawnTiles(TilesStack stack, int stages) {
             Tile[] tiles = new Tile[stages]; //Inits Array with stages size
 
-            if (stack.CountRated() > 2) {
+            if (stack.CountRated() > stages) {
                 float ratio = stack.CountRated() * (1f / stages); //Make ratio for stages
                 for (int i = 1; i <= stages; i++) {
                     tiles[i - 1] = stack.DrawRated((int) Math.Ceiling((i * ratio)));
