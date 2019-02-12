@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
     public class Settings : MonoBehaviour {
@@ -31,12 +32,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private int maxDestructablesPerCalc = 2;
 
+        [FormerlySerializedAs("_buildingHight")]
         [Header(
             "Building High, after that the Player lose. If a Player should lose,"
             + "when a building is higher than 5, set the value to 6.")]
         [Range(1, 60)]
         [SerializeField]
-        private int _buildingHight = 5;
+        private int _buildingHeight = 5;
 
         [Range(0.2f, 2)]
         [Header("Move speed of destructible. Move Speed for one field in seconds")]
@@ -57,54 +59,63 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private float earlySpawnTime = 0.5f;
 
+        [Header("The point at which the game reaches the max difficulty")]
+        [SerializeField]
+        private int highScoreMax = 10000;
+
+        [SerializeField] [Header("Max Amount of Fields")]
+        [Range(2,6)]
+        private int maxField = 2;
+        
+        [SerializeField] [Header("Min Amount of Fields")]
+        [Range(2,6)]
+        private int minField = 2;
+
+
+        [Header("Start Amount of spawn duration")]
+        [SerializeField]
+        [Range(0.1f, 10)]
+        private float spawnDurationStart = 20;
+
+        [Header("Min Amount of spawn duration")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float spawnDurationMin = 2;
+
+        [Header("Start Amount of spawn interval")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float spawnIntervalStart = 20;
+
+        [Header("Min Amount of spawn interval")]
+        [SerializeField]
+        [Range(0.1f, 10f)]
+        private float spawnIntervalMin = 2;
+
+        [Header("Start Amount of grow speed")]
+        [SerializeField]
+        [Range(0.1f, 30f)]
+        private float growIntervalStart = 30;
+
+        [Header("Min Amount of grow speed")]
+        [SerializeField]
+        [Range(0.1f, 30f)]
+        private float growIntervalMin = 5;
+
         public int SaltGrains => saltGrains;
         public int HousePercentage => housePercentage;
         public int DestructablesPerPoints => destructablesPerPoints;
         public float MoveUpSpeed => moveUpSpeed;
         public float RotationDuration => rotationDuration;
         public float MoveDuration => moveDuration;
-        public float BuildingHight => _buildingHight;
+        public int BuildingHeight => _buildingHeight;
         public int BasePoint => basePoint;
         public float DestructibleMoveSpeed => _destructibleMoveSpeed;
         public float EarlySpawnTime => earlySpawnTime;
         public int MaxDestructablesPerCalc => maxDestructablesPerCalc;
-
-        [Header("The point at which the game reaches the max difficulty")]
-        [SerializeField]
-        private float highScoreMax;
-
-        [SerializeField] [Header("Max Amounts of Fields")]
-        public int maxField;
-
-        [Header("Start Amount of spawn duration")]
-        [SerializeField]
-        [Range(0.1f, 10)]
-        private float spawnDurationStart;
-
-        [Header("Min Amount of spawn duration")]
-        [SerializeField]
-        [Range(0.1f, 10f)]
-        private float spawnDurationMin;
-
-        [Header("Start Amount of spawn interval")]
-        [SerializeField]
-        [Range(0.1f, 10f)]
-        private float spawnIntervalStart;
-
-        [Header("Min Amount of spawn interval")]
-        [SerializeField]
-        [Range(0.1f, 10f)]
-        private float spawnIntervalMin;
-
-        [Header("Start Amount of grow speed")]
-        [SerializeField]
-        [Range(0.1f, 10f)]
-        private float growIntervalStart;
-
-        [Header("Min Amount of grow speed")]
-        [SerializeField]
-        [Range(0.1f, 10f)]
-        private float growIntervalMin;
+        public int MaxField => maxField;
+        public int MinField => minField;
+        public int HighScoreMax => highScoreMax;
 
         public float GetSpawnDuration() {
             return GameManager.GetManager().Character.Highscore > highScoreMax ?
