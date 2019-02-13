@@ -6,10 +6,17 @@ ModelImporter:
     100000: //RootNode
     400000: //RootNode
     2100000: Office_Building.000
+    2100002: No Name
     2300000: //RootNode
     3300000: //RootNode
     4300000: Cube.003
+    4300002: Cube.032
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 0e570bb952b3b474381b709d03670aa1, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

@@ -18,11 +18,16 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
                     return red;
                 case ApartmentColorType.Yellow:
                     return yellow;
+                case ApartmentColorType.None:
+                    return new Color(0,0,0,0);
             }
 
             return new Color();
         }
     }
 
-    public enum ApartmentColorType { Green, Blue, Red, Yellow }
+    public enum ApartmentColorType {
+        Green = 0, Blue = 1, Red = 2, Yellow = 3,
+        None = 4
+    }
 }

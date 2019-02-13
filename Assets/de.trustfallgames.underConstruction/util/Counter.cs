@@ -7,7 +7,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
     /// Automatic Counter.
     /// </summary>
     public class Counter {
-        private readonly float start;
+        private float start;
         private bool[] marker = new bool[0];
         private float[] stops = new float[0];
         private float current;
@@ -24,6 +24,11 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             current = this.start = start;
             GameManager.GetManager().CounterHive.RegisterCounter(this);
         }
+
+        public Counter(ref float time) {
+            
+        }
+
 
         /// <summary>
         /// Initialise a new Counter object with customizable auto reset.
@@ -114,6 +119,12 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             current = start;
             executed = false;
         }
+
+        public void Reset(float time) {
+            start = current = time;
+            executed = false;
+        }
+        
 
         public float Current => current;
     }
