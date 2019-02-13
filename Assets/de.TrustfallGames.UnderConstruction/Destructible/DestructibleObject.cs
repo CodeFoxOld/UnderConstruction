@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
@@ -64,8 +65,10 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private void StartDestroy() {
             start = false;
             destructionInProgress = true;
-            Destroy(gameObject);
-            //throw new NotImplementedException();
+            GetComponent<MeshFilter>().mesh = null;
+            var emission = GetComponentInChildren<ParticleSystem>().emission;
+            emission.enabled = false;
+            StartCoroutine(DestroyAfterTime(3));
         }
 
         public DestructibleObject Setup(GameManager gameManager, MapManager mapManager, Character character,
@@ -148,6 +151,14 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             }
 
             _directionVector3 = dirVector / (_gameManager.Settings.DestructibleMoveSpeed * (1 / Time.fixedDeltaTime));
+        }
+
+        private IEnumerator DestroyAfterTime(int time)
+        {
+            WaitForSeconds wait = new WaitForSeconds(time);
+            yield return wait;
+            
+            Destroy(gameObject);
         }
     }
 }
