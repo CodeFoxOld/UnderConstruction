@@ -1,20 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using de.TrustfallGames.UnderConstruction.Core;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.SoundManager {
+    [RequireComponent(typeof(SoundCollection))]
     public class SoundHandler : MonoBehaviour {
-        [SerializeField] private SoundFile[] sounds;
-        [SerializeField] private SoundCollection collection;
+        [SerializeField] private float sfxVolume = 1;
+        [SerializeField] private float musicVolume = 1;
+        private SoundCollection collection;
 
         private SoundHive hive;
 
-        private Dictionary<SourceKey, AudioSource> sources;
+        private readonly Dictionary<SourceKey, AudioSource> sources = new Dictionary<SourceKey, AudioSource>(SourceKey.HashNameComparer);
+        private SoundHandler _instance;
 
         // Start is called before the first frame update
-        void Start() {
+        private void Start() {
             DontDestroyOnLoad(gameObject);
             hive = new SoundHive(this);
+            collection = GetComponent<SoundCollection>().Init();
+            musicVolume = PlayerPrefHandler.GetMusicVolume();
+            sfxVolume = PlayerPrefHandler.GetSfxVolume();
         }
 
         private void FixedUpdate() { CheckForSilentSources(); }
@@ -29,12 +38,12 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         }
 
         public void PlaySound(SoundName name, bool loop, int hash) {
-            var source = hive.Draw();
-            var file = collection.GetAudioClip(name);
+            AudioSource source = hive.Draw();
+            SoundFile file = collection.GetAudioClip(name);
             source.clip = file.Clip;
-            source.volume = GetAudioVolume(file.AudioType);
+            source.volume = GetAudioVolume(file.SoundType, file.Volume);
             source.loop = loop;
-            sources.Add(new SourceKey(hash,name), source);
+            sources.Add(new SourceKey(hash, name), source);
         }
 
         /// <summary>
@@ -43,8 +52,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// <param name="name"></param>
         /// <param name="hash"></param>
         public void StopSound(SoundName name, int hash) {
-            AudioSource a;
-            if (sources.TryGetValue(new SourceKey(hash, name), out a)) {
+            if (sources.TryGetValue(new SourceKey(hash, name), out AudioSource a)) {
                 a.Stop();
             }
         }
@@ -54,7 +62,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// </summary>
         /// <param name="hash"></param>
         public void StopSound(int hash) {
-            foreach (KeyValuePair<SourceKey,AudioSource> pair in sources) {
+            foreach (KeyValuePair<SourceKey, AudioSource> pair in sources) {
                 if (pair.Key.Hash == hash) {
                     pair.Value.Stop();
                 }
@@ -70,21 +78,43 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             }
         }
 
+        /// <summary>
+        /// Creates a new Sound Source at the camera.
+        /// </summary>
+        /// <returns></returns>
         internal AudioSource CreateNewSoundSource() {
-            var go = Instantiate(new GameObject());
+            GameObject go = Instantiate(
+                                        new GameObject(), Camera.main.transform.position, new Quaternion(0, 0, 0, 0),
+                                        transform);
             return go.AddComponent<AudioSource>();
         }
 
-        private float GetAudioVolume(SoundType type) {
-            return type == SoundType.Music ? PlayerPrefs.GetFloat("MusicVolume") : PlayerPrefs.GetFloat("SFXVolume");
+        /// <summary>
+        /// Returns the Volume from the PlayerPrefs
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private float GetAudioVolume(SoundType type, float baseVolume) {
+            return (type == SoundType.Music ? musicVolume : sfxVolume) * baseVolume;
         }
+
+        private void Awake() {
+            if (_instance == null)
+                _instance = this;
+            else if (_instance != this) {
+                Destroy(gameObject);
+            }
+        }
+
+        public SoundHandler GetInstance() { return _instance; }
+
     }
 
     public enum SoundType { Music, SFX }
 
     public class SourceKey {
-        private int hash;
-        private SoundName name;
+        private readonly int hash;
+        private readonly SoundName name;
 
         public SourceKey(int hash, SoundName name) {
             this.hash = hash;
@@ -103,9 +133,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
                 return x.hash == y.hash && x.name == y.name;
             }
 
-            public int GetHashCode(SourceKey obj) {
-                    return 1;
-            }
+            public int GetHashCode(SourceKey obj) { return 1; }
         }
 
         public static IEqualityComparer<SourceKey> HashNameComparer { get; } = new HashNameEqualityComparer();
