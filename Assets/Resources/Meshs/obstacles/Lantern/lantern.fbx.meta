@@ -9,7 +9,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: lantern
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Laterne
+    second: {fileID: 2100000, guid: d671bdb3937c4384b83349681adeb93d, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
