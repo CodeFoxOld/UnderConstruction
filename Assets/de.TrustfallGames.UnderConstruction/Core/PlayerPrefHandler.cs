@@ -18,9 +18,11 @@ namespace de.TrustfallGames.UnderConstruction.Core {
         //Highscore
         private static string _highscores = "Highscores";
         private static string _highscore = "Highscore";
+        private static string _lastSentHighscore = "Last Sent HS";
+        private static string _lastSentAchievement = "Last Sent AC";
 
         public static int[] GetHighscores() {
-            return Array.ConvertAll(PlayerPrefs.GetString(_highscores).Split(), s => int.Parse(s));
+            return Array.ConvertAll(PlayerPrefs.GetString(_highscores).Split(','), s => int.Parse(s));
         }
 
         public static void SetHighscores(params int[] scores) {
@@ -28,7 +30,19 @@ namespace de.TrustfallGames.UnderConstruction.Core {
         }
 
         public static int GetHighScore() { return PlayerPrefs.GetInt(_highscore); }
+
+        public static void SetHighScore(int value)
+        {
+            if(value > GetHighScore())
+                PlayerPrefs.SetInt(_highscore, value);
+        }
+
+        public static int GetLastSentHighScore() { return PlayerPrefs.GetInt(_lastSentHighscore); }
         
-        public static void SetHighScore(int value){PlayerPrefs.SetInt(_highscore, value);}
+        public static void SetLastSentHighscore(int value){PlayerPrefs.SetInt(_lastSentHighscore, value);}
+
+        public static string GetLastSentAchievement(){ return PlayerPrefs.GetString(_lastSentAchievement); }
+        
+        public static void SetLastSentAchievement(string value){PlayerPrefs.SetString(_lastSentAchievement, value);}
     }
 }
