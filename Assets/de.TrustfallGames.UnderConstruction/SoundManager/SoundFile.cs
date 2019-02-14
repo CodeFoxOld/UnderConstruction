@@ -5,13 +5,15 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         [SerializeField] private SoundType soundType;
         [SerializeField] private SoundName soundName;
         [SerializeField] private AudioClip clip;
-        [SerializeField] [UnityEngine.Range(0,1)] private float volume;
+        [SerializeField] [Range(0,1)] private float volume = 1;
+        [SerializeField] private bool validate = false;
         public SoundType SoundType => soundType;
         public SoundName SoundName => soundName;
         public AudioClip Clip => clip;
-        public float Volume => volume = 1;
+        public float Volume => volume;
 
         private void OnValidate() {
+            if(!validate) return;
             var clip = this.clip == null ? "null" : this.clip.name;
             gameObject.name = "Type: " + soundType + " | Name: " + soundName + " | Clip: " + clip + " at Volume " + volume;
         }

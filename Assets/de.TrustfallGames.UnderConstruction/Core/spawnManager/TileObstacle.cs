@@ -1,5 +1,6 @@
 using System;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
@@ -25,7 +26,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             }
         }
 
-        public void AddStage() { stage++; }
+        public void AddStage() {
+            stage++; 
+        }
 
         public void TakeStage() { stage--; }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 using Random = System.Random;
@@ -192,6 +193,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         }
 
         private void Stack() {
+            SoundHandler.GetInstance().PlaySound(SoundName.HouseStack);
             GameObject b = house;
             if (b != null) {
                 tileObstacle.AddStage(); //Count Stage 1 up

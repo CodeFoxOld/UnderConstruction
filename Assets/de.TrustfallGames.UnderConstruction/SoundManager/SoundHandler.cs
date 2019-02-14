@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text;
 using de.TrustfallGames.UnderConstruction.Core;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.SoundManager {
@@ -10,12 +13,18 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
     public class SoundHandler : MonoBehaviour {
         [SerializeField] private float sfxVolume = 1;
         [SerializeField] private float musicVolume = 1;
+        [SerializeField] private AudioMixerGroup mixer;
+        [SerializeField] private int hiveSize;
         private SoundCollection collection;
 
         private SoundHive hive;
 
-        private readonly Dictionary<SourceKey, AudioSource> sources = new Dictionary<SourceKey, AudioSource>(SourceKey.HashNameComparer);
-        private SoundHandler _instance;
+        private readonly Dictionary<SourceKey, AudioSource> LoopSources =
+            new Dictionary<SourceKey, AudioSource>(SourceKey.HashNameComparer);
+
+        private readonly List<AudioSource> sources = new List<AudioSource>();
+
+        private static SoundHandler _instance;
 
         // Start is called before the first frame update
         private void Start() {
@@ -26,24 +35,54 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             sfxVolume = PlayerPrefHandler.GetSfxVolume();
         }
 
-        private void FixedUpdate() { CheckForSilentSources(); }
+        private void FixedUpdate() {
+            CheckForSilentSources();
+            hiveSize = hive.Size();
+        }
 
         private void CheckForSilentSources() {
-            foreach (KeyValuePair<SourceKey, AudioSource> source in sources) {
-                if (!source.Value.isPlaying) {
-                    hive.Deposit(source.Value);
-                    sources.Remove(source.Key);
+            List<SourceKey> keys = new List<SourceKey>();
+            foreach (KeyValuePair<SourceKey, AudioSource> loopSource in LoopSources) {
+                if (!loopSource.Value.isPlaying) {
+                    hive.Deposit(loopSource.Value);
+                    keys.Add(loopSource.Key);
+                }
+            }
+
+            foreach (SourceKey key in keys) {
+                LoopSources.Remove(key);
+            }
+
+            for (int i = 0; i < sources.Count; i++) {
+                if (!sources[i].isPlaying) {
+                    hive.Deposit(sources[i]);
+                    sources.RemoveAt(i);
+                    i--;
                 }
             }
         }
 
-        public void PlaySound(SoundName name, bool loop, int hash) {
+        /// <summary>
+        /// Plays a Sound without looping
+        /// </summary>
+        /// <param name="name"></param>
+        public void PlaySound(SoundName name) { PlaySound(name, false, 0, out AudioClip clip); }
+
+        public void PlaySound(SoundName name, bool loop, int hash) { PlaySound(name, loop, hash, out AudioClip clip); }
+
+        public void PlaySound(SoundName name, bool loop, int hash, out AudioClip clip) {
             AudioSource source = hive.Draw();
             SoundFile file = collection.GetAudioClip(name);
-            source.clip = file.Clip;
+            source.clip = clip = file.Clip;
             source.volume = GetAudioVolume(file.SoundType, file.Volume);
             source.loop = loop;
-            sources.Add(new SourceKey(hash, name), source);
+            if (loop) {
+                LoopSources.Add(new SourceKey(hash, name), source);
+            } else {
+                sources.Add(source);
+            }
+
+            source.Play();
         }
 
         /// <summary>
@@ -52,7 +91,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// <param name="name"></param>
         /// <param name="hash"></param>
         public void StopSound(SoundName name, int hash) {
-            if (sources.TryGetValue(new SourceKey(hash, name), out AudioSource a)) {
+            if (LoopSources.TryGetValue(new SourceKey(hash, name), out AudioSource a)) {
                 a.Stop();
             }
         }
@@ -62,7 +101,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// </summary>
         /// <param name="hash"></param>
         public void StopSound(int hash) {
-            foreach (KeyValuePair<SourceKey, AudioSource> pair in sources) {
+            foreach (KeyValuePair<SourceKey, AudioSource> pair in LoopSources) {
                 if (pair.Key.Hash == hash) {
                     pair.Value.Stop();
                 }
@@ -73,7 +112,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// Stops all sounds
         /// </summary>
         public void StopSound() {
-            foreach (AudioSource value in sources.Values) {
+            foreach (AudioSource value in LoopSources.Values) {
                 value.Stop();
             }
         }
@@ -86,7 +125,11 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             GameObject go = Instantiate(
                                         new GameObject(), Camera.main.transform.position, new Quaternion(0, 0, 0, 0),
                                         transform);
-            return go.AddComponent<AudioSource>();
+            go.name = "SoundSource";
+            var source = go.AddComponent<AudioSource>();
+            source.outputAudioMixerGroup = mixer;
+            source.playOnAwake = false;
+            return source;
         }
 
         /// <summary>
@@ -95,6 +138,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// <param name="type"></param>
         /// <returns></returns>
         private float GetAudioVolume(SoundType type, float baseVolume) {
+            Debug.Log("Playing with Volume: " + (type == SoundType.Music ? musicVolume : sfxVolume) * baseVolume);
             return (type == SoundType.Music ? musicVolume : sfxVolume) * baseVolume;
         }
 
@@ -106,8 +150,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             }
         }
 
-        public SoundHandler GetInstance() { return _instance; }
-
+        public static SoundHandler GetInstance() { return _instance; }
     }
 
     public enum SoundType { Music, SFX }
