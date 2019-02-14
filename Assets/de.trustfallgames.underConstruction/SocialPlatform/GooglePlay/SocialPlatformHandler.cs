@@ -39,7 +39,7 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
             PlayGamesPlatform.Activate();
 
             //Prompt the user for OAuth on game start
-            if (!PlayerPrefHandler.FirstStartPromptCheck())
+            if (PlayerPrefHandler.FirstStartPromptCheck() == 0)
             {
                 UserAuthentication();
                 PlayerPrefHandler.FirstStartPromptDone();

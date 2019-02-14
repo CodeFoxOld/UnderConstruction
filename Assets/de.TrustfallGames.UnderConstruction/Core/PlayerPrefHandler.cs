@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core {
-    public static class PlayerPrefHandler {
+    public static class PlayerPrefHandler {      
         //Sound
         private static string _musicVolume = "MusicVolume";
         private static string _sfxVolume = "SfxVolume";
@@ -23,7 +23,7 @@ namespace de.TrustfallGames.UnderConstruction.Core {
         
         
         //Social
-        private static bool _firstStartPrompt;
+        private static string _firstStartPrompt = "First Prompt";
         
         //Error handling
         private static string _lastSentHighscore = "Last Sent HS";
@@ -31,14 +31,14 @@ namespace de.TrustfallGames.UnderConstruction.Core {
         
         
         public static int[] GetHighscores() {
-            return Array.ConvertAll(PlayerPrefs.GetString(_highscores).Split(','), s => int.Parse(s));
+            return Array.ConvertAll(PlayerPrefs.GetString(_highscores,"0").Split(','), s => int.Parse(s));
         }
 
         public static void SetHighscores(params int[] scores) {
             PlayerPrefs.SetString(_highscores,string.Join(",", scores));
         }
 
-        public static int GetHighScore() { return PlayerPrefs.GetInt(_highscore); }
+        public static int GetHighScore() { return PlayerPrefs.GetInt(_highscore,0); }
 
         public static void SetHighScore(int value)
         {
@@ -46,22 +46,16 @@ namespace de.TrustfallGames.UnderConstruction.Core {
                 PlayerPrefs.SetInt(_highscore, value);
         }
 
-        public static int GetLastSentHighScore() { return PlayerPrefs.GetInt(_lastSentHighscore); }
+        public static int GetLastSentHighScore() { return PlayerPrefs.GetInt(_lastSentHighscore,0); }
         
         public static void SetLastSentHighscore(int value){PlayerPrefs.SetInt(_lastSentHighscore, value);}
 
-        public static string GetLastSentAchievement(){ return PlayerPrefs.GetString(_lastSentAchievement); }
+        public static string GetLastSentAchievement(){ return PlayerPrefs.GetString(_lastSentAchievement,"None"); }
         
         public static void SetLastSentAchievement(string value){PlayerPrefs.SetString(_lastSentAchievement, value);}
 
-        public static bool FirstStartPromptCheck()
-        {
-            return _firstStartPrompt;
-        }
+        public static int FirstStartPromptCheck(){ return PlayerPrefs.GetInt(_firstStartPrompt, 0);}
 
-        public static void FirstStartPromptDone()
-        {
-            _firstStartPrompt = true;
-        }
+        public static void FirstStartPromptDone(){PlayerPrefs.SetInt(_firstStartPrompt, 1);}
     }
 }

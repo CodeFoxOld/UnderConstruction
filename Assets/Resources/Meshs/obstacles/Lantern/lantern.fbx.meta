@@ -1,27 +1,15 @@
 fileFormatVersion: 2
-guid: d18c41c40809f0848b31eafe017c13ef
+guid: 74f8c2467462d5f409a7a0bc2256f0af
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: M_tree
-    2100002: M_Tree
+    2100000: M_Laterne
     2300000: //RootNode
     3300000: //RootNode
-    4300000: tree4
-    4300002: Tree
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: M_Tree
-    second: {fileID: 2100000, guid: 0224d074642f064469d62652d0cd3cd7, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: M_tree
-    second: {fileID: 2100000, guid: bda1b13bf41ddd447a7e1a4e5a02154c, type: 2}
+    4300000: lantern
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
