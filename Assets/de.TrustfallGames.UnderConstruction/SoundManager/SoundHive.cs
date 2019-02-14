@@ -20,5 +20,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         }
 
         public void Deposit(AudioSource source) { sources.Push(source); }
+
+        public int Size() { return sources.Count; }
     }
 }
