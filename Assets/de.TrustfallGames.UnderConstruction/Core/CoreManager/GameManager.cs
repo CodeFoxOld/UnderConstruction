@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Core;
 using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
@@ -17,6 +19,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField] private Controller controller;
         [SerializeField] private MapManager mapManager;
         [SerializeField] private Settings settings;
+        [SerializeField] private SocialPlatformHandler platformHandler;
         private InternTick internTick;
         
         private CounterHive _counterHive;
@@ -35,6 +38,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             controller = GetComponent<Controller>();
             settings = GetComponent<Settings>();
             internTick = GetComponent<InternTick>();
+            platformHandler = SocialPlatformHandler.GetSocialHandler();
             RegisterInternUpdate();
         }
 
@@ -71,8 +75,14 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public UiManager UiManager => _uiManager;
 
-        public void Lose() {
-            Debug.Log("YOU LOSE BITCH!");
+        public void Lose()
+        {
+            if (PlayerPrefHandler.GetHighScore() < Character.Highscore)
+            {
+                PlayerPrefHandler.SetHighScore(Character.Highscore);
+                platformHandler.SendToLeaderboard(Character.Highscore);
+            }
+
             _uiManager.OnGameLost();
         }
 

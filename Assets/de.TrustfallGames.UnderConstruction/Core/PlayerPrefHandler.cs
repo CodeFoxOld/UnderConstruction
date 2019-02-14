@@ -1,4 +1,6 @@
 using System;
+using System.Runtime.CompilerServices;
+using UnityEditor;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core {
@@ -18,9 +20,16 @@ namespace de.TrustfallGames.UnderConstruction.Core {
         //Highscore
         private static string _highscores = "Highscores";
         private static string _highscore = "Highscore";
+        
+        
+        //Social
+        private static bool _firstStartPrompt;
+        
+        //Error handling
         private static string _lastSentHighscore = "Last Sent HS";
         private static string _lastSentAchievement = "Last Sent AC";
-
+        
+        
         public static int[] GetHighscores() {
             return Array.ConvertAll(PlayerPrefs.GetString(_highscores).Split(','), s => int.Parse(s));
         }
@@ -44,5 +53,15 @@ namespace de.TrustfallGames.UnderConstruction.Core {
         public static string GetLastSentAchievement(){ return PlayerPrefs.GetString(_lastSentAchievement); }
         
         public static void SetLastSentAchievement(string value){PlayerPrefs.SetString(_lastSentAchievement, value);}
+
+        public static bool FirstStartPromptCheck()
+        {
+            return _firstStartPrompt;
+        }
+
+        public static void FirstStartPromptDone()
+        {
+            _firstStartPrompt = true;
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         private static SocialPlatformHandler _instance = null;
         [SerializeField] private bool userIsAuthenticated;
 
+        private const string _defaultLeaderboard = "CgkI3PuauqQdEAIQAA";
+
         void Awake()
         {
             //Singleton instantiation
@@ -37,7 +39,11 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
             PlayGamesPlatform.Activate();
 
             //Prompt the user for OAuth on game start
-            UserAuthentication();
+            if (!PlayerPrefHandler.FirstStartPromptCheck())
+            {
+                UserAuthentication();
+                PlayerPrefHandler.FirstStartPromptDone();
+            }
         }
 
         /// <summary>
@@ -57,7 +63,7 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
                         int scoreToCheck = PlayerPrefHandler.GetLastSentHighScore();
 
                         if (scoreToCheck != 0)
-                            SendToLeaderboard("", scoreToCheck);
+                            SendToLeaderboard(scoreToCheck);
                         
                         //Check to resend a failed achievement complete attempt
                         string achievementToCheck = PlayerPrefHandler.GetLastSentAchievement();
@@ -78,11 +84,11 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         /// </summary>
         /// <param name="identifier">The string identifier of the leaderboard</param>
         /// <param name="score">The new score to send</param>
-        public void SendToLeaderboard(string identifier, int score)
+        public void SendToLeaderboard(int score)
         {
             if (userIsAuthenticated)
             {
-                Social.ReportScore(score, identifier, (bool success) =>
+                Social.ReportScore(score, _defaultLeaderboard, (bool success) =>
                 {
                     if (!success)
                     {
