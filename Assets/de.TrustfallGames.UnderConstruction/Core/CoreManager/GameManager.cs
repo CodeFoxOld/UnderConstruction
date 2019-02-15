@@ -6,6 +6,7 @@ using de.TrustfallGames.UnderConstruction.Core;
 using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
 using de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
@@ -40,6 +41,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             internTick = GetComponent<InternTick>();
             platformHandler = SocialPlatformHandler.GetSocialHandler();
             RegisterInternUpdate();
+            SoundHandler.GetInstance().StopSound();
         }
 
         public GameManager RegisterCharacter(Character character) {
