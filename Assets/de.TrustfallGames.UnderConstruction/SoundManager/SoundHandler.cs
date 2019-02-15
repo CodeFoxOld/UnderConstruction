@@ -158,6 +158,12 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         }
 
         public static SoundHandler GetInstance() { return _instance; }
+
+        public void Refresh() {
+            musicVolume = PlayerPrefHandler.GetMusicVolume();
+            sfxVolume   = PlayerPrefHandler.GetSfxVolume();
+        }
+        
     }
 
     public enum SoundType { Music, SFX }
