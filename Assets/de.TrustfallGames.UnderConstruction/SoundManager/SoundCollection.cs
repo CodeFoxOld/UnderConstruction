@@ -36,6 +36,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         Horn, GameOver, Click, Plopp,
         CharacterPickup, CharacterMove, BulldozerSpawn, BulldozerMove,
         HouseStack, BackgroundMusic, NewBest, NewRecord,
-        NewHighscore, PersonalBest, YouWin, Title
+        NewHighscore, PersonalBest, YouWin, Title,
+        FadeIn, FadeOut
     }
 }

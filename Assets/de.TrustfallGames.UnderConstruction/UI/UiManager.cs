@@ -1,5 +1,6 @@
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.UI {
@@ -31,6 +32,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
             gamePaused = true;
             ui.SetActive(false);
             pauseMenuCanvas.SetActive(true);
+            //TODO; SoundHandler.GetInstance().PlaySound();
         }
 
         public void OnGameContinue() {
