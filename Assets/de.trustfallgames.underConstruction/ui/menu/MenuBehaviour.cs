@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+﻿using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
