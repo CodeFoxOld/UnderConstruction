@@ -19,8 +19,8 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
 
         private SoundHive hive;
 
-        private readonly Dictionary<SourceKey, AudioSource> LoopSources =
-            new Dictionary<SourceKey, AudioSource>(SourceKey.HashNameComparer);
+        private readonly Dictionary<SourceKey, SoundSource> LoopSources =
+            new Dictionary<SourceKey, SoundSource>(SourceKey.HashNameComparer);
 
         private readonly List<AudioSource> sources = new List<AudioSource>();
 
@@ -42,9 +42,9 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
 
         private void CheckForSilentSources() {
             List<SourceKey> keys = new List<SourceKey>();
-            foreach (KeyValuePair<SourceKey, AudioSource> loopSource in LoopSources) {
-                if (!loopSource.Value.isPlaying) {
-                    hive.Deposit(loopSource.Value);
+            foreach (KeyValuePair<SourceKey, SoundSource> loopSource in LoopSources) {
+                if (!loopSource.Value.Source.isPlaying) {
+                    hive.Deposit(loopSource.Value.Source);
                     keys.Add(loopSource.Key);
                 }
             }
@@ -81,10 +81,10 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             AudioSource source   = hive.Draw();
             SoundFile   file     = collection.GetAudioClip(name);
             source.clip   = clip = file.Clip;
-            source.volume = GetAudioVolume(file.SoundType, file.Volume);
+            source.volume = GetAudioVolume(file);
             source.loop   = loop;
             if (loop) {
-                LoopSources.Add(new SourceKey(hash, name), source);
+                LoopSources.Add(new SourceKey(hash, name), new SoundSource(file, source));
             } else {
                 sources.Add(source);
             }
@@ -98,8 +98,8 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// <param name="name"></param>
         /// <param name="hash"></param>
         public void StopSound(SoundName name, int hash) {
-            if (LoopSources.TryGetValue(new SourceKey(hash, name), out AudioSource a)) {
-                a.Stop();
+            if (LoopSources.TryGetValue(new SourceKey(hash, name), out SoundSource a)) {
+                a.Source.Stop();
             }
         }
 
@@ -108,9 +108,9 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// </summary>
         /// <param name="hash"></param>
         public void StopSound(int hash) {
-            foreach (KeyValuePair<SourceKey, AudioSource> pair in LoopSources) {
+            foreach (KeyValuePair<SourceKey, SoundSource> pair in LoopSources) {
                 if (pair.Key.Hash == hash) {
-                    pair.Value.Stop();
+                    pair.Value.Source.Stop();
                 }
             }
         }
@@ -119,8 +119,8 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// Stops all sounds
         /// </summary>
         public void StopSound() {
-            foreach (AudioSource value in LoopSources.Values) {
-                value.Stop();
+            foreach (SoundSource value in LoopSources.Values) {
+                value.Source.Stop();
             }
         }
 
@@ -144,9 +144,8 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private float GetAudioVolume(SoundType type, float baseVolume) {
-            Debug.Log("Playing with Volume: " + (type == SoundType.Music ? musicVolume : sfxVolume) * baseVolume);
-            return (type == SoundType.Music ? musicVolume : sfxVolume) * baseVolume;
+        private float GetAudioVolume(SoundFile file) {
+            return (file.SoundType == SoundType.Music ? musicVolume : sfxVolume) * file.Volume;
         }
 
         private void Awake() {
@@ -162,8 +161,10 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         public void Refresh() {
             musicVolume = PlayerPrefHandler.GetMusicVolume();
             sfxVolume   = PlayerPrefHandler.GetSfxVolume();
+            foreach (SoundSource source in LoopSources.Values) {
+                source.Source.volume = GetAudioVolume(source.File);
+            }
         }
-        
     }
 
     public enum SoundType { Music, SFX }
