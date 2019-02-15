@@ -43,6 +43,7 @@ public class MainMenuBehaviour : MonoBehaviour
         float newValue = sfxSlider.value / 5;
         PlayerPrefHandler.SetSfxVolume(newValue);
         SoundHandler.GetInstance().Refresh();
+        SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup);
     }
 
     public void SetGameMusicVolume()
