@@ -13,6 +13,8 @@ public class MainMenuBehaviour : MonoBehaviour
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider musicSlider;
 
+    private bool optionsOn;
+
     private void Start()
     {
         sfxSlider.value = GetGameSoundVolume();
@@ -25,6 +27,7 @@ public class MainMenuBehaviour : MonoBehaviour
     {
         mainMenu.SetActive(!mainMenu.activeSelf);
         optionsMenu.SetActive(!optionsMenu.activeSelf);
+        optionsOn = !optionsOn;
         SoundHandler.GetInstance().PlaySound(SoundName.Click);
     }
 
@@ -40,16 +43,22 @@ public class MainMenuBehaviour : MonoBehaviour
 
     public void SetGameSoundVolume()
     {
-        float newValue = sfxSlider.value / 5;
-        PlayerPrefHandler.SetSfxVolume(newValue);
-        SoundHandler.GetInstance().Refresh();
-        SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup);
+        if (optionsOn)
+        {
+            float newValue = sfxSlider.value / 5;
+            PlayerPrefHandler.SetSfxVolume(newValue);
+            SoundHandler.GetInstance().Refresh();
+            SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup);
+        }
     }
 
     public void SetGameMusicVolume()
     {
-        float newValue = musicSlider.value / 5;
-        PlayerPrefHandler.SetMusicVolume(newValue);
-        SoundHandler.GetInstance().Refresh();
+        if (optionsOn)
+        {
+            float newValue = musicSlider.value / 5;
+            PlayerPrefHandler.SetMusicVolume(newValue);
+            SoundHandler.GetInstance().Refresh();
+        }
     }
 }
