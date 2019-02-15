@@ -25,14 +25,12 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         private readonly List<AudioSource> sources = new List<AudioSource>();
 
         private static SoundHandler _instance;
+        
+        
 
         // Start is called before the first frame update
         private void Start() {
             DontDestroyOnLoad(gameObject);
-            hive        = new SoundHive(this);
-            collection  = GetComponent<SoundCollection>().Init();
-            musicVolume = PlayerPrefHandler.GetMusicVolume();
-            sfxVolume   = PlayerPrefHandler.GetSfxVolume();
         }
 
         private void FixedUpdate() {
@@ -154,6 +152,12 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             else if (_instance != this) {
                 Destroy(gameObject);
             }
+            
+            hive        = new SoundHive(this);
+            collection  = GetComponent<SoundCollection>().Init();
+            musicVolume = PlayerPrefHandler.GetMusicVolume();
+            sfxVolume   = PlayerPrefHandler.GetSfxVolume();
+
         }
 
         public static SoundHandler GetInstance() { return _instance; }
