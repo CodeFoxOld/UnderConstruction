@@ -11,11 +11,11 @@ using UnityEngine.Serialization;
 namespace de.TrustfallGames.UnderConstruction.SoundManager {
     [RequireComponent(typeof(SoundCollection))]
     public class SoundHandler : MonoBehaviour {
-        [SerializeField] private float sfxVolume = 1;
-        [SerializeField] private float musicVolume = 1;
+        [SerializeField] private float           sfxVolume   = 1;
+        [SerializeField] private float           musicVolume = 1;
         [SerializeField] private AudioMixerGroup mixer;
-        [SerializeField] private int hiveSize;
-        private SoundCollection collection;
+        [SerializeField] private int             hiveSize;
+        private                  SoundCollection collection;
 
         private SoundHive hive;
 
@@ -29,10 +29,10 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         // Start is called before the first frame update
         private void Start() {
             DontDestroyOnLoad(gameObject);
-            hive = new SoundHive(this);
-            collection = GetComponent<SoundCollection>().Init();
+            hive        = new SoundHive(this);
+            collection  = GetComponent<SoundCollection>().Init();
             musicVolume = PlayerPrefHandler.GetMusicVolume();
-            sfxVolume = PlayerPrefHandler.GetSfxVolume();
+            sfxVolume   = PlayerPrefHandler.GetSfxVolume();
         }
 
         private void FixedUpdate() {
@@ -71,11 +71,18 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         public void PlaySound(SoundName name, bool loop, int hash) { PlaySound(name, loop, hash, out AudioClip clip); }
 
         public void PlaySound(SoundName name, bool loop, int hash, out AudioClip clip) {
-            AudioSource source = hive.Draw();
-            SoundFile file = collection.GetAudioClip(name);
-            source.clip = clip = file.Clip;
+            if (loop) {
+                clip = null;
+                foreach (SourceKey key in LoopSources.Keys) {
+                    if (key.Name == name) return;
+                }
+            }
+
+            AudioSource source   = hive.Draw();
+            SoundFile   file     = collection.GetAudioClip(name);
+            source.clip   = clip = file.Clip;
             source.volume = GetAudioVolume(file.SoundType, file.Volume);
-            source.loop = loop;
+            source.loop   = loop;
             if (loop) {
                 LoopSources.Add(new SourceKey(hash, name), source);
             } else {
@@ -128,7 +135,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             go.name = "SoundSource";
             var source = go.AddComponent<AudioSource>();
             source.outputAudioMixerGroup = mixer;
-            source.playOnAwake = false;
+            source.playOnAwake           = false;
             return source;
         }
 
@@ -156,7 +163,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
     public enum SoundType { Music, SFX }
 
     public class SourceKey {
-        private readonly int hash;
+        private readonly int       hash;
         private readonly SoundName name;
 
         public SourceKey(int hash, SoundName name) {
@@ -164,7 +171,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             this.name = name;
         }
 
-        public int Hash => hash;
+        public int       Hash => hash;
         public SoundName Name => name;
 
         private sealed class HashNameEqualityComparer : IEqualityComparer<SourceKey> {
