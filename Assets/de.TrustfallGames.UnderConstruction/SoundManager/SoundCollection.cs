@@ -13,8 +13,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             if (soundDictionary.ContainsKey(name)) {
                 return soundDictionary[name];
             }
-
-            return null;
+            throw new NotImplementedException("This Sound is not implemented yet");
         }
 
         public SoundCollection Init() {

@@ -15,6 +15,7 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         [SerializeField] private float           musicVolume = 1;
         [SerializeField] private AudioMixerGroup mixer;
         [SerializeField] private int             hiveSize;
+        [SerializeField] private GameObject      soundSourcePrefab;
         private                  SoundCollection collection;
 
         private SoundHive hive;
@@ -25,8 +26,6 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         private readonly List<AudioSource> sources = new List<AudioSource>();
 
         private static SoundHandler _instance;
-        
-        
 
         // Start is called before the first frame update
         private void Start() {
@@ -128,13 +127,10 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
         /// <returns></returns>
         internal AudioSource CreateNewSoundSource() {
             GameObject go = Instantiate(
-                                        new GameObject(), Camera.main.transform.position, new Quaternion(0, 0, 0, 0),
+                                        soundSourcePrefab, Camera.main.transform.position, Camera.main.transform.rotation,
                                         transform);
             go.name = "SoundSource";
-            var source = go.AddComponent<AudioSource>();
-            source.outputAudioMixerGroup = mixer;
-            source.playOnAwake           = false;
-            return source;
+            return go.GetComponent<AudioSource>();
         }
 
         /// <summary>
@@ -152,12 +148,11 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             else if (_instance != this) {
                 Destroy(gameObject);
             }
-            
+
             hive        = new SoundHive(this);
             collection  = GetComponent<SoundCollection>().Init();
             musicVolume = PlayerPrefHandler.GetMusicVolume();
             sfxVolume   = PlayerPrefHandler.GetSfxVolume();
-
         }
 
         public static SoundHandler GetInstance() { return _instance; }
