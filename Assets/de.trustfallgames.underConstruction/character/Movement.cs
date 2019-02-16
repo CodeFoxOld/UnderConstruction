@@ -185,6 +185,11 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this, 30); }
 
         public void Init() { }
+        
+        public void OnDestroy() {
+            _gameManager.InternTick.RemoveTickObject(this);
+        }
+
     }
     
     

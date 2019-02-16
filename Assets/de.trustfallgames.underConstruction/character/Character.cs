@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
@@ -134,6 +135,12 @@ namespace de.TrustfallGames.UnderConstruction.character {
             if (moving) {
                 Move();
             }
+            
+            
+        }
+
+        public void OnDestroy() {
+            gameManager.InternTick.RemoveTickObject(this);
         }
 
         public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 20); }

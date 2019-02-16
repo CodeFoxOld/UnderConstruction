@@ -322,6 +322,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public bool Visited { get; set; }
         public bool SpawnInProgress { get; private set; }
         public float TopInidicatorInterval => topInidicatorInterval;
+        
+        public void OnDestroy() {
+            gameManager.InternTick.RemoveTickObject(this);
+        }
+
     }
 
     public enum ObstacleType { House, NotHouse }

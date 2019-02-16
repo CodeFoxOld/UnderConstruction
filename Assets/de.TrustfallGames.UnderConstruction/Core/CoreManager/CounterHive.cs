@@ -28,5 +28,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 100); }
 
         public void Init() { }
+        
+        public void OnDestroy() {
+            gameManager.InternTick.RemoveTickObject(this);
+        }
+
     }
 }

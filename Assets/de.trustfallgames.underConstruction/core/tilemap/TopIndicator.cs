@@ -44,5 +44,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             counter = new Counter(tile.TopInidicatorInterval);
             this.tile = tile;
         }
+        
+        public void OnDestroy() {
+            GameManager.GetManager().InternTick.RemoveTickObject(this);
+        }
+
     }
 }

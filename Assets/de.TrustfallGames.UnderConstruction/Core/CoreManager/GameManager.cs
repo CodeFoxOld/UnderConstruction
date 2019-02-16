@@ -105,5 +105,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public InternTick InternTick => internTick;
 
         public void Init() {  }
+        
+        public void OnDestroy() {
+            InternTick.RemoveTickObject(this);
+        }
+
     }
 }

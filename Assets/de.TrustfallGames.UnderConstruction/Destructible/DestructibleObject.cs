@@ -170,5 +170,10 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
 
             Destroy(gameObject);
         }
+        
+        public void OnDestroy() {
+            _gameManager.InternTick.RemoveTickObject(this);
+        }
+
     }
 }
