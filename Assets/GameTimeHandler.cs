@@ -67,7 +67,6 @@ public class GameTimeHandler : MonoBehaviour {
                 }
             }
 
-            Debug.Log(Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration) / dawnDuration);
             directionalLight.color = dayToDawn.Evaluate(Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration) / dawnDuration);
         }
 
