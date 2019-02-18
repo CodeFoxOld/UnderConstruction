@@ -21,13 +21,13 @@ public class MainMenuBehaviour : MonoBehaviour
     {
         sfxSlider.value = GetGameSoundVolume();
         musicSlider.value = GetGameMusicVolume();
-
-        optionsMenu.SetActive(false);
         
         if (SocialPlatformHandler.GetSocialHandler().UserIsAuthenticated)
         {
             loginButton.interactable = false;
         }
+
+        optionsMenu.SetActive(false);
     }
     
     public void Login()
