@@ -1,36 +1,25 @@
 ﻿using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.SoundManager;
+using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuBehaviour : MonoBehaviour
-{
+public class MenuBehaviour : MonoBehaviour {
     private GameManager _gamemanager;
 
-    private void Start()
-    {
-        _gamemanager = GameManager.GetManager();
-    }
+    private void Start() { _gamemanager = GameManager.GetManager(); }
 
-    public void StartGame(int sceneNumber)
-    {
+    public void StartGame(SceneEnum sceneEnum) {
         SoundHandler.GetInstance().PlaySound(SoundName.Click);
-        SceneManager.LoadScene(sceneNumber);
+        SceneManager.LoadScene((int) sceneEnum);
     }
 
-    public void RestartGame()
-    {
+    public void RestartGame() {
         SoundHandler.GetInstance().PlaySound(SoundName.Click);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void PauseGame()
-    {
-        _gamemanager.UiManager.OnGamePaused();
-    }
+    public void PauseGame() { _gamemanager.UiManager.OnGamePaused(); }
 
-    public void UnpauseGame()
-    {
-        _gamemanager.UiManager.OnGameContinue();
-    }
+    public void UnpauseGame() { _gamemanager.UiManager.OnGameContinue(); }
 }
