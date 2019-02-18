@@ -1,6 +1,7 @@
 ﻿using System;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
@@ -75,6 +76,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
             }
 
             if (moveInProgress) return;
+            SoundHandler.GetInstance().PlaySound(SoundName.CharacterMove, false, GetInstanceID());
             _character.CurrentCoord = _character.CurrentCoord.NextTileCoord(moveDirection);
             CalcRot(moveDirection);
             startPosition = _character.transform.position;
@@ -183,6 +185,11 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this, 30); }
 
         public void Init() { }
+        
+        public void OnDestroy() {
+            _gameManager.InternTick.RemoveTickObject(this);
+        }
+
     }
     
     

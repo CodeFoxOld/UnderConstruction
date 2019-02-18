@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
@@ -62,6 +64,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         }
 
         public void Stack(ApartmentPart apartmentPart) {
+            SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup, false,GetInstanceID());
             var b = _character.gameObject.transform;
             _character = Instantiate(apartmentBlueprint).transform;                    //Create Blueprint
             _character.position = new Vector3(CurrentCoord.X, -1, CurrentCoord.Z);     //Assign under tile
@@ -132,6 +135,12 @@ namespace de.TrustfallGames.UnderConstruction.character {
             if (moving) {
                 Move();
             }
+            
+            
+        }
+
+        public void OnDestroy() {
+            gameManager.InternTick.RemoveTickObject(this);
         }
 
         public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 20); }
