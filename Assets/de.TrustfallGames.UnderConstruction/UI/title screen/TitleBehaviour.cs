@@ -60,9 +60,9 @@ namespace de.TrustfallGames.UnderConstruction.UI.title_screen {
             }
 
             if (titleProgress) {
-                FadeAlpha(ref subTitleLeftImage, -1 * fadeSpeed);
-                FadeAlpha(ref subTitleRightImage, -1 * fadeSpeed);
-                FadeAlpha(ref titleImage, -1 * fadeSpeed);
+                FadeAlpha(ref subTitleLeftImage, -(fadeSpeed));
+                FadeAlpha(ref subTitleRightImage, -(fadeSpeed));
+                FadeAlpha(ref titleImage, -(fadeSpeed));
             }
 
             if (titleProgress && Math.Abs(titleImage.color.a) < 0.001) {

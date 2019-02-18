@@ -16,7 +16,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
 
         // Update is called once per frame
         void Update() {
-            TitleBehaviour.FadeAlpha(ref image, fadeDuration);
+            TitleBehaviour.FadeAlpha(ref image, -(fadeDuration));
             if (Math.Abs(image.color.a) < 0.001) {
                 Destroy(gameObject);
             }
