@@ -167,8 +167,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             } else {
                 for (int i = 1; i <= stages; i++) {
                     tiles[i - 1] = stack.DrawUnrated();
+                    if(tiles[i - 1]) break;
                     while (tiles[i - 1].SpawnInProgress) {
                         tiles[i - 1] = stack.DrawUnrated();
+                        if(tiles[i - 1] == null) break;
                     }
                 }
             }
@@ -241,5 +243,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this, 10); }
 
         public void Init() { }
+        
+        public void OnDestroy() {
+            _gameManager.InternTick.RemoveTickObject(this);
+        }
+
     }
 }

@@ -5,5 +5,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         void RegisterInternUpdate();
 
         void Init();
+
+        void OnDestroy();
     }
 }

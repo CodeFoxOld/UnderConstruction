@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections;
 using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using de.TrustfallGames.UnderConstruction.UI;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Destructible {
-    public class DestructibleObject : MonoBehaviour,IInternUpdate {
+    public class DestructibleObject : MonoBehaviour, IInternUpdate {
         private GameManager _gameManager;
         private MapManager _mapManager;
         private Character _character;
@@ -64,8 +66,16 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private void StartDestroy() {
             start = false;
             destructionInProgress = true;
-            Destroy(gameObject);
-            //throw new NotImplementedException();
+            GetComponent<MeshFilter>().mesh = null;
+            var emission = GetComponentInChildren<ParticleSystem>().emission;
+            emission.enabled = false;
+            StartCoroutine(DestroyAfterTime(3));
+        }
+
+        private IEnumerator PlayCarSound(float time) {
+            yield return new WaitForSeconds(time);
+            start = true;
+            SoundHandler.GetInstance().PlaySound(SoundName.BulldozerMove, false, GetInstanceID());
         }
 
         public DestructibleObject Setup(GameManager gameManager, MapManager mapManager, Character character,
@@ -97,14 +107,15 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
 
         private void SetPosition() {
             if (_direction == DestructibleDirection.vertical) {
-                gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z );
-                gameObject.transform.localEulerAngles = new Vector3(0,90,0);
+                gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z);
+                gameObject.transform.localEulerAngles = new Vector3(0, 90, 0);
             } else {
                 gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z);
             }
         }
 
-        public void InternUpdate() {             if (start) {
+        public void InternUpdate() {
+            if (start) {
                 gameObject.transform.position = gameObject.transform.position + _directionVector3;
 
                 DestroyRoutine();
@@ -115,9 +126,12 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             if (!start && destructionInProgress) { }
         }
 
-        public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this,60); }
+        public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this, 60); }
 
-        public void Init() { start = true; }
+        public void Init() {
+            SoundHandler.GetInstance().PlaySound(SoundName.Horn, false, GetInstanceID(), out AudioClip clip);
+            StartCoroutine(PlayCarSound(clip.length - 0.2f));
+        }
 
         private void BuildDestructibleArray() {
             destructibleArray = new TileCoord[_direction == DestructibleDirection.vertical ? _mapManager.YDimension :
@@ -149,5 +163,17 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
 
             _directionVector3 = dirVector / (_gameManager.Settings.DestructibleMoveSpeed * (1 / Time.fixedDeltaTime));
         }
+
+        private IEnumerator DestroyAfterTime(int time) {
+            WaitForSeconds wait = new WaitForSeconds(time);
+            yield return wait;
+
+            Destroy(gameObject);
+        }
+        
+        public void OnDestroy() {
+            _gameManager.InternTick.RemoveTickObject(this);
+        }
+
     }
 }

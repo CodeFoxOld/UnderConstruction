@@ -31,6 +31,15 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
             Debug.Log("Current Update Prio Report! \n" + a);
         }
+
+        public void RemoveTickObject(IInternUpdate obj) {
+            for (int i = 0; i < updates.Count; i++) {
+                if (updates[i].GetHashCode() == obj.GetHashCode()) {
+                    updates.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
     }
 
     internal class ObjectUpdate {

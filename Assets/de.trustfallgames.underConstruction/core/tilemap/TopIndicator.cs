@@ -32,6 +32,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
 
         private void ToggleLocalState() {
             localState = !localState;
+            if(GetComponent<MeshRenderer>() == null) return;
             if (localState) {
                 GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.white);
             } else {
@@ -43,5 +44,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             counter = new Counter(tile.TopInidicatorInterval);
             this.tile = tile;
         }
+        
+        public void OnDestroy() {
+            GameManager.GetManager().InternTick.RemoveTickObject(this);
+        }
+
     }
 }

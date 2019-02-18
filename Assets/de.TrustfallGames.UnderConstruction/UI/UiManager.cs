@@ -1,5 +1,6 @@
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.UI {
@@ -31,12 +32,14 @@ namespace de.TrustfallGames.UnderConstruction.UI {
             gamePaused = true;
             ui.SetActive(false);
             pauseMenuCanvas.SetActive(true);
+            SoundHandler.GetInstance().PlaySound(SoundName.FadeIn);
         }
 
         public void OnGameContinue() {
             gamePaused = false;
             ui.SetActive(true);
             pauseMenuCanvas.SetActive(false);
+            SoundHandler.GetInstance().PlaySound(SoundName.FadeOut);
         }
 
         public UiManager OnHighscoreCalc(int highscoreMultiplicator, ApartmentColorType apartmentColorType, int highscore, int height)
@@ -57,6 +60,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
 
         public void OnGameLost()
         {
+            SoundHandler.GetInstance().PlaySound(SoundName.GameOver);
             gamePaused = true;
             ui.SetActive(false);
             gameOverCanvas.SetActive(true);

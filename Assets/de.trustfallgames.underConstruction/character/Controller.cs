@@ -54,5 +54,10 @@ namespace de.TrustfallGames.UnderConstruction.character {
         public void RegisterInternUpdate() { GameManager.GetManager().InternTick.RegisterTickObject(this, 25); }
 
         public void Init() { throw new NotImplementedException(); }
+        
+        public void OnDestroy() {
+            GameManager.GetManager().InternTick.RemoveTickObject(this);
+        }
+
     }
 }
