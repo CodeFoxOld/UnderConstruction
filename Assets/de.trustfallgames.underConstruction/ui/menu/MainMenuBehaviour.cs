@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using de.TrustfallGames.UnderConstruction.Core;
 using de.TrustfallGames.UnderConstruction.SoundManager;
+using de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay;
 
 public class MainMenuBehaviour : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class MainMenuBehaviour : MonoBehaviour
     [SerializeField] private GameObject optionsMenu;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider musicSlider;
+    [SerializeField] private Button loginButton;
 
     private bool optionsOn;
 
@@ -21,6 +23,16 @@ public class MainMenuBehaviour : MonoBehaviour
         musicSlider.value = GetGameMusicVolume();
 
         optionsMenu.SetActive(false);
+        
+        if (SocialPlatformHandler.GetSocialHandler().UserIsAuthenticated)
+        {
+            loginButton.interactable = false;
+        }
+    }
+    
+    public void Login()
+    {
+        SocialPlatformHandler.GetSocialHandler().UserAuthentication();
     }
 
     public void SwapMenuDisplay()

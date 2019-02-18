@@ -9,9 +9,9 @@ public class MenuBehaviour : MonoBehaviour {
 
     private void Start() { _gamemanager = GameManager.GetManager(); }
 
-    public void StartGame(SceneEnum sceneEnum) {
+    public void StartGame(int buildIndex) {
         SoundHandler.GetInstance().PlaySound(SoundName.Click);
-        SceneManager.LoadScene((int) sceneEnum);
+        SceneManager.LoadScene(buildIndex);
     }
 
     public void RestartGame() {

@@ -11,6 +11,8 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         private static SocialPlatformHandler _instance = null;
         [SerializeField] private bool userIsAuthenticated;
 
+        public bool UserIsAuthenticated => userIsAuthenticated;
+
         private const string _defaultLeaderboard = "CgkI3PuauqQdEAIQAA";
 
         void Awake()
@@ -49,7 +51,7 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         /// <summary>
         /// Prompts the user for OAuthentication to Google Play Services. This is required for leaderboards and achievements.
         /// </summary>
-        private void UserAuthentication()
+        public void UserAuthentication()
         {
             if (!userIsAuthenticated)
             {
