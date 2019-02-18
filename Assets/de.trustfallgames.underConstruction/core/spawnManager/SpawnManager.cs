@@ -167,7 +167,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             } else {
                 for (int i = 1; i <= stages; i++) {
                     tiles[i - 1] = stack.DrawUnrated();
-                    if(tiles[i - 1]) break;
+                    if(tiles[i - 1]==null) break;
                     while (tiles[i - 1].SpawnInProgress) {
                         tiles[i - 1] = stack.DrawUnrated();
                         if(tiles[i - 1] == null) break;
