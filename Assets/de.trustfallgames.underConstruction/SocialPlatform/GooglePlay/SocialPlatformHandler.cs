@@ -11,8 +11,7 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         private static SocialPlatformHandler _instance = null;
         //[SerializeField] private bool userIsAuthenticated;
 
-
-        private const string _defaultLeaderboard = "CgkI3PuauqQdEAIQAA";
+        private const string _defaultLeaderboard = "CgkI3PuauqQdEAIQAg";
 
         void Awake()
         {
@@ -64,8 +63,22 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
 
                     if (achievementToCheck != "None")
                         CompleteAchievement(achievementToCheck);
+                    
+                    Debug.Log("Successful Login!");
+                }
+                else
+                {
+                    Debug.Log("Authentication failed!");
                 }
             });
+        }
+        
+        /// <summary>
+        /// Logs the user out.
+        /// </summary>
+        public void LogOut()
+        {
+            ((PlayGamesPlatform)Social.Active).SignOut();
         }
 
         /// <summary>
@@ -73,19 +86,28 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         /// </summary>
         /// <param name="identifier">The string identifier of the leaderboard</param>
         /// <param name="score">The new score to send</param>
-        public void SendToLeaderboard(int score)
+        public bool SendToLeaderboard(int score)
         {
-            Social.ReportScore(score, _defaultLeaderboard, (bool success) =>
+            var reportSuccess = false;
+            if (Social.localUser.authenticated)
             {
-                if (!success)
+                Social.ReportScore(score, _defaultLeaderboard, (bool success) =>
                 {
-                    PlayerPrefHandler.SetLastSentHighscore(score);
-                }
-                else
-                {
-                    PlayerPrefHandler.SetLastSentHighscore(0);
-                }
-            });
+                    if (!success)
+                    {
+                        PlayerPrefHandler.SetLastSentHighscore(score);
+                        Debug.Log("Sending Score failed!");                      
+                    }
+                    else
+                    {
+                        PlayerPrefHandler.SetLastSentHighscore(0);
+                        Debug.Log("Sending Score succeeded!");
+                        reportSuccess = true;
+                    }
+                });
+            }
+
+            return reportSuccess;
         }
 
         /// <summary>
