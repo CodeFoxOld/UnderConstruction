@@ -81,9 +81,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         {
             if (PlayerPrefHandler.GetHighScore() < Character.Highscore)
             {
-                PlayerPrefHandler.SetHighScore(Character.Highscore);
-                platformHandler.SendToLeaderboard(Character.Highscore);
+                PlayerPrefHandler.SetHighScore(Character.Highscore);               
             }
+            
+            platformHandler.SendToLeaderboard(Character.Highscore);
 
             _uiManager.OnGameLost();
         }
