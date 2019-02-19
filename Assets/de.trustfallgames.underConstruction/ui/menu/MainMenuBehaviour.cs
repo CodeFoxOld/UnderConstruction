@@ -21,11 +21,6 @@ public class MainMenuBehaviour : MonoBehaviour
     {
         sfxSlider.value = GetGameSoundVolume();
         musicSlider.value = GetGameMusicVolume();
-        
-        if (SocialPlatformHandler.GetSocialHandler().UserIsAuthenticated)
-        {
-            loginButton.interactable = false;
-        }
 
         optionsMenu.SetActive(false);
     }
@@ -33,6 +28,11 @@ public class MainMenuBehaviour : MonoBehaviour
     public void Login()
     {
         SocialPlatformHandler.GetSocialHandler().UserAuthentication();
+    }
+    
+    public void TestScore(int score)
+    {
+        SocialPlatformHandler.GetSocialHandler().SendToLeaderboard(score);
     }
 
     public void SwapMenuDisplay()
