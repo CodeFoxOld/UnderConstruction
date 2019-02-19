@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GooglePlayGames.Native.Cwrapper;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         [SerializeField]
         private float turnLightsOn;
 
-        [SerializeField]private float lightOnScatter;
+        [SerializeField] private float lightOnScatter;
 
         private Light directionalLight;
         private static GameTimeHandler _instance;
@@ -94,10 +95,8 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         private void FixedUpdate() {
             if (currentDawnDuration > dawnDuration * turnLightsOn && lightState == LightState.Off) {
                 ToggleLights(LightState.On);
-                lightState = LightState.On;
             } else if (currentDawnDuration < dawnDuration * turnLightsOn && lightState == LightState.On) {
                 ToggleLights(LightState.Off);
-                lightState = LightState.Off;
             }
 
             //Dimm Lights
@@ -165,6 +164,7 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         }
 
         private void ToggleLights(LightState state) {
+            lightState = state;
             for (int i = 0; i < timeObjects.Count; i++) {
                 if (timeObjects[i] != null) {
                     timeObjects[i].ToggleLight(state == LightState.On ? nightEmissionColor : dayEmissionColor);
@@ -173,15 +173,29 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
                     i--;
                 }
             }
-
         }
 
         public float LightOnScatter => lightOnScatter;
 
+        public Color GetEmissionColor() { return lightState == LightState.On ? nightEmissionColor : dayEmissionColor; }
+
+        public LightState LightState => lightState;
+
         private enum DayTime { Day, Dawn, Night }
 
-        private enum LightState { Off, On }
+        public float DimValue() {
+            if (GetClampedDawnDuration() > dawnDuration * turnLightsOn) {
+                float b = dawnDuration - dawnDuration * turnLightsOn;
+                float c = GetClampedDawnDuration() - dawnDuration * turnLightsOn;
 
-        public Color GetEmissionColor() { return lightState == LightState.On ? nightEmissionColor : dayEmissionColor; }
+                return 1-c/b;
+            }
+
+            return 1;
+        }
+
+        float GetClampedDawnDuration() { return Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration); }
     }
+
+    public enum LightState { Off, On }
 }
