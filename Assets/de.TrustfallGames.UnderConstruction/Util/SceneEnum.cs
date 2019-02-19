@@ -3,5 +3,6 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         Title = 0,
         Menu = 1,
         Game = 2,
+        Settings = 3
     }
 }
