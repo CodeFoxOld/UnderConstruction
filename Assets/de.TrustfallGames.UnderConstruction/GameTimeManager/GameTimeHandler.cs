@@ -1,147 +1,185 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using GooglePlayGames.Native.Cwrapper;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameTimeHandler : MonoBehaviour {
-    [SerializeField]
-    private Gradient dayToDawn;
+namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
+    public class GameTimeHandler : MonoBehaviour {
+        [SerializeField]
+        private Gradient dayToDawn;
 
-    [SerializeField] private Color dayColor;
-    [SerializeField] private Color dawnColor;
-    [SerializeField] private Color nightColor;
+        [SerializeField] private Color dayColor;
+        [SerializeField] private Color dawnColor;
+        [SerializeField] private Color nightColor;
 
-    [SerializeField] private Color dayEmissionColor;
-    [SerializeField] private Color nightEmissionColor;
+        [SerializeField] private Color dayEmissionColor;
+        [SerializeField] private Color nightEmissionColor;
 
-    [SerializeField] private Image dayBg;
-    [SerializeField] private Image dawnBg;
+        [SerializeField] private Image dayBg;
+        [SerializeField] private Image dawnBg;
 
-    private float currentDayDuration;
-    private float currentDawnDuration;
-    private DayTime dayTime = DayTime.Day;
-    private DayTime lastDayTime;
+        private float currentDayDuration;
+        private float currentDawnDuration;
+        private DayTime dayTime = DayTime.Day;
+        private DayTime lastDayTime;
 
-    [SerializeField] private float dayTimeDuration = 20;
-    [SerializeField] private float dawnDuration = 10;
+        [SerializeField] private float dayTimeDuration = 20;
+        [SerializeField] private float dawnDuration = 10;
 
-    [Range(0, 1)]
-    [SerializeField]
-    private float turnLightsOn;
+        [Range(0, 1)]
+        [SerializeField]
+        private float turnLightsOn;
 
-    private Light directionalLight;
-    private GameTimeHandler _instance;
+        [SerializeField]private float lightOnScatter;
 
-    private void Awake() {
-        if (_instance == null)
-            _instance = this;
-        else if (_instance != this) {
-            Destroy(gameObject);
+        private Light directionalLight;
+        private static GameTimeHandler _instance;
+
+        private List<GameTimeObject> timeObjects = new List<GameTimeObject>();
+
+        private LightState lightState = LightState.Off;
+
+        private void Awake() {
+            if (_instance == null)
+                _instance = this;
+            else if (_instance != this) {
+                Destroy(gameObject);
+            }
         }
-    }
 
-    public GameTimeHandler GetInstance() { return _instance; }
+        public static GameTimeHandler GetInstance() { return _instance; }
 
-    public bool isNight(out Color emissiveColor) {
-        if (dawnDuration > dawnDuration * turnLightsOn) {
-            emissiveColor = nightColor;
-            return true;
+        public void RegisterTimeObject(GameTimeObject timeObject) { timeObjects.Add(timeObject); }
+
+        public void RemoveTimeObject(GameTimeObject timeObject) {
+            timeObjects.RemoveAt(timeObjects.FindIndex(timeObject.Equals));
         }
 
-        emissiveColor = dayColor;
-        return false;
-    }
+        public bool isNight(out Color emissiveColor) {
+            if (dawnDuration > dawnDuration * turnLightsOn) {
+                emissiveColor = nightColor;
+                return true;
+            }
 
-    // Start is called before the first frame update
-    void Start() {
-        dayToDawn = new Gradient();
-        currentDayDuration = dayTimeDuration;
-        var colorKey = new GradientColorKey[3];
-        colorKey[0].color = dayColor;
-        colorKey[0].time = 0.0f;
-        colorKey[1].color = dawnColor;
-        colorKey[1].time = 0.5f;
-        colorKey[2].color = nightColor;
-        colorKey[2].time = 1.0f;
+            emissiveColor = dayColor;
+            return false;
+        }
 
-        var alphaKey = new GradientAlphaKey[3];
-        alphaKey[0].alpha = 1f;
-        alphaKey[0].time = 0.0f;
-        alphaKey[1].alpha = 1f;
-        alphaKey[1].time = 0.5f;
-        alphaKey[2].alpha = 1f;
-        alphaKey[2].time = 1.0f;
+        // Start is called before the first frame update
+        void Start() {
+            dayToDawn = new Gradient();
+            currentDayDuration = dayTimeDuration;
+            var colorKey = new GradientColorKey[3];
+            colorKey[0].color = dayColor;
+            colorKey[0].time = 0.0f;
+            colorKey[1].color = dawnColor;
+            colorKey[1].time = 0.5f;
+            colorKey[2].color = nightColor;
+            colorKey[2].time = 1.0f;
 
-        dayToDawn.SetKeys(colorKey, alphaKey);
+            var alphaKey = new GradientAlphaKey[3];
+            alphaKey[0].alpha = 1f;
+            alphaKey[0].time = 0.0f;
+            alphaKey[1].alpha = 1f;
+            alphaKey[1].time = 0.5f;
+            alphaKey[2].alpha = 1f;
+            alphaKey[2].time = 1.0f;
 
-        directionalLight = GetComponent<Light>();
-    }
+            dayToDawn.SetKeys(colorKey, alphaKey);
 
-    // Update is called once per frame
-    private void FixedUpdate() {
-        //Dimm Lights
-        if (dayTime == DayTime.Dawn) {
-            currentDawnDuration = lastDayTime == DayTime.Night ? currentDawnDuration - Time.fixedDeltaTime :
-                                      currentDawnDuration + Time.fixedDeltaTime;
+            directionalLight = GetComponent<Light>();
+        }
 
-            if (lastDayTime == DayTime.Night) /*Go To Day*/ {
-                if (currentDawnDuration < 0) {
-                    SetDayTime(DayTime.Day);
+        // Update is called once per frame
+        private void FixedUpdate() {
+            if (currentDawnDuration > dawnDuration * turnLightsOn && lightState == LightState.Off) {
+                ToggleLights(LightState.On);
+                lightState = LightState.On;
+            } else if (currentDawnDuration < dawnDuration * turnLightsOn && lightState == LightState.On) {
+                ToggleLights(LightState.Off);
+                lightState = LightState.Off;
+            }
+
+            //Dimm Lights
+            if (dayTime == DayTime.Dawn) {
+                currentDawnDuration = lastDayTime == DayTime.Night ? currentDawnDuration - Time.fixedDeltaTime :
+                                          currentDawnDuration + Time.fixedDeltaTime;
+
+                if (lastDayTime == DayTime.Night) /*Go To Day*/ {
+                    if (currentDawnDuration < 0) {
+                        SetDayTime(DayTime.Day);
+                    }
+                }
+
+                if (lastDayTime == DayTime.Day) /*Go To Night*/ {
+                    if (currentDawnDuration > dawnDuration) {
+                        SetDayTime(DayTime.Night);
+                    }
+                }
+
+                void SetDayTime(DayTime time) {
+                    dayTime = time;
+                    lastDayTime = DayTime.Dawn;
+                    currentDayDuration = dayTimeDuration;
+                }
+
+                var a = dawnDuration / 2;
+
+                //Fade night
+                if (currentDawnDuration > a) {
+                    var color = dayBg.color;
+                    dayBg.color = new Color(color.r, color.g, color.b, 0);
+
+                    color = dawnBg.color;
+                    color = new Color(color.r, color.g, color.b, 1 - ((GetClampedDawnDuration() - a) / a));
+                    dawnBg.color = color;
+                }
+
+                // Fade day
+                else {
+                    var color = dawnBg.color;
+                    dawnBg.color = new Color(color.r, color.g, color.b, 1);
+
+                    color = dayBg.color;
+                    dayBg.color = new Color(color.r, color.g, color.b, 1 - (GetClampedDawnDuration() / a));
+                }
+
+                float GetClampedDawnDuration() { return Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration); }
+
+                directionalLight.color =
+                    dayToDawn.Evaluate(Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration) / dawnDuration);
+            }
+
+            //Static Light
+            if (dayTime == DayTime.Day || dayTime == DayTime.Night) {
+                currentDayDuration -= Time.fixedDeltaTime;
+                if (currentDayDuration < 0) {
+                    lastDayTime = dayTime;
+                    dayTime = DayTime.Dawn;
+                    if (lastDayTime == DayTime.Day)
+                        currentDawnDuration = 0;
+                    if (lastDayTime == DayTime.Night)
+                        currentDawnDuration = dawnDuration;
+                }
+            }
+        }
+
+        private void ToggleLights(LightState state) {
+            for (int i = 0; i < timeObjects.Count; i++) {
+                if (timeObjects[i] != null) {
+                    timeObjects[i].ToggleLight(state == LightState.On ? nightEmissionColor : dayEmissionColor);
+                } else {
+                    timeObjects.RemoveAt(i);
+                    i--;
                 }
             }
 
-            if (lastDayTime == DayTime.Day) /*Go To Night*/ {
-                if (currentDawnDuration > dawnDuration) {
-                    SetDayTime(DayTime.Night);
-                }
-            }
-
-            void SetDayTime(DayTime time) {
-                dayTime = time;
-                lastDayTime = DayTime.Dawn;
-                currentDayDuration = dayTimeDuration;
-            }
-
-            var a = dawnDuration / 2;
-
-            //Fade night
-            if (currentDawnDuration > a) {
-                var color = dayBg.color;
-                dayBg.color = new Color(color.r,color.g,color.b, 0);
-                
-                color = dawnBg.color;
-                color = new Color(color.r, color.g, color.b, 1-((GetClampedDawnDuration() - a) / a));
-                dawnBg.color = color;
-            }
-
-            // Fade day
-            else {
-                var color = dawnBg.color;
-                dawnBg.color = new Color(color.r, color.g, color.b, 1);
-
-                color = dayBg.color;
-                dayBg.color = new Color(color.r, color.g, color.b, 1- (GetClampedDawnDuration() / a));
-            }
-
-            float GetClampedDawnDuration() { return Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration); }
-            
-            directionalLight.color =
-                dayToDawn.Evaluate(Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration) / dawnDuration);
         }
 
-        //Static Light
-        if (dayTime == DayTime.Day || dayTime == DayTime.Night) {
-            currentDayDuration -= Time.fixedDeltaTime;
-            if (currentDayDuration < 0) {
-                lastDayTime = dayTime;
-                dayTime = DayTime.Dawn;
-                if (lastDayTime == DayTime.Day)
-                    currentDawnDuration = 0;
-                if (lastDayTime == DayTime.Night)
-                    currentDawnDuration = dawnDuration;
-            }
-        }
+        public float LightOnScatter => lightOnScatter;
+
+        private enum DayTime { Day, Dawn, Night }
+
+        private enum LightState { Off, On }
     }
-
-    private enum DayTime { Day, Dawn, Night }
 }
