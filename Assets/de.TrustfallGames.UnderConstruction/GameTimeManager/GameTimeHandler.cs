@@ -181,5 +181,7 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         private enum DayTime { Day, Dawn, Night }
 
         private enum LightState { Off, On }
+
+        public Color GetEmissionColor() { return lightState == LightState.On ? nightEmissionColor : dayEmissionColor; }
     }
 }

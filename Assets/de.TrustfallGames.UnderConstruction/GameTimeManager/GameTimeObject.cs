@@ -9,12 +9,16 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         private void Start() {
             gameTimeHandler = GameTimeHandler.GetInstance();
             gameTimeHandler.RegisterTimeObject(this);
+            TurnLightOn(gameTimeHandler.GetEmissionColor());
             renderer = GetComponent<MeshRenderer>();
         }
 
         public void ToggleLight(Color color) { StartCoroutine(TurnLightOn(color)); }
 
-        private void OnDestroy() { gameTimeHandler.RemoveTimeObject(this); }
+        private void OnDestroy() {
+            if(gameTimeHandler == null) return;
+            gameTimeHandler.RemoveTimeObject(this);
+        }
 
         private IEnumerator TurnLightOn(Color color) {
             yield return new WaitForSeconds(Random.Range(0f,gameTimeHandler.LightOnScatter));
