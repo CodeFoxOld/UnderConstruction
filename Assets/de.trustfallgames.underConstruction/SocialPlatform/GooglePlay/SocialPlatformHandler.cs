@@ -89,6 +89,7 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         public bool SendToLeaderboard(int score)
         {
             var reportSuccess = false;
+            
             if (Social.localUser.authenticated)
             {
                 Social.ReportScore(score, _defaultLeaderboard, (bool success) =>
