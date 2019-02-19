@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using de.TrustfallGames.UnderConstruction.Core;
 using de.TrustfallGames.UnderConstruction.SoundManager;
 using de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay;
+using TMPro;
 
 public class MainMenuBehaviour : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class MainMenuBehaviour : MonoBehaviour
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Button loginButton;
+    [SerializeField] private TextMeshProUGUI testText;
 
     private bool optionsOn;
 
@@ -30,9 +32,23 @@ public class MainMenuBehaviour : MonoBehaviour
         SocialPlatformHandler.GetSocialHandler().UserAuthentication();
     }
     
+    public void LogOut()
+    {
+        SocialPlatformHandler.GetSocialHandler().LogOut();
+    }
+    
     public void TestScore(int score)
     {
-        SocialPlatformHandler.GetSocialHandler().SendToLeaderboard(score);
+        var success = SocialPlatformHandler.GetSocialHandler().SendToLeaderboard(score);
+        
+        if (success)
+        {
+            testText.SetText("success!");
+        }
+        else
+        {
+            testText.SetText("unsuccessful!");
+        }
     }
 
     public void SwapMenuDisplay()
