@@ -16,6 +16,7 @@ public class GameUIBehaviour : MonoBehaviour {
     
     private GameManager _gameManager;
     private int baseScore;
+    private bool destructorButtonsAreSwapped;
 
     void Start() {
         _gameManager = GameManager.GetManager();
@@ -63,7 +64,7 @@ public class GameUIBehaviour : MonoBehaviour {
         scoreOutput.SetText(multiplier.ToString() + " X " + baseScore);
     }
 
-    public void OnDesctructibleButtonPressed(String direction) {
+    private void OnDesctructibleButtonPressed(String direction) {
         _gameManager.MapManager.SpawnDesctructible(
                                                    direction.Equals(
                                                                     "vertical",
@@ -71,4 +72,29 @@ public class GameUIBehaviour : MonoBehaviour {
                                                        DestructibleDirection.vertical :
                                                        DestructibleDirection.horizontal);
     }
+    
+    #region Button Logic for Destructors
+    
+    public void DestructorButtonClickLeft()
+    {
+        if(destructorButtonsAreSwapped)
+            OnDesctructibleButtonPressed("vertical");
+        else
+            OnDesctructibleButtonPressed("horizontal");
+    }
+    
+    public void DestructorButtonClickRight()
+    {
+        if(!destructorButtonsAreSwapped)
+            OnDesctructibleButtonPressed("vertical");
+        else
+            OnDesctructibleButtonPressed("horizontal");
+    }
+
+    public void SwapDestructorButtonListeners()
+    {
+        destructorButtonsAreSwapped = !destructorButtonsAreSwapped;
+    }
+    
+    #endregion
 }

@@ -3,7 +3,6 @@ using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.XR.WSA.Input;
 
 public class SceneChanger : MonoBehaviour {
     [SerializeField] private SceneEnum sceneEnum;

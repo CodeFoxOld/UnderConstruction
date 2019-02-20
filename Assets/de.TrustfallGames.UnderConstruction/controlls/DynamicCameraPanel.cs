@@ -4,6 +4,7 @@ using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.ui.components;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -22,9 +23,8 @@ public class DynamicCameraPanel : InteractableButton
     [Header("The control X")] [SerializeField]
     private GameObject _controlX;
 
-    [Header("Bagger Buttons")]
-    [SerializeField] private GameObject _baggerButtonLeft;
-    [SerializeField] private GameObject _baggerButtonRight;
+    [Header("The game UI")] [SerializeField]
+    private GameUIBehaviour GUI;
 
 
     private float _targetRotation;
@@ -112,11 +112,7 @@ public class DynamicCameraPanel : InteractableButton
 
     private void SwapBaggerButtons()
     {
-        Vector3 mirrorTransform = _baggerButtonRight.transform.position;
-        _baggerButtonRight.transform.position = _baggerButtonLeft.transform.position;
-        _baggerButtonLeft.transform.position = mirrorTransform;
-        _baggerButtonLeft.transform.Rotate(0,0,90);
-        _baggerButtonRight.transform.Rotate(0,0,90);
+        GUI.SwapDestructorButtonListeners();
     }
 
     private enum SwipedDirection
