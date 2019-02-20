@@ -1,43 +1,96 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.GameTimeManager;
+﻿using System;
 using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.XR.WSA.Input;
 
 public class SceneChanger : MonoBehaviour {
     [SerializeField] private SceneEnum sceneEnum;
     [SerializeField] private bool LoadAsync;
     [SerializeField] private bool FadeOver;
     [SerializeField] private Image FadeImage;
+    [SerializeField] private Sprite spriteFade;
+
+    [Range(0.01f, 1)]
+    [SerializeField]
+    private float fadeSpeed = 0.05f;
+
+    private bool fadeInProgress;
+    private bool fadeDone;
+    private bool restart;
 
     private void Awake() {
         if (FadeImage != null) {
+            var a = FadeImage.color;
+        }
+
+        if (FadeImage != null && FadeImage.GetComponent<TransitionImage>() == null) {
             FadeImage.enabled = false;
         }
     }
 
-    private void FixedUpdate() { }
+    private void FixedUpdate() {
+        if (!fadeInProgress) return;
+        var a = FadeImage.color;
+        FadeImage.color = new Color(a.r, a.g, a.b, Mathf.Clamp(a.a + fadeSpeed, 0, 1));
+        if (Math.Abs(FadeImage.color.a - 1) < 0.0001) {
+            fadeDone = true;
+            ChangeScene();
+        }
+    }
 
-    
-    
     public void ChangeScene() {
+        Debug.Log("Change Scene to " + sceneEnum);
+        if (FadeOver && !fadeDone) {
+            StartFade();
+            return;
+        }
+
+        if (FadeImage != null) {
+            TransitionBitch.GetInstance().SetSprite(FadeImage.sprite);
+        } else {
+            TransitionBitch.GetInstance().SetSprite(spriteFade);
+        }
+
+        if (LoadAsync) {
+            if (restart) {
+                SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+            } else {
+                SceneManager.LoadSceneAsync((int) sceneEnum);
+            }
+        } else {
+            if (restart) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            } else {
+                SceneManager.LoadScene((int) sceneEnum);
+            }
+        }
+    }
+
+    private void StartFade() {
+        fadeInProgress = true;
+        FadeImage.enabled = true;
+        if (spriteFade != null) {
+            FadeImage.sprite = spriteFade;
+        }
+    }
+
+    public void QuitApplication() { Application.Quit(); }
+
+    public void ReloadScene() {
+        if (FadeImage != null) {
+            TransitionBitch.GetInstance().SetSprite(FadeImage.sprite);
+        } else {
+            TransitionBitch.GetInstance().SetSprite(spriteFade);
+        }
+
+        restart = true;
         if (FadeOver) {
             StartFade();
             return;
         }
-        
-        if (LoadAsync) {
-            SceneManager.LoadSceneAsync((int) sceneEnum);
-        } else {
-            SceneManager.LoadScene((int) sceneEnum);
-        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    private void StartFade() { throw new System.NotImplementedException(); }
-
-    public void QuitApplication() { Application.Quit(); }
-
-    public void ReloadScene() { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
 }

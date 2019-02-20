@@ -9,7 +9,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
 
         [Range(0.01f, 1)]
         [SerializeField]
-        private float fadeDuration;
+        private float fadeDuration = 0.05f;
 
         // Start is called before the first frame update
         void Start() { image = GetComponent<Image>(); }

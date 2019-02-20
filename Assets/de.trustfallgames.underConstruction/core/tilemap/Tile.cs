@@ -13,6 +13,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] indicator;
+        [SerializeField] private GameObject warnIndicator;
         [SerializeField] private GameObject topIndicatorPrefab;
         [SerializeField] private float topInidicatorInterval;
 
@@ -50,6 +51,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             foreach (var obj in indicator) {
                 obj.SetActive(false);
             }
+            warnIndicator.SetActive(false);
 
             RegisterInternUpdate();
         }
@@ -322,11 +324,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public bool Visited { get; set; }
         public bool SpawnInProgress { get; private set; }
         public float TopInidicatorInterval => topInidicatorInterval;
-        
-        public void OnDestroy() {
-            gameManager.InternTick.RemoveTickObject(this);
-        }
 
+        public void OnDestroy() { gameManager.InternTick.RemoveTickObject(this); }
+
+        public void WarnIndicator(bool b) { warnIndicator.SetActive(b); }
     }
 
     public enum ObstacleType { House, NotHouse }

@@ -66,7 +66,7 @@ namespace de.TrustfallGames.UnderConstruction.UI.title_screen {
             }
 
             if (titleProgress && Math.Abs(titleImage.color.a) < 0.001) {
-                SceneManager.LoadScene((int) SceneEnum.Menu);
+                GetComponent<SceneChanger>().ChangeScene();
             }
         }
 

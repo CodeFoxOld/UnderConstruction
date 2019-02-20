@@ -33,6 +33,7 @@ namespace de.TrustfallGames.UnderConstruction.Core {
             if (a.GetComponent<MapManager>() != null) {
                 a.GetComponent<MapManager>().GenerateTilemap();
             }
+            a.transform.SetAsFirstSibling();
 
             Debug.Log(gameObject.name + " spawned");
         }

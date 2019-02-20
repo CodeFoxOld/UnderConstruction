@@ -11,18 +11,23 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
         private Counter counter;
         private Tile tile;
 
-        void Start() {
-            RegisterInternUpdate(); 
-        }
+        void Start() { RegisterInternUpdate(); }
 
         public void InternUpdate() {
-            if(tile == null || tile.ObstacleData == null) return;
+            if (tile == null || tile.ObstacleData == null) return;
             if (tile.ObstacleData.Stage == GameManager.GetManager().Settings.BuildingHeight) {
+                tile.WarnIndicator(true);
+                globalState = true;
                 if (counter.Check()) {
                     ToggleLocalState();
                 }
             } else if (localState) {
                 ToggleLocalState();
+            } else {
+                if (globalState) {
+                    globalState = false;
+                    tile.WarnIndicator(false);
+                }
             }
         }
 
@@ -32,7 +37,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
 
         private void ToggleLocalState() {
             localState = !localState;
-            if(GetComponent<MeshRenderer>() == null) return;
+            if (GetComponent<MeshRenderer>() == null) return;
             if (localState) {
                 GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.white);
             } else {
@@ -44,10 +49,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             counter = new Counter(tile.TopInidicatorInterval);
             this.tile = tile;
         }
-        
-        public void OnDestroy() {
-            GameManager.GetManager().InternTick.RemoveTickObject(this);
-        }
 
+        public void OnDestroy() { GameManager.GetManager().InternTick.RemoveTickObject(this); }
     }
 }
