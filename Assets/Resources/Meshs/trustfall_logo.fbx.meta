@@ -5,11 +5,16 @@ ModelImporter:
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material.001
+    2100000: M_Trustfall
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Plane
-  externalObjects: {}
+    4300000: Trustfall Logo
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Trustfall
+    second: {fileID: 2100000, guid: 39f9e48b03b03b7488988d5cccc693d1, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
