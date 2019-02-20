@@ -1,20 +1,15 @@
 fileFormatVersion: 2
-guid: 24a84d9fdb34aaf479aab508bb74d843
+guid: abfd12a6808eea44ebc2daee02da94e2
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: excavator
+    2100000: Material.001
     2300000: //RootNode
     3300000: //RootNode
-    4300000: excavator
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: excavator
-    second: {fileID: 2100000, guid: 480d631825e60394a91a460ec2ab74ae, type: 2}
+    4300000: Plane
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0

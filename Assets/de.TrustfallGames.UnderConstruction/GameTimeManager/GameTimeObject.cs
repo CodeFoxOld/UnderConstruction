@@ -14,12 +14,14 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         private Gradient blackToWhite;
         private Color setColor;
 
-        private void Start() {
-            gameTimeHandler = GameTimeHandler.GetInstance();
-            gameTimeHandler.RegisterTimeObject(this);
-            TurnLightOn(gameTimeHandler.GetEmissionColor());
+        private void Awake() {
             renderer = GetComponent<MeshRenderer>();
 
+            gameTimeHandler = GameTimeHandler.GetInstance();
+            gameTimeHandler.RegisterTimeObject(this);
+        }
+
+        private void Start() {
             blackToWhite = new Gradient();
             GradientColorKey[] colorKeys = new GradientColorKey[2];
             colorKeys[0].time = 0;
@@ -33,8 +35,14 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             alphaKeys[1].time = 1;
             alphaKeys[1].alpha = 1;
 
-
             blackToWhite.SetKeys(colorKeys, alphaKeys);
+
+
+            if (useOwnColor) {
+                TurnLightOnInstant(GetColor());
+            } else {
+                TurnLightOnInstant(gameTimeHandler.GetEmissionColor());
+            }
         }
 
         private void FixedUpdate() {
@@ -44,7 +52,7 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         }
 
         public void ToggleLight(Color color) {
-            if(instantUpdate) return;
+            if (instantUpdate) return;
             setColor = color;
             StartCoroutine(TurnLightOn(color));
         }
@@ -54,17 +62,23 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             gameTimeHandler.RemoveTimeObject(this);
         }
 
-        private IEnumerator TurnLightOn(Color? color) {
+        private IEnumerator TurnLightOn(Color color) {
             yield return new WaitForSeconds(Random.Range(0f, gameTimeHandler.LightOnScatter));
-            renderer.material.SetColor("_EmissionColor", color ?? GetColor());
+            renderer.material.SetColor("_EmissionColor", GetColor());
         }
+
+        private void TurnLightOnInstant(Color color) { renderer.material.SetColor("_EmissionColor", color); }
 
         private Color GetColor() {
             if (!useOwnColor) {
                 return setColor;
             }
 
-            return blackToWhite.Evaluate(gameTimeHandler.DimValue());
+            if (instantUpdate) {
+                return blackToWhite.Evaluate(gameTimeHandler.DimValue());
+            }
+            
+            return gameTimeHandler.LightState == LightState.On ? nightColor : dayColor;
         }
     }
 }
