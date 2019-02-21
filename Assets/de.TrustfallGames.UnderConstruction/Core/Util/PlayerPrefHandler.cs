@@ -1,9 +1,7 @@
 using System;
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.Core {
+namespace de.TrustfallGames.UnderConstruction.Core.Util {
     public static class PlayerPrefHandler {
         //Sound
         private static string _musicVolume = "MusicVolume";

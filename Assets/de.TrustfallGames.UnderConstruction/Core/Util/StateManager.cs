@@ -1,9 +1,8 @@
 ﻿using System.Collections;
-using System.Linq;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.Core {
+namespace de.TrustfallGames.UnderConstruction.Core.Util {
     public class StateManager : MonoBehaviour {
         [SerializeField] private GameObject gameManager;
         [SerializeField] private GameObject mapManager;

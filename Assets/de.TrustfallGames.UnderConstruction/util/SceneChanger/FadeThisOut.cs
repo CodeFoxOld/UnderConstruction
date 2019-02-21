@@ -3,7 +3,7 @@ using de.TrustfallGames.UnderConstruction.UI.title_screen;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace de.TrustfallGames.UnderConstruction.Util {
+namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
     public class FadeThisOut : MonoBehaviour {
         private Image image;
 

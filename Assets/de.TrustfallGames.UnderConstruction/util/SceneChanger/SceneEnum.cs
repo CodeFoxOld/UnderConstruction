@@ -1,4 +1,4 @@
-namespace de.TrustfallGames.UnderConstruction.Util {
+namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
     public enum SceneEnum {
         Title = 0,
         Menu = 1,

@@ -1,4 +1,4 @@
-namespace de.TrustfallGames.UnderConstruction.Util {
+namespace de.TrustfallGames.UnderConstruction.Core.Util {
     public interface IInternUpdate {
         void InternUpdate();
 

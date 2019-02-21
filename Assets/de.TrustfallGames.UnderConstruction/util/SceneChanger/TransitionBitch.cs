@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace de.TrustfallGames.UnderConstruction.Util {
+namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
     public class TransitionBitch : MonoBehaviour {
         private Sprite sprite;
 

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
- 
+
+namespace de.TrustfallGames.UnderConstruction.UI.Util {
+    
+
 public class ScorePopupSuicide : MonoBehaviour {
     public float delay;
  
@@ -8,4 +10,5 @@ public class ScorePopupSuicide : MonoBehaviour {
     void Start () {
         Destroy (gameObject, this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length); 
     }
+}
 }

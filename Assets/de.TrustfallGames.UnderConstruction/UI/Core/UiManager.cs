@@ -1,10 +1,9 @@
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.SoundManager;
-using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.UI {
+namespace de.TrustfallGames.UnderConstruction.UI.Core {
     public class UiManager : MonoBehaviour {
         [SerializeField] private GameObject pauseMenuCanvas;
         [SerializeField] private GameObject gameOverCanvas;

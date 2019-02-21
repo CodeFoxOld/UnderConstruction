@@ -1,8 +1,10 @@
 ﻿using System;
-using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
+    
 
 public class SceneChanger : MonoBehaviour {
     [SerializeField] private SceneEnum sceneEnum;
@@ -95,4 +97,5 @@ public class SceneChanger : MonoBehaviour {
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+}
 }

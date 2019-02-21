@@ -1,7 +1,7 @@
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.UI.Util {
+namespace de.TrustfallGames.UnderConstruction.Core.Util {
     /// <summary>
     /// Automatic Counter.
     /// </summary>

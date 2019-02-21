@@ -1,10 +1,8 @@
-using System;
 using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace de.TrustfallGames.UnderConstruction.Util {
+namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
     [RequireComponent(typeof(TransitionImage))]
     public class Loading : MonoBehaviour {
         private RectTransform rectTransform;
