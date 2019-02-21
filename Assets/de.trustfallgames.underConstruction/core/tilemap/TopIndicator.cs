@@ -1,4 +1,5 @@
-﻿using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+﻿using System;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 using Tile = de.TrustfallGames.UnderConstruction.Core.tilemap.Tile;
@@ -37,7 +38,13 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
 
         private void ToggleLocalState() {
             localState = !localState;
-            if (GetComponent<MeshRenderer>() == null) return;
+            try {
+                if (gameObject == null || GetComponent<MeshRenderer>() == null) return;
+            } catch (MissingReferenceException e) {
+                Console.WriteLine(e);
+                return;
+            }
+
             if (localState) {
                 GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.white);
             } else {
