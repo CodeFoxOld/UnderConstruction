@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.PostProcessing;
 using de.TrustfallGames.UnderConstruction.Core;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.SoundManager;
@@ -18,8 +17,6 @@ public class MainMenuBehaviour : MonoBehaviour
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Button loginButton;
     [SerializeField] private TextMeshProUGUI localHighscore;
-    [SerializeField] private PostProcessingProfile defaultProfile;
-    [SerializeField] private PostProcessingProfile blurProfile;
     
     private bool optionsOn;
 
@@ -48,15 +45,6 @@ public class MainMenuBehaviour : MonoBehaviour
         optionsMenu.SetActive(!optionsMenu.activeSelf);
         optionsOn = !optionsOn;
         SoundHandler.GetInstance().PlaySound(SoundName.Click);
-
-        if (!optionsMenu.activeSelf)
-        {
-            Camera.main.GetComponent<PostProcessingBehaviour>().profile = defaultProfile;
-        }
-        else
-        {
-            Camera.main.GetComponent<PostProcessingBehaviour>().profile = blurProfile;
-        }
     }
 
     public int GetGameSoundVolume()
