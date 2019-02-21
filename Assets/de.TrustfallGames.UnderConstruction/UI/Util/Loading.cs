@@ -46,8 +46,6 @@ namespace de.TrustfallGames.UnderConstruction.Util {
                 playSoundAtPosition =
                     0 - ((a / TransitionBitch.GetInstance().AverageFixedDeltaTime) * moveDistancePerFrame);
             }
-
-            Debug.Log("Start at" + start.x + " End at " + end.x);
         }
 
         private void FixedUpdate() {

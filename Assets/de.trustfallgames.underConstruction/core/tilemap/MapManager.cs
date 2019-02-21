@@ -113,8 +113,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 Tile tile = obj.GetComponent<Tile>();
                 tiles[tile.Coords] = tile;
             }
-
-            Debug.Log(tiles.Count + " tiles refreshed");
         }
 
         public bool FieldBlocked(TileCoord tileCoord) {
