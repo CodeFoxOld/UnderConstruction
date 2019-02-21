@@ -19,7 +19,6 @@ public class MainMenuBehaviour : MonoBehaviour
     {
         if (isOptionsMenu)
         {
-            Debug.Log("Hewwo owo");
             sfxSlider.value = GetGameSoundVolume();
             musicSlider.value = GetGameMusicVolume();
         }
