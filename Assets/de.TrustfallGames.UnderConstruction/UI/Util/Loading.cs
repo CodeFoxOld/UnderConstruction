@@ -1,4 +1,5 @@
 using System;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -6,40 +7,66 @@ using UnityEngine.UI;
 namespace de.TrustfallGames.UnderConstruction.Util {
     [RequireComponent(typeof(TransitionImage))]
     public class Loading : MonoBehaviour {
-        
         private RectTransform rectTransform;
         private TransitionImage transitionImage;
         [SerializeField] private Image loadingTransitionObject;
-        
-        [SerializeField] 
+
+        [SerializeField] private bool playSound;
+        [SerializeField] private SoundName playSoundName;
+
+        [Range(-4f, 4f)]
+        [SerializeField]
+        private float soundOffset;
 
         private float moveDistancePerFrame;
 
+        private float playSoundAtPosition;
+
         private Vector3 end;
-        
+        private bool soundPlayed;
+
         private void Start() {
-            rectTransform = GetComponent<RectTransform>();
             transitionImage = GetComponent<TransitionImage>();
-            var position = rectTransform.position;
-            position = new Vector3(-(Screen.width / 2) - 300, position.y, position.z);
+            rectTransform = loadingTransitionObject.GetComponent<RectTransform>();
+            var position = rectTransform.localPosition;
+            position = new Vector3(-(Screen.width / 2) - 400, position.y, position.z);
             Vector3 start;
-            rectTransform.position = start = position;
+            rectTransform.localPosition = start = position;
 
-            end = new Vector3((Screen.width / 2) + 300, position.y, position.z);
+            end = new Vector3((Screen.width / 2) + 400, position.y, position.z);
 
-            moveDistancePerFrame = (Vector3.Distance(start, end)) / (transitionImage.WaitDuration / Time.fixedDeltaTime);
+            moveDistancePerFrame = (Vector3.Distance(start, end))
+                                   / (transitionImage.WaitDuration
+                                      / TransitionBitch.GetInstance().AverageFixedDeltaTime);
+
+
+            if (playSound) {
+                var length = SoundHandler.GetInstance().GetSoundLength(playSoundName);
+                var a = (0 - (length + soundOffset * 2) / 2);
+                playSoundAtPosition =
+                    0 - ((a / TransitionBitch.GetInstance().AverageFixedDeltaTime) * moveDistancePerFrame);
+            }
+
+            Debug.Log("Start at" + start.x + " End at " + end.x);
         }
 
         private void FixedUpdate() {
-            var position = rectTransform.position;
+            if (rectTransform == null) return;
+            var position = rectTransform.localPosition;
             position = new Vector3(position.x + moveDistancePerFrame, position.y, position.z);
-            rectTransform.position = position;
+            rectTransform.localPosition = position;
 
-            if (rectTransform.position.x > end.x) {
-                Destroy(gameObject);
+            if (rectTransform.localPosition.x > end.x) {
+                Destroy(loadingTransitionObject.gameObject);
             }
-            
-            //if(rectTransform.position.x > )
+
+
+            if (soundPlayed) return;
+
+            if (rectTransform.localPosition.x > playSoundAtPosition) {
+                SoundHandler.GetInstance().PlaySound(playSoundName);
+                soundPlayed = true;
+            }
         }
     }
 }

@@ -164,6 +164,10 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
                 source.Source.volume = GetAudioVolume(source.File);
             }
         }
+
+        public float GetSoundLength(SoundName name) {
+            return collection.GetAudioClip(name).Clip.length;
+        }
     }
 
     public enum SoundType { Music, SFX }
