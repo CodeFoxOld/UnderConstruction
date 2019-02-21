@@ -1,11 +1,12 @@
 ﻿using System;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using de.TrustfallGames.UnderConstruction.SoundManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.character {
+namespace de.TrustfallGames.UnderConstruction.Character {
     [RequireComponent(typeof(Character))]
     public class Movement : MonoBehaviour,IInternUpdate {
         [SerializeField] private Character _character;

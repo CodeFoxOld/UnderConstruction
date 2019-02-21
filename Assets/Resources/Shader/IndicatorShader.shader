@@ -6,11 +6,14 @@
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Noise("Noise Map", 2D) = "white" {}
         _GradientMap ("Gradient Map", 2D) = "white" {}
-        _Glossiness ("Smoothness", Range(0,1)) = 0.5
-        _Metallic ("Metallic", Range(0,1)) = 0.0
         _Normal ("Normal Map", 2D) = "white" {}
+        _EmissiveMap("Emissive Map", 2D) = "white" {}
+        _EmissionColor("Emission Color", Color) = (1,1,1,1)
+        _EmissionStrength("Emission Intensity", Range(0,1)) = 0
         _ScrollSpeedX ("Scroll Speed X", Range(-10,10)) = 0
         _ScrollSpeedY ("Scroll Speed Y", Range(-10,10)) = 0
+        _Glossiness ("Smoothness", Range(0,1)) = 0.5
+        _Metallic ("Metallic", Range(0,1)) = 0.0
     }
     SubShader
     {
@@ -28,6 +31,7 @@
         sampler2D _Normal;
         sampler2D _Noise;
         sampler2D _GradientMap;
+        sampler2D _EmissiveMap;
 
         struct Input
         {
@@ -35,13 +39,16 @@
             float2 uv_Normal;
             float2 uv_Noise;
             float2 uv_GradientMap;
+            float2 uv_EmissiveMap;
         };
         
         half _ScrollSpeedX;
         half _ScrollSpeedY;
         half _Glossiness;
         half _Metallic;
+        half _EmissionStrength;
         fixed4 _Color;
+        fixed4 _EmissionColor;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -62,12 +69,14 @@
             float noise = tex2D(_Noise, noiseposition);
             half3 normal = tex2D(_Normal, noiseposition);
             
+            fixed4 e = tex2D(_MainTex, IN.uv_EmissiveMap) * (_EmissionColor * _EmissionStrength);
+            
             o.Albedo = c.rgb;
-            // Metallic and smoothness come from slider variables
             o.Metallic = _Metallic;
             o.Smoothness = _Glossiness;
             o.Alpha = gradient * (noise * c.a);
             o.Normal = normal;
+            o.Emission = e;
         }
         ENDCG
     }

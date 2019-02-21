@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
@@ -17,10 +17,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public void RegisterTickObject(IInternUpdate obj, int id) {
             updates.Add(new ObjectUpdate(id, obj));
             updates = updates.OrderBy(o => o.UpdatePriority).ToList();
-            PrintList();
         }
 
-        private void PrintList() {
+        [ContextMenu("Print Update Prio")]
+        public void PrintList() {
             string a = "";
             foreach (var VARIABLE in updates) {
                 a = string.Concat(

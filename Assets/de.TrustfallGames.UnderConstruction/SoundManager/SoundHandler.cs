@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using de.TrustfallGames.UnderConstruction.Core;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Serialization;
@@ -163,6 +164,10 @@ namespace de.TrustfallGames.UnderConstruction.SoundManager {
             foreach (SoundSource source in LoopSources.Values) {
                 source.Source.volume = GetAudioVolume(source.File);
             }
+        }
+
+        public float GetSoundLength(SoundName name) {
+            return collection.GetAudioClip(name).Clip.length;
         }
     }
 

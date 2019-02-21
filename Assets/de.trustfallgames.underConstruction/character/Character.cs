@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
-using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using de.TrustfallGames.UnderConstruction.SoundManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.character {
+namespace de.TrustfallGames.UnderConstruction.Character {
     [RequireComponent(typeof(Movement))]
     public class Character : MonoBehaviour, IInternUpdate {
         [Header("Whole Player Object")]
@@ -37,7 +35,7 @@ namespace de.TrustfallGames.UnderConstruction.character {
         private ApartmentColorType latestColorType = ApartmentColorType.None;
 
         //UI Stuff
-        private int highscore;
+        [SerializeField] private int highscore;
         private int highscoreRest;
         private int destRest;
         private GameManager gameManager;

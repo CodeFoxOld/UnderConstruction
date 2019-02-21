@@ -1,10 +1,9 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
-namespace de.TrustfallGames.UnderConstruction.ui.components {
+namespace de.TrustfallGames.UnderConstruction.UI.components {
     [RequireComponent(typeof(EventTrigger))]
     [RequireComponent(typeof(Image))]
     [AddComponentMenu("CustomUI/TouchButton")]

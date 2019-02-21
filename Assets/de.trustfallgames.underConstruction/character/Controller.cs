@@ -1,9 +1,10 @@
 ﻿using System;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.character {
+namespace de.TrustfallGames.UnderConstruction.Character {
     public class Controller : MonoBehaviour,IInternUpdate {
         private                  bool      test;
         [SerializeField] private Character _character;

@@ -1,15 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.character;
+﻿using de.TrustfallGames.UnderConstruction.Character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.ui.components;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using MoveDirection = de.TrustfallGames.UnderConstruction.Util.MoveDirection;
+using MoveDirection = de.TrustfallGames.UnderConstruction.UI.Util.MoveDirection;
 
-namespace de.TrustfallGames.UnderConstruction.ui.components {
+namespace de.TrustfallGames.UnderConstruction.Controlls {
     [RequireComponent(typeof(Image))]
     public class MobileButton : InteractableButton {
         [SerializeField] private MoveDirection moveDirection;

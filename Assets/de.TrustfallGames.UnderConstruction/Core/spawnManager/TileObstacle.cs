@@ -1,9 +1,7 @@
-using System;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
-using de.TrustfallGames.UnderConstruction.SoundManager;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
     public class TileObstacle {
         private int stage = 1;
         private ObstacleType obstacleType;

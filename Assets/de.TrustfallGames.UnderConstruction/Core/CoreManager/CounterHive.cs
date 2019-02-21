@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
@@ -19,7 +19,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public void InternUpdate() {
             if (gameManager.UiManager == null) return;
-            if (!gameManager.UiManager.GamePaused)
+            if (!gameManager.GamePaused)
                 foreach (var counter in counters) {
                     counter.Next();
                 }

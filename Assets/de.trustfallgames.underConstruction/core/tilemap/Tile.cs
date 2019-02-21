@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
-using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.Core.spawnManager;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using de.TrustfallGames.UnderConstruction.SoundManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
-using Random = System.Random;
 
-namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] indicator;
+        [SerializeField] private GameObject warnIndicator;
         [SerializeField] private GameObject topIndicatorPrefab;
         [SerializeField] private float topInidicatorInterval;
 
@@ -50,6 +50,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             foreach (var obj in indicator) {
                 obj.SetActive(false);
             }
+            warnIndicator.SetActive(false);
 
             RegisterInternUpdate();
         }
@@ -167,7 +168,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             _stackCounter = new Counter(gameManager.Settings.GetGrowInterval());
             apartmentPart = apartmentStack.draw();
             ShowIndicator();
-            Debug.Log(obstacleData.ToString());
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(
                                         gameManager.Settings.GetSpawnDuration(), false,
@@ -322,11 +322,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         public bool Visited { get; set; }
         public bool SpawnInProgress { get; private set; }
         public float TopInidicatorInterval => topInidicatorInterval;
-        
-        public void OnDestroy() {
-            gameManager.InternTick.RemoveTickObject(this);
-        }
 
+        public void OnDestroy() { gameManager.InternTick.RemoveTickObject(this); }
+
+        public void WarnIndicator(bool b) { warnIndicator.SetActive(b); }
     }
 
     public enum ObstacleType { House, NotHouse }
