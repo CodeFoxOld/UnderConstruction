@@ -50,4 +50,6 @@ public class TransitionImage : MonoBehaviour {
             }
         }
     }
+
+    public float WaitDuration => waitDuration;
 }
