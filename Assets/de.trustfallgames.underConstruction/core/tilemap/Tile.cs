@@ -169,7 +169,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             _stackCounter = new Counter(gameManager.Settings.GetGrowInterval());
             apartmentPart = apartmentStack.draw();
             ShowIndicator();
-            Debug.Log(obstacleData.ToString());
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(
                                         gameManager.Settings.GetSpawnDuration(), false,

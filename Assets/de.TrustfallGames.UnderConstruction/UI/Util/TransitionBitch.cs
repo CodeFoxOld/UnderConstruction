@@ -25,7 +25,6 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         }
 
         public Sprite GetSprite() {
-            Debug.Log("Sprite send!");
             var a = sprite;
             sprite = null;
             return a;
