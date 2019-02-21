@@ -19,7 +19,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public void InternUpdate() {
             if (gameManager.UiManager == null) return;
-            if (!gameManager.UiManager.GamePaused)
+            if (!gameManager.GamePaused)
                 foreach (var counter in counters) {
                     counter.Next();
                 }

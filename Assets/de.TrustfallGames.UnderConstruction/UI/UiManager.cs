@@ -1,6 +1,7 @@
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.SoundManager;
+using de.TrustfallGames.UnderConstruction.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.UI {
@@ -10,10 +11,8 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         [SerializeField] private GameObject ui;
         
         private GameManager _gamemanager;
-        private bool gamePaused;
         private GameUIBehaviour _gameUI;
         
-        public bool GamePaused => gamePaused;
 
         private void Start() {
             _gamemanager = GameManager.GetManager().RegisterUiManager(this);
@@ -27,17 +26,19 @@ namespace de.TrustfallGames.UnderConstruction.UI {
 
             pauseMenuCanvas.SetActive(false);
             gameOverCanvas.SetActive(false);
+
+           
         }
 
         public void OnGamePaused() {
-            gamePaused = true;
+            _gamemanager.GamePaused = true;
             ui.SetActive(false);
             pauseMenuCanvas.SetActive(true);
             SoundHandler.GetInstance().PlaySound(SoundName.FadeIn);
         }
 
         public void OnGameContinue() {
-            gamePaused = false;
+            _gamemanager.GamePaused = false;
             ui.SetActive(true);
             pauseMenuCanvas.SetActive(false);
             SoundHandler.GetInstance().PlaySound(SoundName.FadeOut);
@@ -62,7 +63,7 @@ namespace de.TrustfallGames.UnderConstruction.UI {
         public void OnGameLost()
         {
             SoundHandler.GetInstance().PlaySound(SoundName.GameOver);
-            gamePaused = true;
+            _gamemanager.GamePaused = true;
             ui.SetActive(false);
             gameOverCanvas.SetActive(true);
         }

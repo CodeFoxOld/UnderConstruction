@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace de.TrustfallGames.UnderConstruction.Util {
-    public class TransitionBitch :MonoBehaviour {
+    public class TransitionBitch : MonoBehaviour {
         private Sprite sprite;
 
         private static TransitionBitch _instance;
+        private bool startGamePaused;
 
         private void Awake() {
             if (_instance == null)
@@ -13,7 +14,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             else if (_instance != this) {
                 Destroy(gameObject);
             }
-            
+
             DontDestroyOnLoad(gameObject);
         }
 
@@ -23,6 +24,17 @@ namespace de.TrustfallGames.UnderConstruction.Util {
             sprite = null;
             return a;
         }
+
+        public bool StartGamePaused() {
+            return startGamePaused;
+        }
+        
+        public void StartGamePaused(bool b) {
+            startGamePaused = b;
+        }
+
+        public void ResetGamePaused() { startGamePaused = false; }
+        
 
         public bool SpriteValid() { return sprite != null; }
 

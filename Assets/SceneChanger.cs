@@ -10,6 +10,7 @@ public class SceneChanger : MonoBehaviour {
     [SerializeField] private bool FadeOver;
     [SerializeField] private Image FadeImage;
     [SerializeField] private Sprite spriteFade;
+    [SerializeField] private bool startGamePaused;
 
     [Range(0.01f, 1)]
     [SerializeField]
@@ -52,6 +53,8 @@ public class SceneChanger : MonoBehaviour {
             TransitionBitch.GetInstance().SetSprite(spriteFade);
         }
 
+        TransitionBitch.GetInstance().StartGamePaused(startGamePaused);
+        
         if (LoadAsync) {
             if (restart) {
                 SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);

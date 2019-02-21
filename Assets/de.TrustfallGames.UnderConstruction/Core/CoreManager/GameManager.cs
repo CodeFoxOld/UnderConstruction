@@ -25,6 +25,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         
         private CounterHive _counterHive;
         private UiManager _uiManager;
+        
+        public bool gamePaused;
+
+        public bool GamePaused { get => gamePaused; set => gamePaused = value; }
 
         private GameManager() { }
 
@@ -42,6 +46,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             platformHandler = SocialPlatformHandler.GetSocialHandler();
             RegisterInternUpdate();
             SoundHandler.GetInstance().StopSound();
+            GamePaused = TransitionBitch.GetInstance().StartGamePaused();
         }
 
         public GameManager RegisterCharacter(Character character) {
