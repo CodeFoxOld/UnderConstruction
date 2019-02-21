@@ -27,6 +27,9 @@ namespace de.TrustfallGames.UnderConstruction.Core {
         //Error handling
         private static string _lastSentHighscore = "Last Sent HS";
         private static string _lastSentAchievement = "Last Sent AC";
+        
+        //Version handling
+        private static string _currentVersion = "Current Version";
 
         public static int[] GetHighscores() {
             return Array.ConvertAll(PlayerPrefs.GetString(_highscores, "0").Split(','), s => int.Parse(s));
@@ -51,8 +54,26 @@ namespace de.TrustfallGames.UnderConstruction.Core {
 
         public static void SetLastSentAchievement(string value) { PlayerPrefs.SetString(_lastSentAchievement, value); }
 
-        public static int FirstStartPromptCheck() { return PlayerPrefs.GetInt(_firstStartPrompt, 0); }
+        public static int GetCurrentVersion()
+        {
+            return PlayerPrefs.GetInt(_currentVersion, 0);
+        }
 
-        public static void FirstStartPromptDone() { PlayerPrefs.SetInt(_firstStartPrompt, 1); }
+        public static void SetCurrentVersion(int newVersion)
+        {
+            PlayerPrefs.SetInt(_currentVersion, newVersion);
+        }
+
+        public static void ValidateVersionNumber(int version)
+        {
+            if (GetCurrentVersion() != version)
+            {
+                SetHighScore(0);
+                SetHighscores(new int[0]);
+                SetCurrentVersion(version);
+            }
+        }
+
+
     }
 }
