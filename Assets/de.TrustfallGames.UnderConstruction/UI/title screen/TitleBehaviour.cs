@@ -1,6 +1,6 @@
 ﻿using System;
 using de.TrustfallGames.UnderConstruction.SoundManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.util.SceneChanger;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;

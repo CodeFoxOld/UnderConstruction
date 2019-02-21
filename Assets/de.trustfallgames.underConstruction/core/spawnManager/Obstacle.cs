@@ -1,4 +1,6 @@
-﻿public class Obstacle {
-    private int id;
-    private int stage;
+﻿namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
+    public class Obstacle {
+        private int id;
+        private int stage;
+    }
 }

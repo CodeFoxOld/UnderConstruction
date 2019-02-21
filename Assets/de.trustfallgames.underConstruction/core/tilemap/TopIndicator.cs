@@ -1,7 +1,7 @@
 ﻿using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
-using Tile = de.TrustfallGames.UnderConstruction.Core.Tilemap.Tile;
+using Tile = de.TrustfallGames.UnderConstruction.Core.tilemap.Tile;
 
 namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
     public class TopIndicator : MonoBehaviour, IInternUpdate {

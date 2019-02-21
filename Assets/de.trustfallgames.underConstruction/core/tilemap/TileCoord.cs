@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 
-namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
     public class TileCoord {
         private TileCoord() {
             up = new TileCoord(x, z + 1);

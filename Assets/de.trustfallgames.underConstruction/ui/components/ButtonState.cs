@@ -1,4 +1,4 @@
-namespace de.TrustfallGames.UnderConstruction.ui.components {
+namespace de.TrustfallGames.UnderConstruction.UI.components {
     public enum ButtonState {
         Pressed,
         NotPressed

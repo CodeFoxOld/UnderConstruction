@@ -3,6 +3,7 @@ using GooglePlayGames.BasicApi;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using de.TrustfallGames.UnderConstruction.Core;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 
 namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
 {

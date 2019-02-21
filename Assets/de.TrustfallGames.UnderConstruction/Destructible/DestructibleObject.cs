@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections;
-using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using de.TrustfallGames.UnderConstruction.SoundManager;
 using de.TrustfallGames.UnderConstruction.UI;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.UI.Core;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Destructible {
     public class DestructibleObject : MonoBehaviour, IInternUpdate {
         private GameManager _gameManager;
         private MapManager _mapManager;
-        private Character _character;
+        private Character.Character _character;
         private DestructibleDirection _direction;
         private Vector3 _directionVector3;
         private bool[] destroyed;
@@ -78,7 +79,7 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             SoundHandler.GetInstance().PlaySound(SoundName.BulldozerMove, false, GetInstanceID());
         }
 
-        public DestructibleObject Setup(GameManager gameManager, MapManager mapManager, Character character,
+        public DestructibleObject Setup(GameManager gameManager, MapManager mapManager, Character.Character character,
             DestructibleDirection direction, TileCoord tileCoord) {
             _gameManager = gameManager;
             _mapManager = mapManager;

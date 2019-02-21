@@ -4,6 +4,7 @@ namespace de.TrustfallGames.UnderConstruction.Util {
         Menu = 1,
         Game = 2,
         Credits = 3,
-        Options = 4
+        Options = 4,
+        Tutorial = 5
     }
 }

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.Destructible;
-using de.TrustfallGames.UnderConstruction.UI;
-using de.TrustfallGames.UnderConstruction.Util;
-using TMPro;
+using de.TrustfallGames.UnderConstruction.UI.Core;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
     [RequireComponent(typeof(ApartmentColor))]
     public class MapManager : MonoBehaviour {
         [Header("Use \"Generate Classes for Tiles\" to add scripts to all tiles and fill refresh values")]
@@ -29,7 +27,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         [SerializeField] private GameObject DestructiblePrefab;
         
         private GameManager gameManager;
-        private Character character;
+        private Character.Character character;
 
         private ApartmentColor apartmentColor;
 
@@ -44,7 +42,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public ApartmentColor ApartmentColor => apartmentColor;
 
-        public void RegisterCharacter(Character character) { this.character = character; }
+        public void RegisterCharacter(Character.Character character) { this.character = character; }
 
         /// <summary>
         /// Adds Tile Classes to Tiles. Adjust Position.

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
     public class ObstacleData {
         private ObstacleType obstacleType;
         private Mesh upperMesh;

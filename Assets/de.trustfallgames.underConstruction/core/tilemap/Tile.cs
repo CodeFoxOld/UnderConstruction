@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
-using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.Core.spawnManager;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using de.TrustfallGames.UnderConstruction.SoundManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
-using Random = System.Random;
 
-namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(MeshCollider))]
     public class Tile : MonoBehaviour, IInternUpdate {

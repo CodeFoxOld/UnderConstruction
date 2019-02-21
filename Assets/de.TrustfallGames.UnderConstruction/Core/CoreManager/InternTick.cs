@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {

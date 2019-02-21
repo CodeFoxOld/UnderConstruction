@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Core.spawnManager;
-using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.Core.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
     public class SpawnManager : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] apartmentParts;
 
@@ -31,7 +29,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private MapManager _mapManager;
         private GameManager _gameManager;
 
-        private Character _character;
+        private Character.Character _character;
 
         // Start is called before the first frame update
 
