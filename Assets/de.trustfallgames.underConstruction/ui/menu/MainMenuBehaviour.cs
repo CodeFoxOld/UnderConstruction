@@ -11,40 +11,28 @@ using TMPro;
 
 public class MainMenuBehaviour : MonoBehaviour
 {
-    [SerializeField] private GameObject mainMenu;
-    [SerializeField] private GameObject optionsMenu;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider musicSlider;
-    [SerializeField] private Button loginButton;
-    [SerializeField] private TextMeshProUGUI localHighscore;
-    
-    private bool optionsOn;
+    [SerializeField] private bool isOptionsMenu;
 
     private void Start()
     {
-        sfxSlider.value = GetGameSoundVolume();
-        musicSlider.value = GetGameMusicVolume();
-
-        optionsMenu.SetActive(false);
-        localHighscore.SetText(PlayerPrefHandler.GetHighScore().ToString());
+        if (isOptionsMenu)
+        {
+            Debug.Log("Hewwo owo");
+            sfxSlider.value = GetGameSoundVolume();
+            musicSlider.value = GetGameMusicVolume();
+        }
     }
     
     public void Login()
     {
         SocialPlatformHandler.GetSocialHandler().UserAuthentication();
     }
-    
+
     public void LogOut()
     {
         SocialPlatformHandler.GetSocialHandler().LogOut();
-    }
-
-    public void SwapMenuDisplay()
-    {
-        mainMenu.SetActive(!mainMenu.activeSelf);
-        optionsMenu.SetActive(!optionsMenu.activeSelf);
-        optionsOn = !optionsOn;
-        SoundHandler.GetInstance().PlaySound(SoundName.Click);
     }
 
     public int GetGameSoundVolume()
@@ -59,22 +47,16 @@ public class MainMenuBehaviour : MonoBehaviour
 
     public void SetGameSoundVolume()
     {
-        if (optionsOn)
-        {
-            float newValue = sfxSlider.value / 5;
-            PlayerPrefHandler.SetSfxVolume(newValue);
-            SoundHandler.GetInstance().Refresh();
-            SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup);
-        }
+        float newValue = sfxSlider.value / 5;
+        PlayerPrefHandler.SetSfxVolume(newValue);
+        SoundHandler.GetInstance().Refresh();
+        SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup);
     }
 
     public void SetGameMusicVolume()
     {
-        if (optionsOn)
-        {
-            float newValue = musicSlider.value / 5;
-            PlayerPrefHandler.SetMusicVolume(newValue);
-            SoundHandler.GetInstance().Refresh();
-        }
+        float newValue = musicSlider.value / 5;
+        PlayerPrefHandler.SetMusicVolume(newValue);
+        SoundHandler.GetInstance().Refresh();
     }
 }
