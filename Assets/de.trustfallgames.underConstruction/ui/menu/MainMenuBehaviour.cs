@@ -6,8 +6,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace de.TrustfallGames.UnderConstruction.UI.menu {
-    public class MainMenuBehaviour : MonoBehaviour {
+namespace de.TrustfallGames.UnderConstruction.UI.menu
+{
+    public class MainMenuBehaviour : MonoBehaviour
+    {
         [SerializeField] private Slider sfxSlider;
         [SerializeField] private Slider musicSlider;
         [SerializeField] private Image musicIcon;
@@ -20,8 +22,10 @@ namespace de.TrustfallGames.UnderConstruction.UI.menu {
         [SerializeField] private bool isOptionsMenu;
         private bool start;
 
-        private void Start() {
-            if (isOptionsMenu) {
+        private void Start()
+        {
+            if (isOptionsMenu)
+            {
                 sfxSlider.value = GetGameSoundVolume();
                 musicSlider.value = GetGameMusicVolume();
                 sfxIcon.sprite = Math.Abs(sfxSlider.value / 5) < 0.01 ? sfxOff : sfxOn;
@@ -30,41 +34,60 @@ namespace de.TrustfallGames.UnderConstruction.UI.menu {
             }
         }
 
-        private void FixedUpdate() {
-            if (isOptionsMenu) {
-                if (Social.localUser.authenticated) {
+        private void FixedUpdate()
+        {
+            if (isOptionsMenu)
+            {
+                if (Social.localUser.authenticated)
+                {
                     login.text = "Log Out";
-                } else {
+                }
+                else
+                {
                     login.text = "Log In";
                 }
             }
         }
 
-        public void Login() { SocialPlatformHandler.GetSocialHandler().UserAuthentication(); }
-
-        public void LogOut() { SocialPlatformHandler.GetSocialHandler().LogOut(); }
-
-        public int GetGameSoundVolume() { return (int) (Math.Round(PlayerPrefHandler.GetSfxVolume() * 5, 0)); }
-
-        public int GetGameMusicVolume() { return (int) (Math.Round(PlayerPrefHandler.GetMusicVolume() * 5, 0)); }
-
-        public void SetGameSoundVolume() {
-            if (!start) return;
-            float newValue = sfxSlider.value / 5;
-            PlayerPrefHandler.SetSfxVolume(newValue);
-            SoundHandler.GetInstance().Refresh();
-            SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup);
-
-            sfxIcon.sprite = Math.Abs(newValue) < 0.01 ? sfxOff : sfxOn;
+        public void Login()
+        {
+            if (Social.localUser.authenticated)
+            {
+                SocialPlatformHandler.GetSocialHandler().LogOut();
+            } else {
+            SocialPlatformHandler.GetSocialHandler().UserAuthentication();
         }
+    }
 
-        public void SetGameMusicVolume() {
-            if (!start) return;
-            float newValue = musicSlider.value / 5;
-            PlayerPrefHandler.SetMusicVolume(newValue);
-            SoundHandler.GetInstance().Refresh();
+    public int GetGameSoundVolume()
+    {
+        return (int) (Math.Round(PlayerPrefHandler.GetSfxVolume() * 5, 0));
+    }
 
-            musicIcon.sprite = Math.Abs(newValue) < 0.01 ? musicOff : musicOn;
-        }
+    public int GetGameMusicVolume()
+    {
+        return (int) (Math.Round(PlayerPrefHandler.GetMusicVolume() * 5, 0));
+    }
+
+    public void SetGameSoundVolume()
+    {
+        if (!start) return;
+        float newValue = sfxSlider.value / 5;
+        PlayerPrefHandler.SetSfxVolume(newValue);
+        SoundHandler.GetInstance().Refresh();
+        SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup);
+
+        sfxIcon.sprite = Math.Abs(newValue) < 0.01 ? sfxOff : sfxOn;
+    }
+
+    public void SetGameMusicVolume()
+    {
+        if (!start) return;
+        float newValue = musicSlider.value / 5;
+        PlayerPrefHandler.SetMusicVolume(newValue);
+        SoundHandler.GetInstance().Refresh();
+
+        musicIcon.sprite = Math.Abs(newValue) < 0.01 ? musicOff : musicOn;
+    }
     }
 }
