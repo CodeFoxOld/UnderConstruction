@@ -1,9 +1,10 @@
 ﻿using System;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.character {
+namespace de.TrustfallGames.UnderConstruction.Character {
     public class Controller : MonoBehaviour,IInternUpdate {
         private                  bool      test;
         [SerializeField] private Character _character;
@@ -16,6 +17,12 @@ namespace de.TrustfallGames.UnderConstruction.character {
 
         private void Start() { RegisterInternUpdate(); }
 
+        /// <summary>
+        /// Input interface for movement
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="state"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void ButtonToggle(MoveDirection direction, bool state) {
             switch (direction) {
                 case MoveDirection.up:
@@ -51,12 +58,18 @@ namespace de.TrustfallGames.UnderConstruction.character {
                 _movement.StartMove(MoveDirection.left);
         }
 
+        /// <summary>
+        /// Registers intern update object at hive
+        /// </summary>
         public void RegisterInternUpdate() { GameManager.GetManager().InternTick.RegisterTickObject(this, 25); }
 
         public void Init() { throw new NotImplementedException(); }
         
+        /// <summary>
+        /// Destroys the current instance
+        /// </summary>
         public void OnDestroy() {
-            GameManager.GetManager().InternTick.RemoveTickObject(this);
+            GameManager.GetManager().InternTick.UnregisterTickObject(this);
         }
 
     }

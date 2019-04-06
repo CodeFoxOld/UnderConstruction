@@ -1,10 +1,11 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.UIElements;
-using Button = UnityEngine.UI.Button;
 
-namespace de.TrustfallGames.UnderConstruction.ui.components {
+namespace de.TrustfallGames.UnderConstruction.Controlls {
+    /// <summary>
+    /// Touch button with hold behaviour
+    /// </summary>
     [RequireComponent(typeof(Image))]
     public abstract class InteractableButton : MonoBehaviour, IPointerUpHandler, IPointerDownHandler {
         // Start is called before the first frame update

@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
+    /// <summary>
+    /// Class to manage Counters
+    /// </summary>
     public class CounterHive : MonoBehaviour, IInternUpdate {
         private GameManager gameManager;
         private List<Counter> counters = new List<Counter>();
@@ -19,7 +22,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public void InternUpdate() {
             if (gameManager.UiManager == null) return;
-            if (!gameManager.UiManager.GamePaused)
+            if (!gameManager.GamePaused)
                 foreach (var counter in counters) {
                     counter.Next();
                 }
@@ -30,7 +33,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public void Init() { }
         
         public void OnDestroy() {
-            gameManager.InternTick.RemoveTickObject(this);
+            gameManager.InternTick.UnregisterTickObject(this);
         }
 
     }

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.SoundManager {
+    /// <summary>
+    /// Class for managing audio sources. Creates new Sources if needed.
+    /// </summary>
     public class SoundHive {
         private SoundHandler soundHandler;
 

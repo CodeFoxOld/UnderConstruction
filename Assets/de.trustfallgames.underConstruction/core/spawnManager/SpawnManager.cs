@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
-using de.TrustfallGames.UnderConstruction.Core.spawnManager;
-using de.TrustfallGames.UnderConstruction.Core.SpawnManager;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
+using de.TrustfallGames.UnderConstruction.Core.Util;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
     public class SpawnManager : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] apartmentParts;
 
@@ -31,7 +29,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         private MapManager _mapManager;
         private GameManager _gameManager;
 
-        private Character _character;
+        private Character.Character _character;
 
         // Start is called before the first frame update
 
@@ -54,6 +52,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             CheckSpawns();
         }
 
+        /// <summary>
+        /// Checks if all tiles are spawned. Starts a new spawn routine if the are spawned
+        /// </summary>
         private void CheckSpawns() {
             bool temp = false;
             foreach (Tile tile in spawns) {
@@ -67,6 +68,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             StartNewSpawnRoutine();
         }
 
+        /// <summary>
+        /// Builds apartment dictionary
+        /// </summary>
         private void BuildDictionary() {
             foreach (GameObject part in apartmentParts) {
                 if (!apartmentStacks.ContainsKey(part.GetComponent<ApartmentPart>().ApartmentColorType)) {
@@ -79,13 +83,16 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             }
         }
 
+        /// <summary>
+        /// Initialise new spawn routines on fields
+        /// </summary>
         private void StartNewSpawnRoutine() {
             TilesStack tilesStack = GetClassifiedTiles();
 
 
-            Tile[] tiles = GetSpawnTiles(tilesStack, CalculateStages());
+            Tile[] tiles = GetSpawnTiles(tilesStack, CalculateSpawnedFields());
 
-            if (tiles.Length < CalculateStages()) return;
+            if (tiles.Length < CalculateSpawnedFields()) return;
 
             for (int i = tiles.Length - 1; i >= 0; i--) {
                 if (tiles[i] == null) continue;
@@ -119,7 +126,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             }
         }
 
-        private int CalculateStages() {
+        /// <summary>
+        /// Calculates how many fields should start a spawn routine
+        /// </summary>
+        /// <returns></returns>
+        private int CalculateSpawnedFields() {
             int maxHs = _gameManager.Settings.HighScoreMax;
             int hs = _character.Highscore;
             int fields = _gameManager.Settings.MaxField - 1;
@@ -136,6 +147,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             return (hs / steps) + 1;
         }
 
+        /// <summary>
+        /// Returns a random color except one color
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
         private ApartmentColorType GetRandomColorExceptOne(ApartmentColorType color) {
             ApartmentColorType apartmentColorType = (ApartmentColorType) Random.Range(0, 4);
             while (apartmentColorType == color) {
@@ -145,7 +161,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             return apartmentColorType;
         }
 
-        //TODO: Implement spawning amount with player size
 
         /// <summary>
         /// Returns an array with the length of the stages. The lowest index is the nearest field
@@ -167,7 +182,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             } else {
                 for (int i = 1; i <= stages; i++) {
                     tiles[i - 1] = stack.DrawUnrated();
-                    if(tiles[i - 1]) break;
+                    if(tiles[i - 1]==null) break;
                     while (tiles[i - 1].SpawnInProgress) {
                         tiles[i - 1] = stack.DrawUnrated();
                         if(tiles[i - 1] == null) break;
@@ -221,11 +236,18 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
             return stack;
         }
 
+        /// <summary>
+        /// Returns a random obstacle data
+        /// </summary>
+        /// <returns></returns>
         private ObstacleData GetRandomObstacleData() {
-            return Random.Range(0, 101) < _gameManager.Settings.HousePercentage ? house[Random.Range(0, house.Count)] :
+            return Random.Range(0, 101) < _gameManager.Settings.GetHousePercentage() ? house[Random.Range(0, house.Count)] :
                        notHouse[Random.Range(0, notHouse.Count)];
         }
 
+        /// <summary>
+        /// Build the obstacle data
+        /// </summary>
         private void BuildObstacleData() {
             foreach (GameObject obstacle in obstacleParts) {
                 if (obstacle.GetComponent<ObstaclePart>().ObstacleType == ObstacleType.House) {
@@ -245,7 +267,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
         public void Init() { }
         
         public void OnDestroy() {
-            _gameManager.InternTick.RemoveTickObject(this);
+            _gameManager.InternTick.UnregisterTickObject(this);
         }
 
     }

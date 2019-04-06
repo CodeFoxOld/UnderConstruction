@@ -1,82 +1,74 @@
 ﻿using GooglePlayGames;
-using GooglePlayGames.BasicApi;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
-using de.TrustfallGames.UnderConstruction.Core;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 
-namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
-{
-    public class SocialPlatformHandler : MonoBehaviour
-    {
+namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay {
+    public class SocialPlatformHandler : MonoBehaviour {
         private static SocialPlatformHandler _instance = null;
-        [SerializeField] private bool userIsAuthenticated;
+        //[SerializeField] private bool userIsAuthenticated;
 
-        private const string _defaultLeaderboard = "CgkI3PuauqQdEAIQAA";
+        private const string _defaultLeaderboard = "CgkI3PuauqQdEAIQAg";
 
-        void Awake()
-        {
+        void Awake() {
             //Singleton instantiation
             if (_instance == null)
                 _instance = this;
-            else if (_instance != this)
-            {
+            else if (_instance != this) {
                 Destroy(gameObject);
             }
         }
-        
-        public static SocialPlatformHandler GetSocialHandler()
-        {
+
+        public static SocialPlatformHandler GetSocialHandler() {
             return _instance;
         }
 
-        void Start()
-        {
+        void Start() {
+            if (_instance != this) return;
             //Keep the social platform handler alive
             DontDestroyOnLoad(this);
-
+#if UNITY_ANDROID
             //Enable Debug Log for Play Services and Activate the social Platform
             PlayGamesPlatform.DebugLogEnabled = true;
             PlayGamesPlatform.Activate();
 
             //Prompt the user for OAuth on game start
-            if (PlayerPrefHandler.FirstStartPromptCheck() == 0)
-            {
-                UserAuthentication();
-                PlayerPrefHandler.FirstStartPromptDone();
-            }
+            UserAuthentication();
+#endif
         }
 
         /// <summary>
         /// Prompts the user for OAuthentication to Google Play Services. This is required for leaderboards and achievements.
         /// </summary>
-        private void UserAuthentication()
-        {
-            if (!userIsAuthenticated)
-            {
-                Social.localUser.Authenticate((bool success) =>
-                {
-                    if (success)
-                    {
-                        userIsAuthenticated = true;
-                        
+        public void UserAuthentication() {
+            Social.localUser.Authenticate(
+                (bool success) => {
+                    if (success) {
                         //Check to resend a failed highscore send attempt
                         int scoreToCheck = PlayerPrefHandler.GetLastSentHighScore();
 
                         if (scoreToCheck != 0)
                             SendToLeaderboard(scoreToCheck);
-                        
+
                         //Check to resend a failed achievement complete attempt
                         string achievementToCheck = PlayerPrefHandler.GetLastSentAchievement();
 
                         if (achievementToCheck != "None")
                             CompleteAchievement(achievementToCheck);
-                    }
-                    else
-                    {
-                        userIsAuthenticated = false;
+
+                        Debug.Log("Successful Login!");
+                    } else {
+                        Debug.Log("Authentication failed!");
                     }
                 });
-            }
+        }
+
+        /// <summary>
+        /// Logs the user out.
+        /// </summary>
+        public void LogOut() {
+#if UNITY_ANDROID
+            ((PlayGamesPlatform) Social.Active).SignOut();
+#endif
         }
 
         /// <summary>
@@ -84,24 +76,27 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         /// </summary>
         /// <param name="identifier">The string identifier of the leaderboard</param>
         /// <param name="score">The new score to send</param>
-        public void SendToLeaderboard(int score)
-        {
-            if (userIsAuthenticated)
-            {
-                Social.ReportScore(score, _defaultLeaderboard, (bool success) =>
-                {
-                    if (!success)
-                    {
-                        PlayerPrefHandler.SetLastSentHighscore(score);
-                        userIsAuthenticated = false;
-                    }
-                    else
-                    {
-                        PlayerPrefHandler.SetLastSentHighscore(0);
-                    }
-                });
+        public bool SendToLeaderboard(int score) {
+#if UNITY_ANDROID
+            var reportSuccess = false;
+
+            if (Social.localUser.authenticated) {
+                Social.ReportScore(
+                    score, _defaultLeaderboard, (bool success) => {
+                        if (!success) {
+                            PlayerPrefHandler.SetLastSentHighscore(score);
+                            Debug.Log("Sending Score failed!");
+                        } else {
+                            PlayerPrefHandler.SetLastSentHighscore(0);
+                            Debug.Log("Sending Score succeeded!");
+                            reportSuccess = true;
+                        }
+                    });
             }
 
+            return reportSuccess;
+#endif
+            return true;
         }
 
         /// <summary>
@@ -109,39 +104,28 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay
         /// </summary>
         /// <param name="identifier">The achievement to progress</param>
         /// <param name="progress">Progress in %</param>
-        public void ProgressAchievement(string identifier, int progress)
-        {
-            if (userIsAuthenticated)
-            {
-                PlayGamesPlatform.Instance.IncrementAchievement(
-                    identifier, progress, (bool success) =>
-                    {
-                        //TODO: handle success or failure
-                    });
-            }
+        public void ProgressAchievement(string identifier, int progress) {
+#if UNITY_ANDROID
+            PlayGamesPlatform.Instance.IncrementAchievement(
+                identifier, progress, (bool success) => {
+                    //TODO: handle success or failure
+                });
+#endif
         }
 
         /// <summary>
         /// Function to complete a specific achievement
         /// </summary>
         /// <param name="identifier">The achievement to complete</param>
-        public void CompleteAchievement(string identifier)
-        {
-            if (userIsAuthenticated)
-            {
-                Social.ReportProgress(identifier, 100.0f, (bool success) =>
-                {
-                    if (!success)
-                    {
+        public void CompleteAchievement(string identifier) {
+            Social.ReportProgress(
+                identifier, 100.0f, (bool success) => {
+                    if (!success) {
                         PlayerPrefHandler.SetLastSentAchievement(identifier);
-                        userIsAuthenticated = false;
-                    }
-                    else
-                    {
+                    } else {
                         PlayerPrefHandler.SetLastSentAchievement("None");
                     }
                 });
-            }
         }
     }
 }

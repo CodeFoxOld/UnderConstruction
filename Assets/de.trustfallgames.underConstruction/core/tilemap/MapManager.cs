@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.character;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
 using de.TrustfallGames.UnderConstruction.Destructible;
-using de.TrustfallGames.UnderConstruction.UI;
-using de.TrustfallGames.UnderConstruction.Util;
-using TMPro;
+using de.TrustfallGames.UnderConstruction.UI.Core;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
+    /// <summary>
+    /// Class to generate an manage the map
+    /// </summary>
     [RequireComponent(typeof(ApartmentColor))]
     public class MapManager : MonoBehaviour {
         [Header("Use \"Generate Classes for Tiles\" to add scripts to all tiles and fill refresh values")]
@@ -29,7 +30,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
         [SerializeField] private GameObject DestructiblePrefab;
         
         private GameManager gameManager;
-        private Character character;
+        private Character.Character character;
 
         private ApartmentColor apartmentColor;
 
@@ -44,7 +45,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public ApartmentColor ApartmentColor => apartmentColor;
 
-        public void RegisterCharacter(Character character) { this.character = character; }
+        public void RegisterCharacter(Character.Character character) { this.character = character; }
 
         /// <summary>
         /// Adds Tile Classes to Tiles. Adjust Position.
@@ -113,16 +114,25 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
                 Tile tile = obj.GetComponent<Tile>();
                 tiles[tile.Coords] = tile;
             }
-
-            Debug.Log(tiles.Count + " tiles refreshed");
         }
 
-        public bool FieldBlocked(TileCoord tileCoord) {
-            return !tiles.ContainsKey(tileCoord) || tiles[tileCoord].Blocked;
+        /// <summary>
+        /// Returns if a field is blocked
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public bool FieldBlocked(TileCoord position) {
+            return !tiles.ContainsKey(position) || tiles[position].Blocked;
         }
 
-        public bool FieldBlocked(TileCoord tileCoord, MoveDirection moveDirection) {
-            return FieldBlocked(tileCoord.NextTileCoord(moveDirection));
+        /// <summary>
+        /// Returns if the field is blocked in a specified direction depending on a position
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="moveDirection"></param>
+        /// <returns></returns>
+        public bool FieldBlocked(TileCoord position, MoveDirection moveDirection) {
+            return FieldBlocked(position.NextTileCoord(moveDirection));
         }
 
         /// <summary>
@@ -135,6 +145,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             return new TileCoord(0 - (zDimension / 2) + x, (0 - (yDimension / 2) + y));
         }
 
+        /// <summary>
+        /// Returns the tile depending on the tile coord
+        /// </summary>
+        /// <param name="tileCoord"></param>
+        /// <returns></returns>
         public Tile GetTile(TileCoord tileCoord) {
             if (tiles.ContainsKey(tileCoord)) {
                 return tiles[tileCoord];
@@ -148,6 +163,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public Dictionary<TileCoord, Tile> Tiles => tiles;
 
+        /// <summary>
+        /// Spawns a destructible
+        /// </summary>
+        /// <param name="direction"></param>
         public void SpawnDesctructible(DestructibleDirection direction) {
             if (character.TakeDestructible()) {
                 Instantiate(DestructiblePrefab)

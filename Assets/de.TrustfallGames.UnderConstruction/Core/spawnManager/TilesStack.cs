@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using de.TrustfallGames.UnderConstruction.Core.Tilemap;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
 using JetBrains.Annotations;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace de.TrustfallGames.UnderConstruction.Core.SpawnManager {
+namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
     public class TilesStack {
         private Dictionary<int, RatedTiles> ratedTiles = new Dictionary<int, RatedTiles>();
         private List<Tile> unratedTiles = new List<Tile>();

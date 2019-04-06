@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using de.TrustfallGames.UnderConstruction.Util;
+using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
+    /// <summary>
+    /// Class to manage the intern tick objects
+    /// </summary>
     public class InternTick : MonoBehaviour {
         List<ObjectUpdate> updates = new List<ObjectUpdate>();
 
@@ -14,13 +17,21 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             }
         }
 
-        public void RegisterTickObject(IInternUpdate obj, int id) {
-            updates.Add(new ObjectUpdate(id, obj));
+        /// <summary>
+        /// Registers a intern Update object with a update priority. Low Priority number means early update
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="updatePriority"></param>
+        public void RegisterTickObject(IInternUpdate obj, int updatePriority) {
+            updates.Add(new ObjectUpdate(updatePriority, obj));
             updates = updates.OrderBy(o => o.UpdatePriority).ToList();
-            PrintList();
         }
 
-        private void PrintList() {
+        /// <summary>
+        /// Prints the current update prio
+        /// </summary>
+        [ContextMenu("Print Update Prio")]
+        public void PrintList() {
             string a = "";
             foreach (var VARIABLE in updates) {
                 a = string.Concat(
@@ -32,7 +43,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
             Debug.Log("Current Update Prio Report! \n" + a);
         }
 
-        public void RemoveTickObject(IInternUpdate obj) {
+        /// <summary>
+        /// Unregister object from intern tick
+        /// </summary>
+        /// <param name="obj"></param>
+        public void UnregisterTickObject(IInternUpdate obj) {
             for (int i = 0; i < updates.Count; i++) {
                 if (updates[i].GetHashCode() == obj.GetHashCode()) {
                     updates.RemoveAt(i);
@@ -42,6 +57,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         }
     }
 
+    /// <summary>
+    /// Class to safe a update object
+    /// </summary>
     internal class ObjectUpdate {
         private int updatePriority;
         private IInternUpdate internUpdateObject;

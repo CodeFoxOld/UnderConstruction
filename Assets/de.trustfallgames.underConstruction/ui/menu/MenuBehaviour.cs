@@ -1,36 +1,45 @@
-﻿using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+﻿using System;
+using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuBehaviour : MonoBehaviour
-{
-    private GameManager _gamemanager;
+namespace de.TrustfallGames.UnderConstruction.UI.menu {
+    /// <summary>
+    /// Game Menu behaviour
+    /// </summary>
+    public class MenuBehaviour : MonoBehaviour {
+        private GameManager _gamemanager;
 
-    private void Start()
-    {
-        _gamemanager = GameManager.GetManager();
-    }
+        private void Start() { _gamemanager = GameManager.GetManager(); }
 
-    public void StartGame(int sceneNumber)
-    {
-        SoundHandler.GetInstance().PlaySound(SoundName.Click);
-        SceneManager.LoadScene(sceneNumber);
-    }
+        /// <summary>
+        /// Starts the game
+        /// </summary>
+        /// <param name="buildIndex"></param>
+        [Obsolete]
+        public void StartGame(int buildIndex) {
+            SoundHandler.GetInstance().PlaySound(SoundName.Click);
+            SceneManager.LoadScene(buildIndex);
+        }
 
-    public void RestartGame()
-    {
-        SoundHandler.GetInstance().PlaySound(SoundName.Click);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+        /// <summary>
+        /// Restarts the game
+        /// </summary>
+        [Obsolete]
+        public void RestartGame() {
+            SoundHandler.GetInstance().PlaySound(SoundName.Click);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
 
-    public void PauseGame()
-    {
-        _gamemanager.UiManager.OnGamePaused();
-    }
+        /// <summary>
+        /// Pause the current game
+        /// </summary>
+        public void PauseGame() { _gamemanager.UiManager.OnGamePaused(); }
 
-    public void UnpauseGame()
-    {
-        _gamemanager.UiManager.OnGameContinue();
+        /// <summary>
+        /// Unpause the current game
+        /// </summary>
+        public void UnpauseGame() { _gamemanager.UiManager.OnGameContinue(); }
     }
 }

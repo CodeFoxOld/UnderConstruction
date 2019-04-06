@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using de.TrustfallGames.UnderConstruction.Core.tilemap;
 using UnityEngine;
 
-namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
+namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
     public class ObstacleData {
         private ObstacleType obstacleType;
         private Mesh upperMesh;
@@ -14,6 +14,16 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         private ObstacleData() { }
 
+        /// <summary>
+        /// Constructor to create a new obstacle data. used for stackable obstacles
+        /// </summary>
+        /// <param name="obstacleType"></param>
+        /// <param name="upperMesh"></param>
+        /// <param name="upperMeshMaterial"></param>
+        /// <param name="lowerMesh"></param>
+        /// <param name="lowerMeshMaterial"></param>
+        /// <param name="doorMesh"></param>
+        /// <param name="doorMeshMaterial"></param>
         private ObstacleData(ObstacleType obstacleType, Mesh upperMesh, Material upperMeshMaterial, Mesh lowerMesh,
             Material lowerMeshMaterial, Mesh doorMesh, Material doorMeshMaterial) {
             this.obstacleType = obstacleType;
@@ -25,6 +35,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
             this.doorMeshMaterial = doorMeshMaterial;
         }
 
+        /// <summary>
+        /// Constructor to create a new obstacle data.  used for non stackable objects
+        /// </summary>
+        /// <param name="obstacleType"></param>
+        /// <param name="upperMesh"></param>
+        /// <param name="upperMeshMaterial"></param>
         public ObstacleData(ObstacleType obstacleType, Mesh upperMesh, Material upperMeshMaterial) {
             this.obstacleType = obstacleType;
             this.upperMesh = upperMesh;
@@ -33,11 +49,20 @@ namespace de.TrustfallGames.UnderConstruction.Core.Tilemap {
 
         public ObstacleType ObstacleType => obstacleType;
 
+        /// <summary>
+        /// Returns a string with object meta
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() {
             return ("Obstacle Type: " + obstacleType + "with Upper Mesh " + upperMesh.name + " with Material "
                     + upperMeshMaterial.name + " ObstacleType: " + obstacleType);
         }
 
+        /// <summary>
+        /// Builds a obstacle data list out of obstacle part
+        /// </summary>
+        /// <param name="parts"></param>
+        /// <returns></returns>
         public static List<ObstacleData> Builder(ObstaclePart parts) {
             List<ObstacleData> list = new List<ObstacleData>();
 
