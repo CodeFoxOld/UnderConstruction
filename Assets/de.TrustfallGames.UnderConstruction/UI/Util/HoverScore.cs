@@ -1,6 +1,8 @@
 using System;
+using de.TrustfallGames.UnderConstruction.util.SceneChanger;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.UI.Util {
     /// <summary>
@@ -10,7 +12,7 @@ namespace de.TrustfallGames.UnderConstruction.UI.Util {
         [SerializeField] private TextMeshProUGUI textMeshPro;
         [SerializeField] private float speed = 1;
         [SerializeField] private float duration = 1.5f;
-        [SerializeField] private float fadeOutSpeed = 0.01f;
+        [SerializeField] private float fadeOutTime = 0.01f;
         private float currentDuration;
         private bool _move;
 
@@ -34,7 +36,8 @@ namespace de.TrustfallGames.UnderConstruction.UI.Util {
                 transform.position = pos;
             } else {
                 var col = textMeshPro.color;
-                col.a = Mathf.Clamp(col.a - fadeOutSpeed, 0, 1);
+                var time = 1 / (fadeOutTime * (1 / Time.deltaTime));
+                col.a = Mathf.Clamp(col.a - time, 0, 1);
                 textMeshPro.color = col;
                 if (Math.Abs(col.a) < 0.001) {
                     Destroy(gameObject);
