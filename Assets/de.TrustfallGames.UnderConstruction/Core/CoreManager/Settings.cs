@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -45,10 +45,15 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private float _destructibleMoveSpeed = 0.25f;
 
-        [Header("Percent of house obstacles.")]
+        [Header("Minimum/Start Percent of house obstacles.")]
         [SerializeField]
         [Range(0, 100)]
-        private int housePercentage = 40;
+        private int minHousePercentage = 30;
+        
+        [Header("Maximum/End Percent of house obstacles.")]
+        [SerializeField]
+        [Range(0, 100)]
+        private int maxHousePercentage = 80;
 
         [Header("Percentage of color strike break. Higher value means more breaks.")]
         [SerializeField]
