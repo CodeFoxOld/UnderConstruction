@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
     public class GameTimeObject : MonoBehaviour {
-        private GameTimeHandler gameTimeHandler;
+        private GameTimeHandler timeHandler;
         private MeshRenderer renderer;
 
         [SerializeField] private bool instantUpdate;
@@ -17,8 +17,8 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         private void Awake() {
             renderer = GetComponent<MeshRenderer>();
 
-            gameTimeHandler = GameTimeHandler.GetInstance();
-            gameTimeHandler.RegisterTimeObject(this);
+            //gameTimeHandler = GameTimeHandler.GetInstance();
+            //gameTimeHandler.RegisterTimeObject(this);
         }
 
         private void Start() {
@@ -41,7 +41,7 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             if (useOwnColor) {
                 TurnLightOnInstant(GetColor());
             } else {
-                TurnLightOnInstant(gameTimeHandler.GetEmissionColor());
+                TurnLightOnInstant(GameTimeHandler.GetInstance().GetEmissionColor());
             }
         }
 
@@ -49,6 +49,11 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             if (instantUpdate && useOwnColor) {
                 renderer.material.SetColor("_EmissionColor", GetColor());
             }
+
+            /*if (!GameTimeHandler.GetInstance().IsRegistered(this)) {
+                gameTimeHandler = GameTimeHandler.GetInstance();
+                gameTimeHandler.RegisterTimeObject(this);
+            }*/
         }
 
         /// <summary>
@@ -65,8 +70,8 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         /// Removed time object from hive
         /// </summary>
         private void OnDestroy() {
-            if (gameTimeHandler == null) return;
-            gameTimeHandler.RemoveTimeObject(this);
+            if (timeHandler == null) return;
+            timeHandler.RemoveTimeObject(this);
         }
 
         /// <summary>
@@ -75,7 +80,7 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         /// <param name="color"></param>
         /// <returns></returns>
         private IEnumerator TurnLightOn(Color color) {
-            yield return new WaitForSeconds(Random.Range(0f, gameTimeHandler.LightOnScatter));
+            yield return new WaitForSeconds(Random.Range(0f, timeHandler.LightOnScatter));
             renderer.material.SetColor("_EmissionColor", GetColor());
         }
 
@@ -95,10 +100,12 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             }
 
             if (instantUpdate) {
-                return blackToWhite.Evaluate(gameTimeHandler.DimValue());
+                return blackToWhite.Evaluate(GameTimeHandler.GetInstance().DimValue());
             }
-            
-            return gameTimeHandler.LightState == LightState.On ? nightColor : dayColor;
+
+            return GameTimeHandler.GetInstance().LightState == LightState.On ? nightColor : dayColor;
         }
+
+        public GameTimeHandler TimeHandler { get => timeHandler; set => timeHandler = value; }
     }
 }

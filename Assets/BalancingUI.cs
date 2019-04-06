@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
+using de.TrustfallGames.UnderConstruction.GameTimeManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -17,24 +18,10 @@ public class BalancingUI : MonoBehaviour {
     void FixedUpdate() {
         string a = "";
         try {
-            a = string.Concat(a, "Grow Interval: " + Math.Round(GameManager.GetManager().Settings.GetGrowInterval(),2) + "\n");
+            a = string.Concat(a, "Reg. DayTime Objects: " + GameTimeHandler.GetInstance().RegisteredObjectsCount()+"\n");
         } catch (NullReferenceException e) {
             a = string.Concat(a, "Grow Interval: 0\n");
         }
-
-        try {
-            a = string.Concat(a, "Spawn Interval: " + Math.Round(GameManager.GetManager().Settings.GetSpawnInterval(),2) + "\n");
-        } catch (NullReferenceException e) {
-            a = string.Concat(a, "Spawn Interval: 0\n");
-        }
-
-        try {
-            a = string.Concat(a, "Spawn Duration: " + Math.Round(GameManager.GetManager().Settings.GetSpawnDuration(),2) + 
-            "\n");
-        } catch (NullReferenceException e) {
-            a = string.Concat(a, "Spawn Duration: 0\n");
-        }
-
         textField.text = a;
     }
 }

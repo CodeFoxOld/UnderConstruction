@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GooglePlayGames.Native.Cwrapper;
 using UnityEngine;
 using UnityEngine.UI;
@@ -74,13 +75,13 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
 
         }
 
-        public static GameTimeHandler GetInstance() { return _instance; }
+        public static ref GameTimeHandler GetInstance() { return ref _instance; }
 
         /// <summary>
         /// Register at time hive
         /// </summary>
         /// <param name="timeObject"></param>
-        public void RegisterTimeObject(GameTimeObject timeObject) { timeObjects.Add(timeObject); }
+        public void RegisterTimeObject(GameTimeObject timeObject) { /*timeObjects.Add(timeObject); */ }
 
         public void RemoveTimeObject(GameTimeObject timeObject) {
             timeObjects.RemoveAt(timeObjects.FindIndex(timeObject.Equals));
@@ -107,6 +108,12 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
 
         // Update is called once per frame
         private void FixedUpdate() {
+            timeObjects = FindObjectsOfType<GameTimeObject>().ToList();
+
+            foreach (GameTimeObject obj in timeObjects) {
+                obj.TimeHandler = this;
+            }
+            
             if (currentDawnDuration > dawnDuration * turnLightsOn && lightState == LightState.Off) {
                 ToggleLights(LightState.On);
             } else if (currentDawnDuration < dawnDuration * turnLightsOn && lightState == LightState.On) {
@@ -220,6 +227,20 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
 
         private void OnDestroy() {
             _instance = null;
+        }
+
+        public int RegisteredObjectsCount() {
+            return timeObjects.Count;
+        }
+
+        public bool IsRegistered(GameTimeObject gameTimeObject) {
+            foreach (GameTimeObject timeObject in timeObjects) {
+                if (timeObject.GetInstanceID() == gameTimeObject.GetInstanceID()) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
     
