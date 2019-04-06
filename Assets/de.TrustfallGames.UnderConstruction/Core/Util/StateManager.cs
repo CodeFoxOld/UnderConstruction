@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using de.TrustfallGames.UnderConstruction.Core.tilemap;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.Util {
+    [Obsolete("Do not use anymore", true)]
     public class StateManager : MonoBehaviour {
         [SerializeField] private GameObject gameManager;
         [SerializeField] private GameObject mapManager;
