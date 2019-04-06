@@ -220,7 +220,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
         }
 
         private ObstacleData GetRandomObstacleData() {
-            return Random.Range(0, 101) < _gameManager.Settings.HousePercentage ? house[Random.Range(0, house.Count)] :
+            return Random.Range(0, 101) < _gameManager.Settings.GetHousePercentage() ? house[Random.Range(0, house.Count)] :
                        notHouse[Random.Range(0, notHouse.Count)];
         }
 
