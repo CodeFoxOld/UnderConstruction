@@ -64,18 +64,23 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [SerializeField]
         private float earlySpawnTime = 0.5f;
 
-        [Header("The point at which the game reaches the max difficulty")]
+        [Header("The highscore at which the game reaches the max difficulty")]
         [SerializeField]
         private int highScoreMax = 10000;
 
-        [SerializeField] [Header("Max Amount of Fields")]
-        [Range(2,6)]
-        private int maxField = 2;
-        
-        [SerializeField] [Header("Min Amount of Fields")]
-        [Range(2,6)]
-        private int minField = 2;
+        [Header("The gametime at which the game reaches the max difficulty")]
+        [SerializeField]
+        private int timeMax = 180;
 
+        [SerializeField]
+        [Header("Max Amount of Fields")]
+        [Range(2, 6)]
+        private int maxField = 2;
+
+        [SerializeField]
+        [Header("Min Amount of Fields")]
+        [Range(2, 6)]
+        private int minField = 2;
 
         [Header("Start Amount of spawn duration")]
         [SerializeField]
@@ -107,37 +112,55 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         [Range(0.1f, 30f)]
         private float growIntervalMin = 5;
 
-        public int SaltGrains => saltGrains;
-        public int HousePercentage => housePercentage;
-        public int DestructablesPerPoints => destructablesPerPoints;
-        public float MoveUpSpeed => moveUpSpeed;
-        public float RotationDuration => rotationDuration;
-        public float MoveDuration => moveDuration;
-        public int BuildingHeight => _buildingHeight;
-        public int BasePoint => basePoint;
-        public float DestructibleMoveSpeed => _destructibleMoveSpeed;
-        public float EarlySpawnTime => earlySpawnTime;
-        public int MaxDestructablesPerCalc => maxDestructablesPerCalc;
-        public int MaxField => maxField;
-        public int MinField => minField;
-        public int HighScoreMax => highScoreMax;
+        public int   SaltGrains              => saltGrains;
 
+        public int GetHousePercentage() {
+            return Mathf.RoundToInt(((GameManager.GetManager().Character.Highscore > highScoreMax ?
+                                            calc(minHousePercentage, maxHousePercentage, highScoreMax, highScoreMax) :
+                                            calc(minHousePercentage, maxHousePercentage, highScoreMax, GetGameManager().Character.Highscore))
+                                       + (Time.time > timeMax ? calc(minHousePercentage, maxHousePercentage, timeMax, timeMax) :
+                                              calc(minHousePercentage, maxHousePercentage, timeMax, Time.time))) / 2);
+
+        }
+        public int   DestructablesPerPoints  => destructablesPerPoints;
+        public float MoveUpSpeed             => moveUpSpeed;
+        public float RotationDuration        => rotationDuration;
+        public float MoveDuration            => moveDuration;
+        public int   BuildingHeight          => _buildingHeight;
+        public int   BasePoint               => basePoint;
+        public float DestructibleMoveSpeed   => _destructibleMoveSpeed;
+        public float EarlySpawnTime          => earlySpawnTime;
+        public int   MaxDestructablesPerCalc => maxDestructablesPerCalc;
+        public int   MaxField                => maxField;
+        public int   MinField                => minField;
+        public int   HighScoreMax            => highScoreMax;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public float GetSpawnDuration() {
-            return GameManager.GetManager().Character.Highscore > highScoreMax ?
-                       calc(spawnDurationStart, spawnDurationMin, highScoreMax, highScoreMax) :
-                       calc(spawnDurationStart, spawnDurationMin, highScoreMax, GetGameManager().Character.Highscore);
+            return ((GameManager.GetManager().Character.Highscore > highScoreMax ?
+                         calc(spawnDurationStart, spawnDurationMin, highScoreMax, highScoreMax) :
+                         calc(spawnDurationStart, spawnDurationMin, highScoreMax, GetGameManager().Character.Highscore))
+                    + (Time.time > timeMax ? calc(spawnDurationStart, spawnDurationMin, timeMax, timeMax) :
+                           calc(spawnDurationStart, spawnDurationMin, timeMax, Time.time))) / 2;
         }
 
         public float GetSpawnInterval() {
-            return GameManager.GetManager().Character.Highscore > highScoreMax ?
-                       calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, highScoreMax) :
-                       calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, GetGameManager().Character.Highscore);
+            return ((GameManager.GetManager().Character.Highscore > highScoreMax ?
+                         calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, highScoreMax) :
+                         calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, GetGameManager().Character.Highscore))
+                    + (Time.time > timeMax ? calc(spawnIntervalStart, spawnIntervalMin, timeMax, timeMax) :
+                           calc(spawnIntervalStart, spawnIntervalMin, timeMax, Time.time))) / 2;
         }
 
         public float GetGrowInterval() {
-            return GameManager.GetManager().Character.Highscore > highScoreMax ?
-                       calc(growIntervalStart, growIntervalMin, highScoreMax, highScoreMax) :
-                       calc(growIntervalStart, growIntervalMin, highScoreMax, GetGameManager().Character.Highscore);
+            return ((GameManager.GetManager().Character.Highscore > highScoreMax ?
+                         calc(growIntervalStart, growIntervalMin, highScoreMax, highScoreMax) :
+                         calc(growIntervalStart, growIntervalMin, highScoreMax, GetGameManager().Character.Highscore))
+                    + (Time.time > timeMax ? calc(growIntervalStart, growIntervalMin, timeMax, timeMax) :
+                           calc(growIntervalStart, growIntervalMin, timeMax, Time.time))) / 2;
         }
 
         private float calc(float yStart, float min, float xGoal, float point) {
