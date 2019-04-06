@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 
 namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
+    /// <summary>
+    /// Comparer to compare tile coords
+    /// </summary>
     public class TileCoordComparer : IEqualityComparer<TileCoord> {
         private readonly IEqualityComparer<int> _baseComparer;
 

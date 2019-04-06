@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.SoundManager {
+    /// <summary>
+    /// Class to save a sound
+    /// </summary>
     public class SoundFile : MonoBehaviour {
         [SerializeField] private SoundType soundType;
         [SerializeField] private SoundName soundName;

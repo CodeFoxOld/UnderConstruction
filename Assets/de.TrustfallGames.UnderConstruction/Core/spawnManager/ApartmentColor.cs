@@ -8,6 +8,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
         [SerializeField] public Color red;
         [SerializeField] public Color yellow;
 
+        /// <summary>
+        /// Returns the color of the apartment
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
         public Color GetColor(ApartmentColorType color) {
             switch (color) {
                 case ApartmentColorType.Green:

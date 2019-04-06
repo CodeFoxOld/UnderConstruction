@@ -1,6 +1,9 @@
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.SoundManager {
+    /// <summary>
+    /// Class which holds a Sound source and a file
+    /// </summary>
     public class SoundSource {
         private SoundFile file;
         private AudioSource source;

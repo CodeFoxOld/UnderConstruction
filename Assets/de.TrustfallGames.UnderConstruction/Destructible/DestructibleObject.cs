@@ -28,6 +28,9 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
 
         private void Start() { RegisterInternUpdate(); }
 
+        /// <summary>
+        /// Checks if the object is at the end of the lane
+        /// </summary>
         private void CheckDestroy() {
             if (_direction == DestructibleDirection.vertical) {
                 if (gameObject.transform.position.z > _endCoord.Z) {
@@ -40,6 +43,9 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             }
         }
 
+        /// <summary>
+        /// Checks if the object passed a tile.
+        /// </summary>
         private void DestroyRoutine() {
             if (position >= destructibleArray.Length) return;
             if (_direction == DestructibleDirection.vertical) {
@@ -53,6 +59,9 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             }
         }
 
+        /// <summary>
+        /// destroys the current tile if it can be destroyed
+        /// </summary>
         private void DestroyCurrentTile() {
             if (_mapManager.GetTile(destructibleArray[position]) != null) {
                 var tile = _mapManager.GetTile(destructibleArray[position]);
@@ -66,6 +75,9 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             }
         }
 
+        /// <summary>
+        /// Starts the destroy coroutine, which removes the destructible 
+        /// </summary>
         private void StartDestroy() {
             start = false;
             destructionInProgress = true;
@@ -75,12 +87,26 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             StartCoroutine(DestroyAfterTime(3));
         }
 
+        /// <summary>
+        /// Plays the car Sound after a specified time
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
         private IEnumerator PlayCarSound(float time) {
             yield return new WaitForSeconds(time);
             start = true;
             SoundHandler.GetInstance().PlaySound(SoundName.BulldozerMove, false, GetInstanceID());
         }
 
+        /// <summary>
+        /// Setup Method for destructible. Is needed to be called, otherwise the object will not work
+        /// </summary>
+        /// <param name="gameManager"></param>
+        /// <param name="mapManager"></param>
+        /// <param name="character"></param>
+        /// <param name="direction"></param>
+        /// <param name="tileCoord"></param>
+        /// <returns></returns>
         public DestructibleObject Setup(GameManager gameManager, MapManager mapManager, Character.Character character,
             DestructibleDirection direction, TileCoord tileCoord) {
             _gameManager = gameManager;
@@ -94,6 +120,9 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             return this;
         }
 
+        /// <summary>
+        /// Builds the borders of the field. Calculate start and end pos
+        /// </summary>
         private void BuildArrays() {
             destroyed = _direction == DestructibleDirection.vertical ? new bool[_mapManager.ZDimension] :
                             new bool[_mapManager.YDimension];
@@ -108,6 +137,9 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             BuildDestructibleArray();
         }
 
+        /// <summary>
+        /// Sets the position of the object. Build Array must be executed before.
+        /// </summary>
         private void SetPosition() {
             if (_direction == DestructibleDirection.vertical) {
                 gameObject.transform.position = new Vector3(_startCoord.X, 0, _startCoord.Z);
@@ -131,11 +163,17 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
 
         public void RegisterInternUpdate() { _gameManager.InternTick.RegisterTickObject(this, 60); }
 
+        /// <summary>
+        /// Init of the object. Must be executed first
+        /// </summary>
         public void Init() {
             SoundHandler.GetInstance().PlaySound(SoundName.Horn, false, GetInstanceID(), out AudioClip clip);
             StartCoroutine(PlayCarSound(clip.length - 0.2f));
         }
 
+        /// <summary>
+        /// Builds the destruction check array. required to remember the current positon
+        /// </summary>
         private void BuildDestructibleArray() {
             destructibleArray = new TileCoord[_direction == DestructibleDirection.vertical ? _mapManager.YDimension :
                                                   _mapManager.ZDimension];
@@ -153,6 +191,9 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             }
         }
 
+        /// <summary>
+        /// Sets the direction Vector
+        /// </summary>
         private void SetDirectionVector3() {
             Vector3 dirVector = new Vector3();
             switch (_direction) {
@@ -167,6 +208,11 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             _directionVector3 = dirVector / (_gameManager.Settings.DestructibleMoveSpeed * (1 / Time.fixedDeltaTime));
         }
 
+        /// <summary>
+        /// Destroys the object after an specified time
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
         private IEnumerator DestroyAfterTime(int time) {
             WaitForSeconds wait = new WaitForSeconds(time);
             yield return wait;
@@ -174,8 +220,11 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             Destroy(gameObject);
         }
         
+        /// <summary>
+        /// Executed on object destroy
+        /// </summary>
         public void OnDestroy() {
-            _gameManager.InternTick.RemoveTickObject(this);
+            _gameManager.InternTick.UnregisterTickObject(this);
         }
 
     }

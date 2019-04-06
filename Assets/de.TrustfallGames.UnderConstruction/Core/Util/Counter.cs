@@ -73,7 +73,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.Util {
         }
 
         /// <summary>
-        /// 
+        /// Check if the counter end is reached
         /// </summary>
         /// <returns></returns>
         public bool Check() {
@@ -119,6 +119,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Util {
             executed = false;
         }
 
+        /// <summary>
+        /// resets the counter to the given time
+        /// </summary>
+        /// <param name="time"></param>
         public void Reset(float time) {
             start = current = time;
             executed = false;

@@ -40,6 +40,9 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
 
         private LightState lightState = LightState.Off;
 
+        /// <summary>
+        /// Singleton pattern
+        /// </summary>
         private void Awake() {
             if (_instance == null)
                 _instance = this;
@@ -50,12 +53,21 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
 
         public static GameTimeHandler GetInstance() { return _instance; }
 
+        /// <summary>
+        /// Register at time hive
+        /// </summary>
+        /// <param name="timeObject"></param>
         public void RegisterTimeObject(GameTimeObject timeObject) { timeObjects.Add(timeObject); }
 
         public void RemoveTimeObject(GameTimeObject timeObject) {
             timeObjects.RemoveAt(timeObjects.FindIndex(timeObject.Equals));
         }
 
+        /// <summary>
+        /// Returns if it is night and returns the global emissive color
+        /// </summary>
+        /// <param name="emissiveColor"></param>
+        /// <returns></returns>
         public bool isNight(out Color emissiveColor) {
             if (dawnDuration > dawnDuration * turnLightsOn) {
                 emissiveColor = nightColor;
@@ -163,6 +175,10 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             }
         }
 
+        /// <summary>
+        /// Toggle the lights to the desired state
+        /// </summary>
+        /// <param name="state"></param>
         private void ToggleLights(LightState state) {
             lightState = state;
             for (int i = 0; i < timeObjects.Count; i++) {
@@ -183,6 +199,10 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
 
         private enum DayTime { Day, Dawn, Night }
 
+        /// <summary>
+        /// Fades the color depending on the current time
+        /// </summary>
+        /// <returns></returns>
         public float DimValue() {
             if (GetClampedDawnDuration() > dawnDuration * turnLightsOn) {
                 float b = dawnDuration - dawnDuration * turnLightsOn;

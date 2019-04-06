@@ -1,4 +1,7 @@
 namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
+    /// <summary>
+    /// Enum to map the build index for scenes
+    /// </summary>
     public enum SceneEnum {
         Title = 0,
         Menu = 1,

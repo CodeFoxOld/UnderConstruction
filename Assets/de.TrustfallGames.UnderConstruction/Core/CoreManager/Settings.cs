@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
+    /// <summary>
+    /// Class to save the settings
+    /// </summary>
     public class Settings : MonoBehaviour {
         private GameManager _gameManager;
 
@@ -114,14 +117,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public int   SaltGrains              => saltGrains;
 
-        public int GetHousePercentage() {
-            return Mathf.RoundToInt(((GameManager.GetManager().Character.Highscore > highScoreMax ?
-                                            calc(minHousePercentage, maxHousePercentage, highScoreMax, highScoreMax) :
-                                            calc(minHousePercentage, maxHousePercentage, highScoreMax, GetGameManager().Character.Highscore))
-                                       + (Time.time > timeMax ? calc(minHousePercentage, maxHousePercentage, timeMax, timeMax) :
-                                              calc(minHousePercentage, maxHousePercentage, timeMax, Time.time))) / 2);
-
-        }
         public int   DestructablesPerPoints  => destructablesPerPoints;
         public float MoveUpSpeed             => moveUpSpeed;
         public float RotationDuration        => rotationDuration;
@@ -136,37 +131,67 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public int   HighScoreMax            => highScoreMax;
 
         /// <summary>
-        /// 
+        /// Returns the house percentage depending on current played time and current highscore 
+        /// </summary>
+        /// <returns></returns>
+        public int GetHousePercentage() {
+            return Mathf.RoundToInt(((GameManager.GetManager().Character.Highscore > highScoreMax ?
+                    Calc(minHousePercentage, maxHousePercentage, highScoreMax, highScoreMax) :
+                    Calc(minHousePercentage, maxHousePercentage, highScoreMax, GetGameManager().Character.Highscore))
+                + (Time.time > timeMax ? Calc(minHousePercentage, maxHousePercentage, timeMax, timeMax) :
+                    Calc(minHousePercentage, maxHousePercentage, timeMax, Time.time))) / 2);
+
+        }
+
+        
+        /// <summary>
+        /// Returns the spawn Duration depending on current played time and current highscore
         /// </summary>
         /// <returns></returns>
         public float GetSpawnDuration() {
             return ((GameManager.GetManager().Character.Highscore > highScoreMax ?
-                         calc(spawnDurationStart, spawnDurationMin, highScoreMax, highScoreMax) :
-                         calc(spawnDurationStart, spawnDurationMin, highScoreMax, GetGameManager().Character.Highscore))
-                    + (Time.time > timeMax ? calc(spawnDurationStart, spawnDurationMin, timeMax, timeMax) :
-                           calc(spawnDurationStart, spawnDurationMin, timeMax, Time.time))) / 2;
+                         Calc(spawnDurationStart, spawnDurationMin, highScoreMax, highScoreMax) :
+                         Calc(spawnDurationStart, spawnDurationMin, highScoreMax, GetGameManager().Character.Highscore))
+                    + (Time.time > timeMax ? Calc(spawnDurationStart, spawnDurationMin, timeMax, timeMax) :
+                           Calc(spawnDurationStart, spawnDurationMin, timeMax, Time.time))) / 2;
         }
 
+        /// <summary>
+        /// Returns the Spawn interval depending on current played time and current highscore
+        /// </summary>
+        /// <returns></returns>
         public float GetSpawnInterval() {
             return ((GameManager.GetManager().Character.Highscore > highScoreMax ?
-                         calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, highScoreMax) :
-                         calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, GetGameManager().Character.Highscore))
-                    + (Time.time > timeMax ? calc(spawnIntervalStart, spawnIntervalMin, timeMax, timeMax) :
-                           calc(spawnIntervalStart, spawnIntervalMin, timeMax, Time.time))) / 2;
+                         Calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, highScoreMax) :
+                         Calc(spawnIntervalStart, spawnIntervalMin, highScoreMax, GetGameManager().Character.Highscore))
+                    + (Time.time > timeMax ? Calc(spawnIntervalStart, spawnIntervalMin, timeMax, timeMax) :
+                           Calc(spawnIntervalStart, spawnIntervalMin, timeMax, Time.time))) / 2;
         }
 
+        /// <summary>
+        /// Returns the Grow interval depending on current played time and current highscore
+        /// </summary>
+        /// <returns></returns>
         public float GetGrowInterval() {
             return ((GameManager.GetManager().Character.Highscore > highScoreMax ?
-                         calc(growIntervalStart, growIntervalMin, highScoreMax, highScoreMax) :
-                         calc(growIntervalStart, growIntervalMin, highScoreMax, GetGameManager().Character.Highscore))
-                    + (Time.time > timeMax ? calc(growIntervalStart, growIntervalMin, timeMax, timeMax) :
-                           calc(growIntervalStart, growIntervalMin, timeMax, Time.time))) / 2;
+                         Calc(growIntervalStart, growIntervalMin, highScoreMax, highScoreMax) :
+                         Calc(growIntervalStart, growIntervalMin, highScoreMax, GetGameManager().Character.Highscore))
+                    + (Time.time > timeMax ? Calc(growIntervalStart, growIntervalMin, timeMax, timeMax) :
+                           Calc(growIntervalStart, growIntervalMin, timeMax, Time.time))) / 2;
         }
 
-        private float calc(float yStart, float min, float xGoal, float point) {
-            float a = (float) Math.Pow((0 - xGoal), 2);
-            float b = (float) Math.Pow((point - xGoal), 2);
-            return ((yStart - min) / (a)) * b + min;
+        /// <summary>
+        /// Method to get a point on a parable with the specified parameter
+        /// </summary>
+        /// <param name="yAtX0">Value of f(0)</param>
+        /// <param name="xAtPoint">Value of x at f(x)=yAtPointX</param>
+        /// <param name="yAtPointX">Value of f(xAtPoint)</param>
+        /// <param name="x">X at f(x) on the generated parable</param>
+        /// <returns></returns>
+        private float Calc(float yAtX0, float yAtPointX, float xAtPoint, float x) {
+            float a = (float) Math.Pow((0 - xAtPoint), 2);
+            float b = (float) Math.Pow((x - xAtPoint), 2);
+            return ((yAtX0 - yAtPointX) / (a)) * b + yAtPointX;
         }
 
         private GameManager GetGameManager() {

@@ -2,6 +2,9 @@ using de.TrustfallGames.UnderConstruction.Core.tilemap;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
+    /// <summary>
+    /// Contains data about one obstacle
+    /// </summary>
     public class TileObstacle {
         private int stage = 1;
         private ObstacleType obstacleType;
@@ -24,19 +27,34 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
             }
         }
 
+        /// <summary>
+        /// Adds a stage to the obstacle.
+        /// </summary>
         public void AddStage() {
             stage++; 
         }
 
+        /// <summary>
+        /// removes a stage from the obstacle
+        /// </summary>
         public void TakeStage() { stage--; }
 
         public int Stage => stage;
 
+        /// <summary>
+        /// Extract meta data from the object
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() {
             return ("ObstacleType: " + obstacleType + "Upper Mesh " + upperMesh.name + " Upper Material "
                     + upperMeshMaterial.name);
         }
 
+        /// <summary>
+        /// Returns a obstacle data set. Returns null id not valid
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public ObstacleObjectData? GetObstacleObjectData(ObstacleObjectDataType type) {
             switch (type) {
                 case ObstacleObjectDataType.upper:
@@ -52,6 +70,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
 
         public ObstacleType ObstacleType => obstacleType;
 
+        /// <summary>
+        /// Returns the right obstacle part depending on the stage
+        /// </summary>
+        /// <returns></returns>
         public ObstacleObjectData GetObstacleObjectDataStaged() {
             if (stage == 1) {
                 return new ObstacleObjectData(upperMesh, upperMeshMaterial);
@@ -60,6 +82,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
             return new ObstacleObjectData(lowerMesh, lowerMeshMaterial);
         }
 
+        /// <summary>
+        /// Struct do define a obstacle data part
+        /// </summary>
         public struct ObstacleObjectData {
             private Mesh mesh;
             private Material material;
@@ -73,6 +98,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
             }
         }
 
+        /// <summary>
+        /// Enum to define obstacle data part
+        /// </summary>
         public enum ObstacleObjectDataType { upper, lower, door }
     }
 }

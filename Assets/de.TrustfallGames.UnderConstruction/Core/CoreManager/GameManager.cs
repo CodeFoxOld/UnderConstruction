@@ -12,6 +12,9 @@ using de.TrustfallGames.UnderConstruction.UI.Core;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
+    /// <summary>
+    /// Class to manage the core
+    /// </summary>
     [RequireComponent(typeof(CounterHive))]
     [RequireComponent(typeof(Settings))]
     [RequireComponent(typeof(Controller))]
@@ -84,6 +87,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public UiManager UiManager => _uiManager;
 
+        /// <summary>
+        /// Triggers the lose
+        /// </summary>
         public void Lose() {
             PlayerPrefHandler.SetHighScore(Character.Highscore);
             platformHandler.SendToLeaderboard(Character.Highscore);
@@ -105,6 +111,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
 
         public void Init() { }
 
-        public void OnDestroy() { InternTick.RemoveTickObject(this); }
+        public void OnDestroy() { InternTick.UnregisterTickObject(this); }
     }
 }

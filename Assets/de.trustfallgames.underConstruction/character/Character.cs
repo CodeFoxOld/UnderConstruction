@@ -53,6 +53,9 @@ namespace de.TrustfallGames.UnderConstruction.Character {
             RegisterInternUpdate();
         }
 
+        /// <summary>
+        /// Moves the player root up
+        /// </summary>
         private void Move() {
             _character.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
             if (Math.Abs(_character.transform.position.y) < 0.01) {
@@ -61,6 +64,10 @@ namespace de.TrustfallGames.UnderConstruction.Character {
             }
         }
 
+        /// <summary>
+        /// Append the apartment part to the player
+        /// </summary>
+        /// <param name="apartmentPart"></param>
         public void Stack(ApartmentPart apartmentPart) {
             SoundHandler.GetInstance().PlaySound(SoundName.CharacterPickup, false, GetInstanceID());
             var b = _character.gameObject.transform;
@@ -82,6 +89,11 @@ namespace de.TrustfallGames.UnderConstruction.Character {
             height++;
         }
 
+        /// <summary>
+        /// Calculates destructible score
+        /// </summary>
+        /// <param name="combo"></param>
+        /// <returns></returns>
         public int CalculateDestructibleScore(int combo) {
             int pointsAdded = gameManager.Settings.BasePoint * combo;
             highscore += pointsAdded;
@@ -90,6 +102,10 @@ namespace de.TrustfallGames.UnderConstruction.Character {
             return pointsAdded;
         }
 
+        /// <summary>
+        /// Calculates highscore
+        /// </summary>
+        /// <param name="apartmentPart"></param>
         private void CalculateHighscore(ApartmentPart apartmentPart) {
             if (latestColorType == apartmentPart.ApartmentColorType) {
                 colorCount++;
@@ -148,7 +164,7 @@ namespace de.TrustfallGames.UnderConstruction.Character {
         }
 
         public void OnDestroy() {
-            gameManager.InternTick.RemoveTickObject(this);
+            gameManager.InternTick.UnregisterTickObject(this);
         }
 
         public void RegisterInternUpdate() { gameManager.InternTick.RegisterTickObject(this, 20); }

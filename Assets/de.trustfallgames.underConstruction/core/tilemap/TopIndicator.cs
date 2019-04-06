@@ -5,6 +5,9 @@ using UnityEngine;
 using Tile = de.TrustfallGames.UnderConstruction.Core.tilemap.Tile;
 
 namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
+    /// <summary>
+    /// Class to display the top indicator attached to a tile. Enables multiple objects
+    /// </summary>
     public class TopIndicator : MonoBehaviour, IInternUpdate {
         [SerializeField] private GameObject[] OtherObjectsToDisable;
         private bool globalState;
@@ -36,6 +39,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
 
         public void Init() { }
 
+        /// <summary>
+        /// toggles the local state
+        /// </summary>
         private void ToggleLocalState() {
             localState = !localState;
             try {
@@ -57,6 +63,6 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             this.tile = tile;
         }
 
-        public void OnDestroy() { GameManager.GetManager().InternTick.RemoveTickObject(this); }
+        public void OnDestroy() { GameManager.GetManager().InternTick.UnregisterTickObject(this); }
     }
 }

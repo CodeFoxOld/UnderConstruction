@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
+    /// <summary>
+    /// Class for ingame loading screen
+    /// </summary>
     [RequireComponent(typeof(TransitionImage))]
     public class Loading : MonoBehaviour {
         private RectTransform rectTransform;
