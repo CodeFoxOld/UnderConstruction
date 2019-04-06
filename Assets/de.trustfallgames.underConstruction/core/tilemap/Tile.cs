@@ -244,7 +244,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
         public void Destruct(int combo, out bool success) {
             success = false;
             if (combo != 0) {
-                if (tileObstacle.Stage > destructQueue) {
+                if (tileObstacle.Stage > destructQueue && !SpawnInProgress) {
                     int points = gameManager.Character.CalculateDestructibleScore(combo);
                     gameManager.UiManager.ShowPopUpAtPosition(transform.position, points.ToString());
                     success = true;
