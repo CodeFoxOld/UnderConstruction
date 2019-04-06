@@ -1,4 +1,5 @@
-﻿using de.TrustfallGames.UnderConstruction.util.SceneChanger;
+﻿using de.TrustfallGames.UnderConstruction.SoundManager;
+using de.TrustfallGames.UnderConstruction.util.SceneChanger;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,7 @@ namespace de.TrustfallGames.UnderConstruction.UI.Util {
         }
 
         public void ImageForward() {
+            SoundHandler.GetInstance().PlaySound(SoundName.Click);
             index++;
             if (index < images.Length) {
                 ChangePicture();
@@ -35,6 +37,7 @@ namespace de.TrustfallGames.UnderConstruction.UI.Util {
         }
 
         public void ImageBack() {
+            SoundHandler.GetInstance().PlaySound(SoundName.Click);
             index--;
             if (index >= 0) {
                 ChangePicture();
