@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace de.TrustfallGames.UnderConstruction.UI.Util {
+    /// <summary>
+    /// Handler to make tutorials. Skips thought slides as images
+    /// </summary>
     public class TutorialHandler : MonoBehaviour {
         [SerializeField] private Image display;
 

@@ -51,24 +51,44 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             }
         }
 
+        /// <summary>
+        /// Starts a coroutine to turn on the lights
+        /// </summary>
+        /// <param name="color"></param>
         public void ToggleLight(Color color) {
             if (instantUpdate) return;
             setColor = color;
             StartCoroutine(TurnLightOn(color));
         }
 
+        /// <summary>
+        /// Removed time object from hive
+        /// </summary>
         private void OnDestroy() {
             if (gameTimeHandler == null) return;
             gameTimeHandler.RemoveTimeObject(this);
         }
 
+        /// <summary>
+        /// Turns the light on after a random time depending on the light scatter in game time handler
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
         private IEnumerator TurnLightOn(Color color) {
             yield return new WaitForSeconds(Random.Range(0f, gameTimeHandler.LightOnScatter));
             renderer.material.SetColor("_EmissionColor", GetColor());
         }
 
+        /// <summary>
+        /// turns the lights instant on
+        /// </summary>
+        /// <param name="color"></param>
         private void TurnLightOnInstant(Color color) { renderer.material.SetColor("_EmissionColor", color); }
 
+        /// <summary>
+        /// returns the color which is used for the emission map
+        /// </summary>
+        /// <returns></returns>
         private Color GetColor() {
             if (!useOwnColor) {
                 return setColor;

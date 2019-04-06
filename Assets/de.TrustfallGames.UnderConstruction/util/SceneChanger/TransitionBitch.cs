@@ -3,6 +3,9 @@ using System.Linq;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
+    /// <summary>
+    /// Class to save transition image between scenes
+    /// </summary>
     public class TransitionBitch : MonoBehaviour {
         private Sprite sprite;
 
@@ -23,20 +26,43 @@ namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
             DontDestroyOnLoad(gameObject);
         }
 
+        /// <summary>
+        /// Returns the sprite from the last scene transition
+        /// </summary>
+        /// <returns></returns>
         public Sprite GetSprite() {
             var a = sprite;
             sprite = null;
             return a;
         }
 
+        /// <summary>
+        /// Sets if the next scene should start paused
+        /// </summary>
+        /// <returns></returns>
         public bool StartGamePaused() { return startGamePaused; }
 
+        /// <summary>
+        /// sets the game paused state
+        /// </summary>
+        /// <param name="b"></param>
         public void StartGamePaused(bool b) { startGamePaused = b; }
 
+        /// <summary>
+        /// Resets the game paused bool
+        /// </summary>
         public void ResetGamePaused() { startGamePaused = false; }
 
+        /// <summary>
+        /// Returns true if the sprite is not null
+        /// </summary>
+        /// <returns></returns>
         public bool SpriteValid() { return sprite != null; }
 
+        /// <summary>
+        /// Sets the sprite for the transition in the next scene
+        /// </summary>
+        /// <param name="sprite"></param>
         public void SetSprite(Sprite sprite) { this.sprite = sprite; }
 
         public static TransitionBitch GetInstance() { return _instance; }
@@ -51,6 +77,9 @@ namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
             }
         }
 
+        /// <summary>
+        /// Returns the fixed update time average from the last 200 frames
+        /// </summary>
         public float AverageFixedDeltaTime => averageFixedDeltaTime;
     }
 }

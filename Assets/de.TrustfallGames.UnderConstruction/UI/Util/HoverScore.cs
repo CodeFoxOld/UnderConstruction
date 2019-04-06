@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.UI.Util {
+    /// <summary>
+    /// A Hover score behaviour, which moves in a direction with a specified speed and text
+    /// </summary>
     public class HoverScore : MonoBehaviour {
         [SerializeField] private TextMeshProUGUI textMeshPro;
         [SerializeField] private float speed = 1;
@@ -11,6 +14,10 @@ namespace de.TrustfallGames.UnderConstruction.UI.Util {
         private float currentDuration;
         private bool _move;
 
+        /// <summary>
+        /// Inits the object. Sets the Text and starts moving
+        /// </summary>
+        /// <param name="text"></param>
         public void Init(string text) {
             Debug.Log($"Init with text: {text}");
             textMeshPro.text = text;

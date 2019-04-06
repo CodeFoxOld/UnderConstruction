@@ -5,6 +5,9 @@ using de.TrustfallGames.UnderConstruction.Core.Util;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
+    /// <summary>
+    /// Class to manage Counters
+    /// </summary>
     public class CounterHive : MonoBehaviour, IInternUpdate {
         private GameManager gameManager;
         private List<Counter> counters = new List<Counter>();
@@ -30,7 +33,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.CoreManager {
         public void Init() { }
         
         public void OnDestroy() {
-            gameManager.InternTick.RemoveTickObject(this);
+            gameManager.InternTick.UnregisterTickObject(this);
         }
 
     }

@@ -29,8 +29,16 @@ namespace de.TrustfallGames.UnderConstruction.UI.Core {
             ChangeDestructorCount(0);
         }
 
+        /// <summary>
+        /// Changes the score ui element
+        /// </summary>
+        /// <param name="newScore"></param>
         public void ChangeScore(int newScore) { _scoreText.SetText(newScore.ToString()); }
 
+        /// <summary>
+        /// Updates the destruction Count
+        /// </summary>
+        /// <param name="newCount"></param>
         public void ChangeDestructorCount(int newCount)
         {
             if (!(newCount > 0))
@@ -47,6 +55,11 @@ namespace de.TrustfallGames.UnderConstruction.UI.Core {
             _destructCount.SetText(newCount.ToString());
         }
 
+        /// <summary>
+        /// Updates the Combo Counter with the number and the color of the apartment
+        /// </summary>
+        /// <param name="newCounter"></param>
+        /// <param name="apartmentColorType"></param>
         public void ChangeComboCounter(int newCounter, ApartmentColorType apartmentColorType) {
             _comboCounter.SetText("Combo! X" + newCounter.ToString());
 
@@ -57,6 +70,10 @@ namespace de.TrustfallGames.UnderConstruction.UI.Core {
             }
         }
 
+        /// <summary>
+        /// Shows a Score PopUp with multiplier under the score
+        /// </summary>
+        /// <param name="multiplier"></param>
         public void PopScoreWithMultiplier(int multiplier) {
             GameObject popup = GameObject.Instantiate(_popupScore);
 
@@ -66,6 +83,10 @@ namespace de.TrustfallGames.UnderConstruction.UI.Core {
             scoreOutput.SetText(multiplier.ToString() + " X " + baseScore);
         }
 
+        /// <summary>
+        /// Called, when a destructible Button is pressed. Input for Inspector. 
+        /// </summary>
+        /// <param name="direction"> Valid input: "Vertical" and "horizontal"</param>
         private void OnDesctructibleButtonPressed(String direction) {
             _gameManager.MapManager.SpawnDesctructible(
                                                        direction.Equals(
@@ -100,6 +121,11 @@ namespace de.TrustfallGames.UnderConstruction.UI.Core {
     
         #endregion
 
+        /// <summary>
+        /// Transforms a World Position to screen pos and inits a score popup with text
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="text"></param>
         public void ShowPopUpAtPosition(Vector3 position, string text) {
             Vector2 viewportPos = Camera.main.WorldToViewportPoint(position);
             var size = GetComponent<RectTransform>().sizeDelta;

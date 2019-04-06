@@ -7,6 +7,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.spawnManager {
     public class RatedTiles {
         private List<Tile> tiles = new List<Tile>();
 
+        /// <summary>
+        /// Draws a random tile from the list
+        /// </summary>
+        /// <returns></returns>
         [CanBeNull] public Tile Draw() {
             if (tiles.Count == 0) return null;
             return tiles[Random.Range(0, tiles.Count)];

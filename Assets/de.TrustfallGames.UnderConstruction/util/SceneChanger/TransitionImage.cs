@@ -10,7 +10,9 @@ using UnityEngine.UI;
 namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
 
 
-
+/// <summary>
+/// Class which fades out the attached image on start
+/// </summary>
     public class TransitionImage : MonoBehaviour {
         private Image image;
 
@@ -36,7 +38,9 @@ namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
             image.sprite = TransitionBitch.GetInstance().GetSprite();
         }
 
-        // Update is called once per frame
+/// <summary>
+/// Fades out the image
+/// </summary>
         void FixedUpdate() {
             if (sleep) return;
 

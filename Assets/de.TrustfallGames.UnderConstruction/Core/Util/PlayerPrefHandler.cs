@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.Core.Util {
+    /// <summary>
+    /// Class to read and write the player prefs
+    /// </summary>
     public static class PlayerPrefHandler {
         //Sound
         private static string _musicVolume = "MusicVolume";
@@ -39,6 +42,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.Util {
 
         public static int GetHighScore() { return PlayerPrefs.GetInt(_highscore, 0); }
 
+        /// <summary>
+        /// Sets the high score. Only if the new score is higher than the old score
+        /// </summary>
+        /// <param name="value"></param>
         public static void SetHighScore(int value) {
             if (value > GetHighScore())
                 PlayerPrefs.SetInt(_highscore, value);
@@ -57,16 +64,20 @@ namespace de.TrustfallGames.UnderConstruction.Core.Util {
             return PlayerPrefs.GetInt(_currentVersion, 0);
         }
 
-        public static void SetCurrentVersion(int newVersion)
+        private static void SetCurrentVersion(int newVersion)
         {
             PlayerPrefs.SetInt(_currentVersion, newVersion);
         }
 
+        /// <summary>
+        /// Resets the player stat, if the version doesn't match the saved version
+        /// </summary>
+        /// <param name="version">number of the version</param>
         public static void ValidateVersionNumber(int version)
         {
             if (GetCurrentVersion() != version)
             {
-                SetHighScore(0);
+                PlayerPrefs.SetInt(_highscore, 0);
                 SetHighscores(new int[0]);
                 SetCurrentVersion(version);
             }

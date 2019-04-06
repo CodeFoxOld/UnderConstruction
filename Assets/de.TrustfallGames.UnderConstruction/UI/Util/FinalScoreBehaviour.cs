@@ -6,6 +6,9 @@ using TMPro;
 using UnityEngine;
 
 namespace de.TrustfallGames.UnderConstruction.UI.Util {
+    /// <summary>
+    /// Class to display the final score
+    /// </summary>
     public class FinalScoreBehaviour : MonoBehaviour {
         [SerializeField] private GameManager _gameManager;
         [SerializeField] private TextMeshProUGUI _textMeshScore;
@@ -16,20 +19,25 @@ namespace de.TrustfallGames.UnderConstruction.UI.Util {
 
         private void OnEnable() {
             if (_gameManager.Character != null) {
-                setFinalScore(_gameManager.Character.Highscore, _gameManager.Character.Height);
+                SetFinalScore(_gameManager.Character.Highscore, _gameManager.Character.Height);
             }
         }
 
         private void Awake() { _gameManager = GameManager.GetManager(); }
 
-        private void setFinalScore(int finalScore, int stages) {
+        /// <summary>
+        /// Sets the final score
+        /// </summary>
+        /// <param name="finalScore"></param>
+        /// <param name="stages"></param>
+        private void SetFinalScore(int finalScore, int stages) {
             _textMeshScore.text = Separate(finalScore.ToString(), seperator);
-            _textMeshStages.text = Separate(stages.ToString(),seperator);
+            _textMeshStages.text = Separate(stages.ToString(), seperator);
 
             var a = PlayerPrefHandler.GetHighScore();
 
             _textMeshHighscore.text = Separate(a.ToString(), seperator);
-        
+
             if (a == finalScore) {
                 _textMeshHighscoreIndicator.text = "New Highscore!";
                 SoundHandler.GetInstance().PlaySound(SoundName.NewHighscore);
@@ -39,6 +47,12 @@ namespace de.TrustfallGames.UnderConstruction.UI.Util {
             }
         }
 
+        /// <summary>
+        /// returns a string seperated with a seperator after every third char
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="separator"></param>
+        /// <returns></returns>
         private string Separate(string s, char separator) {
             int count = 0;
             string a = "";

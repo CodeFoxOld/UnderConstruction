@@ -75,7 +75,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
 
             if (moving) {
-                Move();
+                MoveUp();
             }
 
             if (blocked) {
@@ -90,8 +90,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
-        //MOVEMENT
-        private void Move() {
+        /// <summary>
+        /// Translates the object root up
+        /// </summary>
+        private void MoveUp() {
             house.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
             if (ObstacleData.Stage == 1 && ObstacleData.ObstacleType == ObstacleType.House) {
                 door.transform.Translate(0, 1 / (GameManager.GetManager().Settings.MoveUpSpeed * 60), 0);
@@ -106,6 +108,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
+        /// <summary>
+        /// Translates the object root down
+        /// </summary>
         private void MoveDown() {
             house.transform.Translate(
                 0, -1 / (GameManager.GetManager().Settings.MoveUpSpeed * (1 / Time.fixedDeltaTime)), 0);
@@ -138,8 +143,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
-        //SPAWN ROUTINES
-
+        /// <summary>
+        /// Starts the Early Spawn routine. Needed if the player is on the tile and could pick the object earlier
+        /// </summary>
         private void EarlySpawnRoutine() {
             if (!SpawnInProgress) return;
 
@@ -160,6 +166,12 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
+        /// <summary>
+        /// Starts the object spawn routine and the spawn counter
+        /// </summary>
+        /// <param name="obstacleData"></param>
+        /// <param name="obstacleBlueprint"></param>
+        /// <param name="apartmentStack"></param>
         public void InitialiseSpawnObject(
             ObstacleData obstacleData,
             GameObject obstacleBlueprint,
@@ -176,6 +188,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
+        /// <summary>
+        /// Spawns the object. Spawns and append object to the player if he is on the tile. Spawns obstacle if not
+        /// </summary>
         private void SpawnObject() {
             HideIndicator();
             if (gameManager.Character.CurrentCoord.Equals(Coords)) {
@@ -190,6 +205,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
+        /// <summary>
+        /// Append the object to the player and start the move up routine
+        /// </summary>
         private void Stack() {
             SoundHandler.GetInstance().PlaySound(SoundName.HouseStack);
             GameObject b = house;
@@ -218,6 +236,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             CheckBuildingHeight();
         }
 
+        /// <summary>
+        /// Takes one stage from the object and starts the move down routine or increase the destruction queue
+        /// </summary>
+        /// <param name="combo">Combo of the destructible</param>
+        /// <param name="success">Returns true if there is a stage to remove</param>
         public void Destruct(int combo, out bool success) {
             success = false;
             if (combo != 0) {
@@ -241,6 +264,10 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             movingDown = true;
         }
 
+        /// <summary>
+        /// Marks the field as blocked or unblocked
+        /// </summary>
+        /// <param name="state"></param>
         private void SetBlocked(bool state) {
             blocked = state;
             if (!state) {
@@ -252,7 +279,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             gameObject.GetComponent<MeshRenderer>().material = blockedTile;
         }
 
-        //SPAWN INDICATOR
+        /// <summary>
+        /// Shows the indicator with the color depending on the current apartment color
+        /// </summary>
         private void ShowIndicator() {
             SpawnInProgress = true;
             foreach (var obj in indicator) {
@@ -266,6 +295,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
+        /// <summary>
+        /// Hides the indicator
+        /// </summary>
         private void HideIndicator() {
             SpawnInProgress = false;
             foreach (var obj in indicator) {
@@ -273,7 +305,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
-        //LOSE CONDITIONS
+        /// <summary>
+        /// Hecks if the object on the tile is too high. Toggles lose if it is
+        /// </summary>
         private void CheckBuildingHeight() {
             if (tileObstacle.Stage > GameManager.GetManager().Settings.BuildingHeight) {
                 Debug.Log("Lose triggered by " + gameObject.name + " height: " + tileObstacle.Stage);
@@ -281,6 +315,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
+        /// <summary>
+        /// Checks if the player can't move anymore and is not able to free him self. Toggles game loose if he cant
+        /// </summary>
         private void CheckCharacterMoveAbility() {
             TileCoord coord = gameManager.Character.CurrentCoord;
 
@@ -304,11 +341,17 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
+        /// <summary>
+        /// Toggles the collision box
+        /// </summary>
         private void OnValidate() {
             GetComponent<BoxCollider>().enabled = blocked;
             GetComponent<MeshCollider>().enabled = !blocked;
         }
 
+        /// <summary>
+        /// Adjust the collider Size
+        /// </summary>
         public void CheckCollider() {
             collider = GetComponent<BoxCollider>();
             collider.size = new Vector3(10, 5, 10);
@@ -326,7 +369,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
         public bool SpawnInProgress { get; private set; }
         public float TopInidicatorInterval => topInidicatorInterval;
 
-        public void OnDestroy() { gameManager.InternTick.RemoveTickObject(this); }
+        public void OnDestroy() { gameManager.InternTick.UnregisterTickObject(this); }
 
         public void WarnIndicator(bool b) { warnIndicator.SetActive(b); }
     }

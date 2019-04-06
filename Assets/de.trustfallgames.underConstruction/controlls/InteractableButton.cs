@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.Experimental.UIElements;
 
 namespace de.TrustfallGames.UnderConstruction.Controlls {
+    /// <summary>
+    /// Touch button with hold behaviour
+    /// </summary>
     [RequireComponent(typeof(Image))]
     public abstract class InteractableButton : MonoBehaviour, IPointerUpHandler, IPointerDownHandler {
         // Start is called before the first frame update

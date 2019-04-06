@@ -8,6 +8,9 @@ using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 namespace de.TrustfallGames.UnderConstruction.UI.title_screen {
+    /// <summary>
+    /// Class for title screen
+    /// </summary>
     public class TitleBehaviour : MonoBehaviour {
         [SerializeField] private GameObject title;
         [SerializeField] private GameObject subTitleLeft;
@@ -70,6 +73,11 @@ namespace de.TrustfallGames.UnderConstruction.UI.title_screen {
             }
         }
 
+        /// <summary>
+        /// Fades in and out the image
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="amount"></param>
         public static void FadeAlpha(ref Image image, float amount) {
             Color color = image.color;
             image.color = new Color(color.r, color.g, color.b, Mathf.Clamp(color.a + amount, 0, 1f));

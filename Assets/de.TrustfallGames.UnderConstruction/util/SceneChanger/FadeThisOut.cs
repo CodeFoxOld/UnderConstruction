@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace de.TrustfallGames.UnderConstruction.util.SceneChanger {
+    /// <summary>
+    /// Fades out the attached image
+    /// </summary>
     public class FadeThisOut : MonoBehaviour {
         private Image image;
 
