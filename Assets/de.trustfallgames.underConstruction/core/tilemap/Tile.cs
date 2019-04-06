@@ -50,6 +50,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             foreach (var obj in indicator) {
                 obj.SetActive(false);
             }
+
             warnIndicator.SetActive(false);
 
             RegisterInternUpdate();
@@ -57,7 +58,7 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
 
         public void InternUpdate() {
             if (destructQueue != 0 && !moving && !movingDown) {
-                Destruct();
+                Destruct(0, out bool success);
                 destructQueue--;
             }
 
@@ -107,15 +108,11 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
 
         private void MoveDown() {
             house.transform.Translate(
-                                      0,
-                                      -1 / (GameManager.GetManager().Settings.MoveUpSpeed * (1 / Time.fixedDeltaTime)),
-                                      0);
+                0, -1 / (GameManager.GetManager().Settings.MoveUpSpeed * (1 / Time.fixedDeltaTime)), 0);
 
             if (ObstacleData.Stage == 0 && ObstacleData.ObstacleType == ObstacleType.House) {
                 door.transform.Translate(
-                                         0,
-                                         -1 / (GameManager.GetManager().Settings.MoveUpSpeed
-                                               * (1 / Time.fixedDeltaTime)), 0);
+                    0, -1 / (GameManager.GetManager().Settings.MoveUpSpeed * (1 / Time.fixedDeltaTime)), 0);
             }
 
             if (house.transform.childCount != 0 && house.transform.GetChild(0).transform.childCount != 0) {
@@ -163,16 +160,17 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             }
         }
 
-        public void InitialiseSpawnObject(ObstacleData obstacleData, GameObject obstacleBlueprint,
+        public void InitialiseSpawnObject(
+            ObstacleData obstacleData,
+            GameObject obstacleBlueprint,
             ApartmentStack apartmentStack) {
             _stackCounter = new Counter(gameManager.Settings.GetGrowInterval());
             apartmentPart = apartmentStack.draw();
             ShowIndicator();
             this.obstacleBlueprint = obstacleBlueprint;
             _spawnCounter = new Counter(
-                                        gameManager.Settings.GetSpawnDuration(), false,
-                                        gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration
-                                        + (Time.fixedDeltaTime * 2));
+                gameManager.Settings.GetSpawnDuration(), false,
+                gameManager.Settings.MoveDuration + gameManager.Settings.RotationDuration + (Time.fixedDeltaTime * 2));
             if (tileObstacle == null) {
                 tileObstacle = new TileObstacle(obstacleData);
             }
@@ -199,8 +197,8 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
                 tileObstacle.AddStage(); //Count Stage 1 up
             }
 
-            house = Instantiate(obstacleBlueprint);                                                  //Create Blueprint
-            house.transform.position = new Vector3(Coords.X, -1, Coords.Z);                          //Assign under tile
+            house = Instantiate(obstacleBlueprint); //Create Blueprint
+            house.transform.position = new Vector3(Coords.X, -1, Coords.Z); //Assign under tile
             house.GetComponent<MeshFilter>().mesh = tileObstacle.GetObstacleObjectDataStaged().Mesh; //Assign mesh
             house.GetComponent<MeshRenderer>().material =
                 tileObstacle.GetObstacleObjectDataStaged().Material; //Assign material
@@ -220,7 +218,16 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             CheckBuildingHeight();
         }
 
-        public void Destruct() {
+        public void Destruct(int combo, out bool success) {
+            success = false;
+            if (combo != 0) {
+                if (tileObstacle.Stage > destructQueue) {
+                    int points = gameManager.Character.CalculateDestructibleScore(combo);
+                    gameManager.UiManager.ShowPopUpAtPosition(transform.position, points.ToString());
+                    success = true;
+                }
+            }
+
             if (movingDown || moving) {
                 destructQueue++;
                 return;
@@ -253,11 +260,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
                 obj.GetComponent<MeshRenderer>().material.color =
                     gameManager.MapManager.ApartmentColor.GetColor(apartmentPart.ApartmentColorType);
                 obj.GetComponent<MeshRenderer>()
-                   .material.SetColor(
-                                      "_EmissionColor",
-                                      gameManager.MapManager.ApartmentColor.GetColor(
-                                                                                     apartmentPart
-                                                                                         .ApartmentColorType));
+                    .material.SetColor(
+                        "_EmissionColor",
+                        gameManager.MapManager.ApartmentColor.GetColor(apartmentPart.ApartmentColorType));
             }
         }
 
@@ -280,11 +285,9 @@ namespace de.TrustfallGames.UnderConstruction.Core.tilemap {
             TileCoord coord = gameManager.Character.CurrentCoord;
 
             List<TileCoord> directions = new List<TileCoord> {
-                                                                 coord.NextTileCoord(MoveDirection.up),
-                                                                 coord.NextTileCoord(MoveDirection.right),
-                                                                 coord.NextTileCoord(MoveDirection.down),
-                                                                 coord.NextTileCoord(MoveDirection.left)
-                                                             };
+                coord.NextTileCoord(MoveDirection.up), coord.NextTileCoord(MoveDirection.right),
+                coord.NextTileCoord(MoveDirection.down), coord.NextTileCoord(MoveDirection.left)
+            };
             bool check = true;
             foreach (var obj in directions) {
                 if (!check) break;
