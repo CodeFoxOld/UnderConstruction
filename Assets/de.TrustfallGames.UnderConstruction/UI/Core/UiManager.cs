@@ -40,11 +40,20 @@ namespace de.TrustfallGames.UnderConstruction.UI.Core {
             SoundHandler.GetInstance().PlaySound(SoundName.FadeOut);
         }
 
+        public UiManager ChangeHighscore(int highscore) {
+            _gameUI.ChangeScore(highscore);
+            return this;
+        }
+
+        public void ShowPopUpAtPosition(Vector3 position, string text) {
+            _gameUI.ShowPopUpAtPosition(position, text);
+        }
+        
         public UiManager OnHighscoreCalc(int highscoreMultiplicator, ApartmentColorType apartmentColorType,
             int highscore, int height) {
             _gameUI.ChangeScore(highscore);
             _gameUI.ChangeComboCounter(highscoreMultiplicator, apartmentColorType);
-            _gameUI.GetComponent<GameUIBehaviour>().PopScoreWithMultiplier(highscoreMultiplicator);
+            _gameUI.PopScoreWithMultiplier(highscoreMultiplicator);
             return this;
         }
 

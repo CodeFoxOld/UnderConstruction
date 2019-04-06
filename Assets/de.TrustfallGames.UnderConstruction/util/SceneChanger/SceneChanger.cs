@@ -1,4 +1,5 @@
 ﻿using System;
+using de.TrustfallGames.UnderConstruction.SoundManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -73,6 +74,7 @@ public class SceneChanger : MonoBehaviour {
     }
 
     private void StartFade() {
+        SoundHandler.GetInstance().PlaySound(SoundName.Click);
         fadeInProgress = true;
         FadeImage.enabled = true;
         if (spriteFade != null) {

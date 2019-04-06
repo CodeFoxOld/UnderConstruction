@@ -51,12 +51,14 @@ namespace de.TrustfallGames.UnderConstruction.UI.menu
 
         public void Login()
         {
+#if UNITY_ANDROID
             if (Social.localUser.authenticated)
             {
                 SocialPlatformHandler.GetSocialHandler().LogOut();
             } else {
             SocialPlatformHandler.GetSocialHandler().UserAuthentication();
         }
+            #endif
     }
 
     public int GetGameSoundVolume()

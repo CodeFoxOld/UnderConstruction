@@ -1,6 +1,7 @@
 ﻿using System;
 using de.TrustfallGames.UnderConstruction.Core.CoreManager;
 using de.TrustfallGames.UnderConstruction.Core.spawnManager;
+using de.TrustfallGames.UnderConstruction.UI.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 namespace de.TrustfallGames.UnderConstruction.UI.Core {
     public class GameUIBehaviour : MonoBehaviour {
         [SerializeField] private GameObject _popupScore;
+        [SerializeField] private GameObject _hoverScore;
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _destructCount;
         [SerializeField] private TextMeshProUGUI _comboCounter;
@@ -97,5 +99,16 @@ namespace de.TrustfallGames.UnderConstruction.UI.Core {
         }
     
         #endregion
+
+        public void ShowPopUpAtPosition(Vector3 position, string text) {
+            Vector2 viewportPos = Camera.main.WorldToViewportPoint(position);
+            var size = GetComponent<RectTransform>().sizeDelta;
+            Vector2 screenPosition = new Vector2(((viewportPos.x * size.x) - size.x * 0.5f), 
+                ((viewportPos.y * size.y) - size.y * 0.5f));
+            GameObject popup = Instantiate(_hoverScore, transform, false);
+            popup.GetComponent<HoverScore>().Init(text);
+
+            popup.GetComponent<RectTransform>().anchoredPosition = screenPosition;
+        }
     }
 }

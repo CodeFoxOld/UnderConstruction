@@ -195,7 +195,13 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
         }
 
         float GetClampedDawnDuration() { return Mathf.Clamp(currentDawnDuration, 0.001f, dawnDuration); }
+
+        private void OnDestroy() {
+            _instance = null;
+        }
     }
+    
+    
 
     public enum LightState { Off, On }
 }

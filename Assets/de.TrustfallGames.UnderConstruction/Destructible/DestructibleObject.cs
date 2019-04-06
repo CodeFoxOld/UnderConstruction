@@ -24,6 +24,7 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
         private int position;
         private bool destructionInProgress;
         private TileCoord _charPos;
+        private int destructionCount = 1;
 
         private void Start() { RegisterInternUpdate(); }
 
@@ -56,7 +57,8 @@ namespace de.TrustfallGames.UnderConstruction.Destructible {
             if (_mapManager.GetTile(destructibleArray[position]) != null) {
                 var tile = _mapManager.GetTile(destructibleArray[position]);
                 if (tile.ObstacleData != null) {
-                    tile.Destruct();
+                    tile.Destruct(destructionCount, out bool success);
+                    if(success) destructionCount++;
                 }
 
                 destroyed[position] = true;
