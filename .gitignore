@@ -35,3 +35,5 @@ sysinfo.txt
 *.unitypackage
 *.xml
 Assets/Plugins/Editor/JetBrains/Unity3DRider.cs
+
+releases/
