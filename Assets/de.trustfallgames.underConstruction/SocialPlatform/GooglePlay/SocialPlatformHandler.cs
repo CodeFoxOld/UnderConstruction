@@ -66,7 +66,9 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay {
         /// Logs the user out.
         /// </summary>
         public void LogOut() {
+#if UNITY_ANDROID
             ((PlayGamesPlatform) Social.Active).SignOut();
+#endif
         }
 
         /// <summary>
@@ -103,10 +105,12 @@ namespace de.TrustfallGames.UnderConstruction.SocialPlatform.GooglePlay {
         /// <param name="identifier">The achievement to progress</param>
         /// <param name="progress">Progress in %</param>
         public void ProgressAchievement(string identifier, int progress) {
+#if UNITY_ANDROID
             PlayGamesPlatform.Instance.IncrementAchievement(
                 identifier, progress, (bool success) => {
                     //TODO: handle success or failure
                 });
+#endif
         }
 
         /// <summary>
