@@ -49,6 +49,29 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
             else if (_instance != this) {
                 Destroy(gameObject);
             }
+            
+            dayToDawn = new Gradient();
+            currentDayDuration = dayTimeDuration;
+            GradientColorKey[] colorKey = new GradientColorKey[3];
+            colorKey[0].color = dayColor;
+            colorKey[0].time = 0.0f;
+            colorKey[1].color = dawnColor;
+            colorKey[1].time = 0.5f;
+            colorKey[2].color = nightColor;
+            colorKey[2].time = 1.0f;
+
+            GradientAlphaKey[] alphaKey = new GradientAlphaKey[3];
+            alphaKey[0].alpha = 1f;
+            alphaKey[0].time = 0.0f;
+            alphaKey[1].alpha = 1f;
+            alphaKey[1].time = 0.5f;
+            alphaKey[2].alpha = 1f;
+            alphaKey[2].time = 1.0f;
+
+            dayToDawn.SetKeys(colorKey, alphaKey);
+
+            directionalLight = GetComponent<Light>();
+
         }
 
         public static GameTimeHandler GetInstance() { return _instance; }
@@ -80,27 +103,6 @@ namespace de.TrustfallGames.UnderConstruction.GameTimeManager {
 
         // Start is called before the first frame update
         void Start() {
-            dayToDawn = new Gradient();
-            currentDayDuration = dayTimeDuration;
-            var colorKey = new GradientColorKey[3];
-            colorKey[0].color = dayColor;
-            colorKey[0].time = 0.0f;
-            colorKey[1].color = dawnColor;
-            colorKey[1].time = 0.5f;
-            colorKey[2].color = nightColor;
-            colorKey[2].time = 1.0f;
-
-            var alphaKey = new GradientAlphaKey[3];
-            alphaKey[0].alpha = 1f;
-            alphaKey[0].time = 0.0f;
-            alphaKey[1].alpha = 1f;
-            alphaKey[1].time = 0.5f;
-            alphaKey[2].alpha = 1f;
-            alphaKey[2].time = 1.0f;
-
-            dayToDawn.SetKeys(colorKey, alphaKey);
-
-            directionalLight = GetComponent<Light>();
         }
 
         // Update is called once per frame
